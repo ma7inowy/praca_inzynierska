@@ -4,8 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -15,6 +19,9 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<String> mNames = new ArrayList<>();
     private ArrayList<String> mImageUrls = new ArrayList<>();
+    Button btn_kontener;
+
+    private RelativeLayout parentLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +30,16 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate:started");
 
         initImageBitmaps();
+
+        btn_kontener = findViewById(R.id.btn_kontener);
+
+        btn_kontener.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, KontenerActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initImageBitmaps() {
