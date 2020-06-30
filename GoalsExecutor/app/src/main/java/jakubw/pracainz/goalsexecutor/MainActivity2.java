@@ -13,9 +13,9 @@ import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity2 extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "MainActivity2";
 
     private ArrayList<String> mNames = new ArrayList<>();
     private ArrayList<String> mImageUrls = new ArrayList<>();
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main2);
         Log.d(TAG, "onCreate:started");
 
         initImageBitmaps();
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         btn_kontener.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, KontenerActivity.class);
+                Intent intent = new Intent(MainActivity2.this, KontenerActivity.class);
                 startActivity(intent);
             }
         });

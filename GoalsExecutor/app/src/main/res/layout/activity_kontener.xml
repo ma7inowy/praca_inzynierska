@@ -37,7 +37,7 @@
 
             <Button
                 android:layout_marginTop="35dp"
-                android:layout_marginLeft="60dp"
+                android:layout_marginLeft="130dp"
                 android:id="@+id/btnAddNew"
                 android:text="+"
                 android:background="@color/colorPrimary"
