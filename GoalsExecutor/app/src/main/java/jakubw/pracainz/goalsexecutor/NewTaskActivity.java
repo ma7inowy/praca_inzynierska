@@ -51,8 +51,9 @@ public class NewTaskActivity extends AppCompatActivity {
                         dataSnapshot.getRef().child("descdoes").setValue(addDate.getText().toString());
                         dataSnapshot.getRef().child("datedoes").setValue(addDate.getText().toString());
 
-                        Intent intent = new Intent(NewTaskActivity.this, KontenerActivity.class);
-                        startActivity(intent);
+//                        Intent intent = new Intent(NewTaskActivity.this, KontenerActivity.class);
+//                        startActivity(intent);
+                        finish();
                     }
 
                     @Override
