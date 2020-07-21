@@ -66,5 +66,15 @@ public class NewTaskActivity extends AppCompatActivity {
             }
         });
 
+
+
+    }
+
+    public void saveNote(){
+//        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Does" + number);
+        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Does" + number);
+        MyDoes myDoes = new MyDoes(addTitle.getText().toString(),addDate.getText().toString(), "jakis opis");
+        reference.push().getRef().child("titledoes").setValue(addTitle.getText().toString());
+        finish();
     }
 }
