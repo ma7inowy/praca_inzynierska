@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +26,7 @@ public class NewTaskActivity extends AppCompatActivity {
     EditText addTitle;
     Button addNewTaskBtn;
     DatabaseReference reference;
-//    MyDoes myDoes;
+    //    MyDoes myDoes;
     Integer number;
 
     @Override
@@ -41,26 +43,26 @@ public class NewTaskActivity extends AppCompatActivity {
         addNewTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Does" + number);
-//                myDoes = new MyDoes(addTitle.getText().toString(),addDate.getText().toString(), "jakis opis");
-//                reference.push().setValue(myDoes);
-                reference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        dataSnapshot.getRef().child("titledoes").setValue(addTitle.getText().toString());
-                        dataSnapshot.getRef().child("descdoes").setValue(addDate.getText().toString());
-                        dataSnapshot.getRef().child("datedoes").setValue(addDate.getText().toString());
-
+              reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Does" + number);
+//            saveNote();
+//              myDoes = new MyDoes(addTitle.getText().toString(),addDate.getText().toString(), "jakis opis");
+//              reference.push().setValue(myDoes);
+              reference.addValueEventListener(new ValueEventListener() {
+                  @Override
+                  public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                      dataSnapshot.getRef().child("titledoes").setValue(addTitle.getText().toString());
+                      dataSnapshot.getRef().child("descdoes").setValue(addDate.getText().toString());
+                      dataSnapshot.getRef().child("datedoes").setValue(addDate.getText().toString());
+                      finish();
 //                        Intent intent = new Intent(NewTaskActivity.this, KontenerActivity.class);
 //                        startActivity(intent);
-                        finish();
-                    }
+                  }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                  @Override
+                  public void onCancelled(@NonNull DatabaseError databaseError) {
+                      Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
+                  }
+              });
             }
         });
 
