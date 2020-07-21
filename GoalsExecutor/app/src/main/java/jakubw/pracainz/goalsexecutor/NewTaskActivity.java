@@ -53,6 +53,7 @@ public class NewTaskActivity extends AppCompatActivity {
                       dataSnapshot.getRef().child("titledoes").setValue(addTitle.getText().toString());
                       dataSnapshot.getRef().child("descdoes").setValue(addDate.getText().toString());
                       dataSnapshot.getRef().child("datedoes").setValue(addDate.getText().toString());
+                      dataSnapshot.getRef().child("id").setValue(number.toString());
                       finish();
 //                        Intent intent = new Intent(NewTaskActivity.this, KontenerActivity.class);
 //                        startActivity(intent);
@@ -70,11 +71,11 @@ public class NewTaskActivity extends AppCompatActivity {
 
     }
 
-    public void saveNote(){
+//    public void saveNote(){
+////        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Does" + number);
 //        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Does" + number);
-        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Does" + number);
-        MyDoes myDoes = new MyDoes(addTitle.getText().toString(),addDate.getText().toString(), "jakis opis");
-        reference.push().getRef().child("titledoes").setValue(addTitle.getText().toString());
-        finish();
-    }
+//        MyDoes myDoes = new MyDoes(addTitle.getText().toString(),addDate.getText().toString(), "jakis opis");
+//        reference.push().getRef().child("titledoes").setValue(addTitle.getText().toString());
+//        finish();
+//    }
 }

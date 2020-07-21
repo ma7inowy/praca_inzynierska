@@ -87,6 +87,9 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
         final MyDoes myDoes = list.get(position);
         Intent intent = new Intent(this, EditDoesActivity.class);
         intent.putExtra("title", myDoes.getTitledoes());
+        intent.putExtra("desc", myDoes.getDescdoes());
+        intent.putExtra("date", myDoes.getDatedoes());
+        intent.putExtra("id", myDoes.getId());
         startActivity(intent);
         Toast.makeText(this, "onNoteclick" + position, Toast.LENGTH_SHORT).show();
     }
