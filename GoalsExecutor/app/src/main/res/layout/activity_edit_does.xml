@@ -38,11 +38,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#808090"
-        android:layout_margin="20dp"
-        android:paddingLeft="22dp"
-        android:paddingRight="22dp"
-        android:paddingBottom="22dp"
-        android:paddingTop="22dp">
+        android:layout_margin="10dp"
+        android:paddingLeft="11dp"
+        android:paddingRight="11dp"
+        android:paddingBottom="11dp"
+        android:paddingTop="11dp">
 
         <TextView
             android:text="Dodaj tytuł"
@@ -68,11 +68,11 @@
         android:background="#808090"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:paddingLeft="22dp"
-        android:paddingRight="22dp"
-        android:paddingBottom="22dp"
-        android:paddingTop="22dp"
+        android:layout_margin="10dp"
+        android:paddingLeft="11dp"
+        android:paddingRight="11dp"
+        android:paddingBottom="11dp"
+        android:paddingTop="11dp"
         android:layout_marginTop="20dp">
 
         <TextView
@@ -94,9 +94,41 @@
             android:hint="Termin" />
     </LinearLayout>
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="#808090"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:paddingLeft="11dp"
+        android:paddingRight="11dp"
+        android:paddingBottom="11dp"
+        android:paddingTop="11dp"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:text="Opis"
+            android:textSize="20dp"
+            android:layout_gravity="center"
+            android:textColor="#FFFFFF"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/editDescription"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#FFFFFF"
+            android:hint="Opis"
+            android:maxLength="200" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/editTaskBtn"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Button" />

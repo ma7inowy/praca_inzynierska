@@ -24,6 +24,7 @@ public class NewTaskActivity extends AppCompatActivity {
 
     EditText addDate;
     EditText addTitle;
+    EditText addDescription;
     Button addNewTaskBtn;
     DatabaseReference reference;
     //    MyDoes myDoes;
@@ -36,6 +37,7 @@ public class NewTaskActivity extends AppCompatActivity {
 
         addDate = findViewById(R.id.addDate);
         addTitle = findViewById(R.id.addTitle);
+        addDescription = findViewById(R.id.addDescription);
         addNewTaskBtn = findViewById(R.id.addNewTaskBtn);
         number = new Random().nextInt();
         reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor");
@@ -51,7 +53,7 @@ public class NewTaskActivity extends AppCompatActivity {
                   @Override
                   public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                       dataSnapshot.getRef().child("titledoes").setValue(addTitle.getText().toString());
-                      dataSnapshot.getRef().child("descdoes").setValue(addDate.getText().toString());
+                      dataSnapshot.getRef().child("descdoes").setValue(addDescription.getText().toString());
                       dataSnapshot.getRef().child("datedoes").setValue(addDate.getText().toString());
                       dataSnapshot.getRef().child("id").setValue(number.toString());
                       finish();

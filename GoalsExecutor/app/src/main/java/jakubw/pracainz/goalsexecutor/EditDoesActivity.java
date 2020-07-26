@@ -16,10 +16,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+
 public class EditDoesActivity extends AppCompatActivity {
 
     EditText editDate;
     EditText editTitle;
+    EditText editDescription;
     Button editTaskBtn;
     String id;
 
@@ -33,6 +36,7 @@ public class EditDoesActivity extends AppCompatActivity {
 
         editDate = findViewById(R.id.editDate);
         editTitle = findViewById(R.id.editTitle);
+        editDescription = findViewById(R.id.editDescription);
         editTaskBtn = findViewById(R.id.editTaskBtn);
 
         reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor");
@@ -40,24 +44,35 @@ public class EditDoesActivity extends AppCompatActivity {
         Intent intent = getIntent();
         editTitle.setText(intent.getStringExtra("title"));
         editDate.setText(intent.getStringExtra("date"));
+        editDescription.setText(intent.getStringExtra("desc"));
         id = intent.getStringExtra("id");
 
         editTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Does" + id);
-                reference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        dataSnapshot.getRef().child("titledoes").setValue(editTitle.getText().toString());
-                        finish();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                HashMap map = new HashMap();
+                map.put("titledoes", editTitle.getText().toString());
+                map.put("descdoes", editDescription.getText().toString());
+                map.put("datedoes", editDate.getText().toString());
+                reference.updateChildren(map);
+                finish();
+                //                reference.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                        HashMap map = new HashMap();
+//                        map.put("titledoes", editTitle.getText().toString());
+//                        map.put("descdoes", editDescription.getText().toString());
+//                        map.put("datedoes", editDate.getText().toString());
+//                        dataSnapshot.getRef().updateChildren(map);
+//                        finish();
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                    }
+//                });
                 Toast.makeText(EditDoesActivity.this, id, Toast.LENGTH_SHORT).show();
             }
         });

@@ -34,7 +34,7 @@ public class DoesAdapter extends RecyclerView.Adapter<DoesAdapter.MyViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
         holder.titledoes.setText(myDoes.get(i).getTitledoes());
-        holder.descdoes.setText(myDoes.get(i).getDescdoes());
+//        holder.descdoes.setText(myDoes.get(i).getDescdoes());
         holder.datedoes.setText(myDoes.get(i).getDatedoes());
 
     }
@@ -52,7 +52,7 @@ public class DoesAdapter extends RecyclerView.Adapter<DoesAdapter.MyViewHolder>{
         public MyViewHolder(@NonNull View itemView, OnNoteListener onNoteListener) {
             super(itemView);
             titledoes = (TextView) itemView.findViewById(R.id.titledoes);
-            descdoes = (TextView) itemView.findViewById(R.id.descdoes);
+//            descdoes = (TextView) itemView.findViewById(R.id.descdoes);
             datedoes = (TextView) itemView.findViewById(R.id.datedoes);
             this.onNoteListener = onNoteListener;
             itemView.setOnClickListener(this);
