@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,13 +31,11 @@ public class DoesAdapter extends RecyclerView.Adapter<DoesAdapter.MyViewHolder>{
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_kontener, parent, false),onNoteListener);
     }
-    // wywoływana przez RecyclerView zeby wyswietlic dane na wybranych pozycjach
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, int i) {
         holder.titledoes.setText(myDoes.get(i).getTitledoes());
 //        holder.descdoes.setText(myDoes.get(i).getDescdoes());
         holder.datedoes.setText(myDoes.get(i).getDatedoes());
-
     }
 
     @Override
@@ -47,6 +46,7 @@ public class DoesAdapter extends RecyclerView.Adapter<DoesAdapter.MyViewHolder>{
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView titledoes, descdoes, datedoes;
+//        Button btnSort;
         OnNoteListener onNoteListener;
 
         public MyViewHolder(@NonNull View itemView, OnNoteListener onNoteListener) {
@@ -55,6 +55,7 @@ public class DoesAdapter extends RecyclerView.Adapter<DoesAdapter.MyViewHolder>{
 //            descdoes = (TextView) itemView.findViewById(R.id.descdoes);
             datedoes = (TextView) itemView.findViewById(R.id.datedoes);
             this.onNoteListener = onNoteListener;
+//            btnSort = itemView.findViewById(R.id.btnsort);
             itemView.setOnClickListener(this);
         }
 

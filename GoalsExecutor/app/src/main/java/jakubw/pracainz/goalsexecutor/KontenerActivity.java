@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,11 +23,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class KontenerActivity extends AppCompatActivity implements DoesAdapter.OnNoteListener {
 
     TextView titlepage, endpage;
-    Button btnAddNew;
+    Button btnAddNew, btnSort;
 
     DatabaseReference reference;
     RecyclerView ourdoes;
@@ -39,6 +45,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
         endpage = findViewById(R.id.endpage);
 
         btnAddNew = findViewById(R.id.btnAddNew);
+        btnSort = findViewById(R.id.btnsort);
 
         ourdoes = findViewById(R.id.ourdoes);
         ourdoes.setLayoutManager(new LinearLayoutManager(this));
@@ -73,6 +80,20 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
             }
         });
 
+        //sortowanie zadan po dlugosci tytulu
+        btnSort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<MyDoes> list2 = new ArrayList();
+                for (MyDoes myDoes : list) {
+                    if (myDoes.getTitledoes().toLowerCase().equals("123")) {
+                        list2.add(myDoes);
+                    }
+                }
+                setAdapter(list2);
+            }
+        });
+
     }
 
     public void setAdapter(ArrayList<MyDoes> list) {
@@ -92,5 +113,56 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
         intent.putExtra("id", myDoes.getId());
         startActivity(intent);
         Toast.makeText(this, "onNoteclick" + position, Toast.LENGTH_SHORT).show();
+    }
+
+    public ArrayList<MyDoes> sort(List<MyDoes> list) {
+        ArrayList<MyDoes> listnew = new ArrayList<>();
+        listnew.add(0, list.get(list.size() - 1));
+        listnew.add(1, list.get(list.size() - 2));
+        listnew.add(2, list.get(list.size() - 3));
+
+        return listnew;
+
+    }
+
+    public void sortByMiasto() {
+        ArrayList<MyDoes> listnew = new ArrayList<>();
+        for (MyDoes item : list) {
+            if (item.getTitledoes().toLowerCase().equals("miasto")) {
+                listnew.add(item);
+            }
+        }
+        setAdapter(listnew);
+    }
+
+    // menu w prawym gornym do filtrowania
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.settings_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item1:
+                Toast.makeText(this, "item1", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.item2:
+                Toast.makeText(this, "akcja", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.item3:
+                Toast.makeText(this, "item3", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.etykieta_dom:
+                Toast.makeText(this, "dom", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.etykieta_miasto:
+                sortByMiasto();
+                Toast.makeText(this, "miasto", Toast.LENGTH_SHORT).show();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/item1"
+        android:icon="@drawable/ic_settings_icon"
+        android:title="SORT BY..."
+        app:showAsAction = "ifRoom">
+    </item>
+
+    <item android:id="@+id/item2"
+        android:icon="@drawable/ic_settings_icon"
+        android:title="AKCJA..."
+        app:showAsAction = "never">
+    </item>
+
+    <item android:id="@+id/item3"
+        android:icon="@drawable/ic_settings_icon"
+        android:title="POKAZ Z ETYKIETA..."
+        app:showAsAction = "never">
+        <menu>
+            <item android:id="@+id/etykieta_dom"
+                android:title="PRZY KOMPUTERZE">
+            </item>
+            <item android:id="@+id/etykieta_miasto"
+                android:title="W MIESCIE">
+            </item>
+        </menu>
+    </item>
+</menu>
