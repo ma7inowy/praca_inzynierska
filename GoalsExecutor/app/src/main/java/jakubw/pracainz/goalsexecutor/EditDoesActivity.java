@@ -56,6 +56,7 @@ public class EditDoesActivity extends AppCompatActivity {
                 map.put("descdoes", editDescription.getText().toString());
                 map.put("datedoes", editDate.getText().toString());
                 reference.updateChildren(map);
+                Toast.makeText(EditDoesActivity.this, editTitle.getText().toString() + " " + editDescription.getText().toString(), Toast.LENGTH_SHORT).show();
                 finish();
                 //                reference.addValueEventListener(new ValueEventListener() {
 //                    @Override
@@ -73,7 +74,7 @@ public class EditDoesActivity extends AppCompatActivity {
 //
 //                    }
 //                });
-                Toast.makeText(EditDoesActivity.this, id, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(EditDoesActivity.this, id, Toast.LENGTH_SHORT).show();
             }
         });
     }

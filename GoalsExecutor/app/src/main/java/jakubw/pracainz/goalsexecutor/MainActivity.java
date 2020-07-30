@@ -19,11 +19,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.navigation.NavigationView;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
     private TextView username;
-    private ImageView userphoto;
+    private CircleImageView userphoto;
     private TextView nickname;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

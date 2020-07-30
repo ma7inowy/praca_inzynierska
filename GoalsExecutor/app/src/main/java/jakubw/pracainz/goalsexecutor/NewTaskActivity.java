@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class NewTaskActivity extends AppCompatActivity {
@@ -46,26 +47,31 @@ public class NewTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
               reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Does" + number);
-//            saveNote();
-//              myDoes = new MyDoes(addTitle.getText().toString(),addDate.getText().toString(), "jakis opis");
-//              reference.push().setValue(myDoes);
-              reference.addValueEventListener(new ValueEventListener() {
-                  @Override
-                  public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                      dataSnapshot.getRef().child("titledoes").setValue(addTitle.getText().toString());
-                      dataSnapshot.getRef().child("descdoes").setValue(addDescription.getText().toString());
-                      dataSnapshot.getRef().child("datedoes").setValue(addDate.getText().toString());
-                      dataSnapshot.getRef().child("id").setValue(number.toString());
-                      finish();
-//                        Intent intent = new Intent(NewTaskActivity.this, KontenerActivity.class);
-//                        startActivity(intent);
-                  }
 
-                  @Override
-                  public void onCancelled(@NonNull DatabaseError databaseError) {
-                      Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
-                  }
-              });
+//              reference.addValueEventListener(new ValueEventListener() {
+//                  @Override
+//                  public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                      dataSnapshot.getRef().child("titledoes").setValue(addTitle.getText().toString());
+//                      dataSnapshot.getRef().child("descdoes").setValue(addDescription.getText().toString());
+//                      dataSnapshot.getRef().child("datedoes").setValue(addDate.getText().toString());
+//                      dataSnapshot.getRef().child("id").setValue(number.toString());
+//                      finish();
+//
+//                  }
+//
+//                  @Override
+//                  public void onCancelled(@NonNull DatabaseError databaseError) {
+//                      Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
+//                  }
+//              });
+                HashMap map = new HashMap();
+                map.put("titledoes", addTitle.getText().toString());
+                map.put("descdoes", addDescription.getText().toString());
+                map.put("datedoes", addDate.getText().toString());
+                map.put("id",number.toString());
+                reference.updateChildren(map);
+                Toast.makeText(NewTaskActivity.this, addTitle.getText().toString() + " " + addDescription.getText().toString(), Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
 

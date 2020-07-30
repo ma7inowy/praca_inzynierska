@@ -112,7 +112,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
         intent.putExtra("date", myDoes.getDatedoes());
         intent.putExtra("id", myDoes.getId());
         startActivity(intent);
-        Toast.makeText(this, "onNoteclick" + position, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "id" +  myDoes.getId(), Toast.LENGTH_SHORT).show();
     }
 
     public ArrayList<MyDoes> sort(List<MyDoes> list) {
