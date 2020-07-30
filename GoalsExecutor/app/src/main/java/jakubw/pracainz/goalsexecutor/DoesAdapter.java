@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,11 +13,11 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-public class DoesAdapter extends RecyclerView.Adapter<DoesAdapter.MyViewHolder>{
+public class DoesAdapter extends RecyclerView.Adapter<DoesAdapter.MyViewHolder> {
 
-    Context context;
-    ArrayList<MyDoes> myDoes;
-    OnNoteListener onNoteListener;
+    private Context context;
+    private ArrayList<MyDoes> myDoes;
+    private OnNoteListener onNoteListener;
 
     public DoesAdapter(Context context, ArrayList<MyDoes> myDoes, OnNoteListener onNoteListener) {
         this.context = context;
@@ -29,13 +28,15 @@ public class DoesAdapter extends RecyclerView.Adapter<DoesAdapter.MyViewHolder>{
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_kontener, parent, false),onNoteListener);
+        return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_kontener, parent, false), onNoteListener);
     }
+
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int i) {
         holder.titledoes.setText(myDoes.get(i).getTitledoes());
-//        holder.descdoes.setText(myDoes.get(i).getDescdoes());
         holder.datedoes.setText(myDoes.get(i).getDatedoes());
+        //holder.descdoes.setText(myDoes.get(i).getDescdoes());
+
     }
 
     @Override
@@ -43,29 +44,27 @@ public class DoesAdapter extends RecyclerView.Adapter<DoesAdapter.MyViewHolder>{
         return myDoes.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView titledoes, descdoes, datedoes;
-//        Button btnSort;
         OnNoteListener onNoteListener;
 
         public MyViewHolder(@NonNull View itemView, OnNoteListener onNoteListener) {
             super(itemView);
             titledoes = (TextView) itemView.findViewById(R.id.titledoes);
-//            descdoes = (TextView) itemView.findViewById(R.id.descdoes);
+//          descdoes = (TextView) itemView.findViewById(R.id.descdoes);
             datedoes = (TextView) itemView.findViewById(R.id.datedoes);
             this.onNoteListener = onNoteListener;
-//            btnSort = itemView.findViewById(R.id.btnsort);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-        onNoteListener.onNoteClick(getAdapterPosition());
+            onNoteListener.onNoteClick(getAdapterPosition());
         }
     }
 
-    public interface OnNoteListener{
+    public interface OnNoteListener {
         void onNoteClick(int position);
     }
 }

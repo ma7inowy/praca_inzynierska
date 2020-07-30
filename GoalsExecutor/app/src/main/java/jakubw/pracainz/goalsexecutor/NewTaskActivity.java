@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,12 +43,15 @@ public class NewTaskActivity extends AppCompatActivity {
         addDescription = findViewById(R.id.addDescription);
         addNewTaskBtn = findViewById(R.id.addNewTaskBtn);
         number = new Random().nextInt();
-        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor");
+//        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor");
+
+        //google signin
+        final GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
 
         addNewTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Does" + number);
+              reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("NextAction").child(signInAccount.getId()).child("Does" + number);
 
 //              reference.addValueEventListener(new ValueEventListener() {
 //                  @Override

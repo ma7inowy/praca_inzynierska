@@ -13,11 +13,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -27,14 +33,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView username;
     private CircleImageView userphoto;
     private TextView nickname;
+    private GoogleSignInClient mGoogleSignInClient;
+
+    //google signin
+    GoogleSignInAccount signInAccount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        username = findViewById(R.id.username);
+        signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        // do wylogowaina
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
 
-         //google signin
-        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        //
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -82,7 +98,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent = new Intent(MainActivity.this, KontenerActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.nav_logout:
+                signOut();
+                break;
         }
         return true;
+    }
+
+    private void signOut() {
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(MainActivity.this, "Successfully signed out", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
     }
 }

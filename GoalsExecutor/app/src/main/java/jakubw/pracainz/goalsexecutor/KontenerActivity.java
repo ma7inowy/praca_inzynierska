@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.FirebaseApiNotAvailableException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,7 +33,6 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
 
     TextView titlepage, endpage;
     Button btnAddNew, btnSort;
-
     DatabaseReference reference;
     RecyclerView ourdoes;
     ArrayList<MyDoes> list;
@@ -43,20 +44,19 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
         setContentView(R.layout.activity_kontener);
         titlepage = findViewById(R.id.titlepage);
         endpage = findViewById(R.id.endpage);
-
         btnAddNew = findViewById(R.id.btnAddNew);
         btnSort = findViewById(R.id.btnsort);
-
         ourdoes = findViewById(R.id.ourdoes);
         ourdoes.setLayoutManager(new LinearLayoutManager(this));
-        list = new ArrayList<MyDoes>();
-//        setAdapter(list);
+        list = new ArrayList<>();
 
-        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor");
+        //google signin
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+
+        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("NextAction").child(signInAccount.getId().toString());
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //set code
                 list.clear();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     MyDoes p = dataSnapshot1.getValue(MyDoes.class);
@@ -67,7 +67,6 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                //set code
                 Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
             }
         });
@@ -80,7 +79,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
             }
         });
 
-        //sortowanie zadan po dlugosci tytulu
+        //tylko do testowania
         btnSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,7 +111,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
         intent.putExtra("date", myDoes.getDatedoes());
         intent.putExtra("id", myDoes.getId());
         startActivity(intent);
-        Toast.makeText(this, "id" +  myDoes.getId(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "id" + myDoes.getId(), Toast.LENGTH_SHORT).show();
     }
 
     public ArrayList<MyDoes> sort(List<MyDoes> list) {
@@ -146,9 +145,6 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.item1:
-                Toast.makeText(this, "item1", Toast.LENGTH_SHORT).show();
-                return true;
             case R.id.item2:
                 Toast.makeText(this, "akcja", Toast.LENGTH_SHORT).show();
                 return true;
