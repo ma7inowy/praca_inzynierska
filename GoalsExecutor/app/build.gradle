@@ -49,5 +49,8 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:28.1.1'
     implementation 'com.google.android.gms:play-services-auth:18.1.0'// appcompat library
 
+    //swipe left for delete
+    implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'
+
 
 }

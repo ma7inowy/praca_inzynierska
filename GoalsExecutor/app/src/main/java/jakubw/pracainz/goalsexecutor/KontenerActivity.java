@@ -2,10 +2,13 @@ package jakubw.pracainz.goalsexecutor;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,6 +32,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
+
+import static androidx.recyclerview.widget.ItemTouchHelper.*;
+
 public class KontenerActivity extends AppCompatActivity implements DoesAdapter.OnNoteListener {
 
     TextView titlepage, endpage;
@@ -37,6 +44,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
     RecyclerView ourdoes;
     ArrayList<MyDoes> list;
     DoesAdapter doesAdapter;
+    GoogleSignInAccount signInAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +59,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
         list = new ArrayList<>();
 
         //google signin
-        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        signInAccount = GoogleSignIn.getLastSignedInAccount(this);
 
         reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("NextAction").child(signInAccount.getId().toString());
         reference.addValueEventListener(new ValueEventListener() {
@@ -93,7 +101,47 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
             }
         });
 
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(ourdoes);
+
+
+
     }
+
+    // swipe left to delete task
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, LEFT){
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            int postion = viewHolder.getAdapterPosition();
+
+            switch (direction){
+                case LEFT:
+                    String id = list.get(postion).getId();
+                    reference.child("Does" + id).removeValue(); // usuwa z bazy
+                    list.remove(postion);
+//                    doesAdapter.notifyItemRemoved(postion);
+                    setAdapter(list);
+                    break;
+            }
+        }
+
+        @Override
+        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+            new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(KontenerActivity.this, R.color.colorDeleteTask))
+//                    .addBackgroundColor(ContextCompat.getColor(KontenerActivity.this, R.color.colorPrimary))
+                    .addSwipeLeftActionIcon(R.drawable.ic_delete_black_)
+                    .create()
+                    .decorate();
+
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        }
+    };
 
     public void setAdapter(ArrayList<MyDoes> list) {
         doesAdapter = new DoesAdapter(KontenerActivity.this, list, this);
@@ -161,4 +209,6 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }
