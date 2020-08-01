@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseApiNotAvailableException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
@@ -117,15 +119,29 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            int postion = viewHolder.getAdapterPosition();
+            final int postion = viewHolder.getAdapterPosition();
 
             switch (direction){
                 case LEFT:
+                    final MyDoes deletedTask = list.get(postion);
                     String id = list.get(postion).getId();
                     reference.child("Does" + id).removeValue(); // usuwa z bazy
                     list.remove(postion);
 //                    doesAdapter.notifyItemRemoved(postion);
                     setAdapter(list);
+                    Snackbar.make(ourdoes, "Task " + deletedTask.getTitledoes() + "deleted!",Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            list.add(postion, deletedTask);
+                            setAdapter(list); // moze lepiej nasluchiwac na jedna pozycje?
+                            HashMap map = new HashMap();
+                            map.put("titledoes", deletedTask.getTitledoes());
+                            map.put("descdoes", deletedTask.getDescdoes());
+                            map.put("datedoes", deletedTask.getDatedoes());
+                            map.put("id",deletedTask.getId());
+                            reference.child("Does" + deletedTask.getId()).updateChildren(map);
+                        }
+                    }).show();
                     break;
             }
         }
