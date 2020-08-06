@@ -4,10 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private CircleImageView userphoto;
     private TextView nickname;
     private GoogleSignInClient mGoogleSignInClient;
+
+    final int callbackId = 42;
 
     //google signin
     GoogleSignInAccount signInAccount;
@@ -101,8 +107,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_logout:
                 signOut();
                 break;
+            case R.id.nav_calendar:
+//                checkPermission(callbackId, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR);
+                synchronized(this) {
+                    checkPermission(callbackId, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR);
+                }
+                break;
+            case R.id.nav_profile:
+                showCalendarsData();
+
+                break;
         }
         return true;
+    }
+
+    private void checkPermission(int callbackId, String... permissionsId) {
+        boolean permissions = true;
+        for (String p : permissionsId) {
+            permissions = permissions && ContextCompat.checkSelfPermission(this, p) == PackageManager.PERMISSION_GRANTED;
+        }
+
+        if (!permissions)
+            ActivityCompat.requestPermissions(this, permissionsId, callbackId);
+    }
+
+    private void showCalendarsData() {
+//        CalendarContentResolver contentResolver = new CalendarContentResolver(this);
+//        String rozmiar = contentResolver.getCalendars().toString();
+//        return  rozmiar;
+        ReadCalendar.readCalendar(this);
     }
 
     private void signOut() {
