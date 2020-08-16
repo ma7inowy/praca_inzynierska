@@ -108,14 +108,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 signOut();
                 break;
             case R.id.nav_calendar:
-//                checkPermission(callbackId, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR);
-                synchronized(this) {
-                    checkPermission(callbackId, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR);
-                }
+                Intent intent2 = new Intent(MainActivity.this, CalendarActivity.class);
+                startActivity(intent2);
                 break;
             case R.id.nav_profile:
                 showCalendarsData();
-
+                break;
+            case R.id.nav_settings:
+                synchronized(this) {
+                    checkPermission(callbackId, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR);
+                }
                 break;
         }
         return true;

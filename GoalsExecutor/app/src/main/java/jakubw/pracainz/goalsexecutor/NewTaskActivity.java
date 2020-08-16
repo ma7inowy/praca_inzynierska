@@ -56,7 +56,7 @@ public class NewTaskActivity extends AppCompatActivity {
 //              reference.addValueEventListener(new ValueEventListener() {
 //                  @Override
 //                  public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                      dataSnapshot.getRef().child("titledoes").setValue(addTitle.getText().toString());
+//                      dataSnapshot.getRef().child("titleEvent").setValue(addTitle.getText().toString());
 //                      dataSnapshot.getRef().child("descdoes").setValue(addDescription.getText().toString());
 //                      dataSnapshot.getRef().child("datedoes").setValue(addDate.getText().toString());
 //                      dataSnapshot.getRef().child("id").setValue(number.toString());
@@ -88,7 +88,7 @@ public class NewTaskActivity extends AppCompatActivity {
 ////        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Does" + number);
 //        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Does" + number);
 //        MyDoes myDoes = new MyDoes(addTitle.getText().toString(),addDate.getText().toString(), "jakis opis");
-//        reference.push().getRef().child("titledoes").setValue(addTitle.getText().toString());
+//        reference.push().getRef().child("titleEvent").setValue(addTitle.getText().toString());
 //        finish();
 //    }
 }

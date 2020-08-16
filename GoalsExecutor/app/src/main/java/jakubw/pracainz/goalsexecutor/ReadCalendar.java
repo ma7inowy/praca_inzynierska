@@ -1,5 +1,7 @@
 package jakubw.pracainz.goalsexecutor;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -14,8 +16,8 @@ import android.provider.CalendarContract;
 import android.text.format.DateUtils;
 import android.util.Log;
 
-public class ReadCalendar
-{
+public class ReadCalendar {
+
     public static final String[] FIELDS = {
             CalendarContract.Calendars._ID,                           // 0
             CalendarContract.Calendars.ACCOUNT_NAME,                  // 1
@@ -39,11 +41,9 @@ public class ReadCalendar
 
         HashSet<String> calendarIds = new HashSet<String>();
 
-        try
-        {
-            Log.i("readcalendar","Count="+cursor.getCount());
-            if(cursor.getCount() > 0)
-            {
+        try {
+            Log.i("readcalendar", "Count=" + cursor.getCount());
+            if (cursor.getCount() > 0) {
                 Log.i("readcalendar", "the control is just inside of the cursor.count loop");
                 while (cursor.moveToNext()) {
                     String _id = cursor.getString(0);
@@ -52,17 +52,13 @@ public class ReadCalendar
                     String displayCalendarName = cursor.getString(2);
                     Boolean selected = !cursor.getString(4).equals("0");
 
-                    Log.i("readcalendar","Id: " + _id + " Owner Name: " + displayName + " Selected: " + selected + " CalendarName: " + displayCalendarName);
+                    Log.i("readcalendar", "Id: " + _id + " Owner Name: " + displayName + " Selected: " + selected + " CalendarName: " + displayCalendarName);
                     calendarIds.add(_id);
                 }
             }
-        }
-        catch(AssertionError ex)
-        {
+        } catch (AssertionError ex) {
             ex.printStackTrace();
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -77,18 +73,15 @@ public class ReadCalendar
             ContentUris.appendId(builder, now + DateUtils.DAY_IN_MILLIS * 1000);
 
             Cursor eventCursor = contentResolver.query(builder.build(),
-                    new String[]  { "title", "begin", "end", "allDay"}, getSelection(),
+                    new String[]{"title", "begin", "end", "allDay"}, null,
                     null, null);
 
-            Log.i("readcalendar",("eventCursor count="+eventCursor.getCount()));
-            if(eventCursor.getCount()>0)
-            {
+            Log.i("readcalendar", ("eventCursor count=" + eventCursor.getCount()));
+            if (eventCursor.getCount() > 0) {
 
-                if(eventCursor.moveToFirst())
-                {
-                    do
-                    {
-                        Object mbeg_date,beg_date,beg_time,end_date,end_time;
+                if (eventCursor.moveToFirst()) {
+                    do {
+                        Object mbeg_date, beg_date, beg_time, end_date, end_time;
 
                         final String title = eventCursor.getString(0);
                         final Date begin = new Date(eventCursor.getLong(1));
@@ -98,16 +91,27 @@ public class ReadCalendar
                         /*  System.out.println("Title: " + title + " Begin: " + begin + " End: " + end +
                                     " All Day: " + allDay);
                         */
-                        Log.i("readcalendar","Title:"+title);
-                        Log.i("readcalendar","Begin:"+begin);
-                        Log.i("readcalendar","End:"+end);
-                        Log.i("readcalendar","All Day:"+allDay);
+                        Log.i("readcalendar", "Title:" + title);
+                        //TESTOWANKO DANE DO Date
+                        SimpleDateFormat postFormater = new SimpleDateFormat("h,dd,MM,yyyy");
+                        String beginNew = postFormater.format(begin);
+                        String[] table = beginNew.split(",");
+                        int hour = Integer.parseInt(table[0]);
+                        int day = Integer.parseInt(table[1]);
+                        int month = Integer.parseInt(table[2]);
+                        int year = Integer.parseInt(table[3]);
+//                        LocalDate dataa = new LocalDate(year,month,day,hour,0); tak sie NIE DA :(
+//                        LocalDate dataa = new LocalDate(year,month,day);
+//                        Date dataa = new Date(year, month, day);
+                        Log.i("readcalendar", "Begin:" + beginNew);
+                        Log.i("readcalendar", "End:" + end);
+                        Log.i("readcalendar", "All Day:" + allDay);
 
                         /* the calendar control metting-begin events Respose  sub-string (starts....hare) */
 
                         Pattern p = Pattern.compile(" ");
                         String[] items = p.split(begin.toString());
-                        String scalendar_metting_beginday,scalendar_metting_beginmonth,scalendar_metting_beginyear,scalendar_metting_begindate,scalendar_metting_begintime,scalendar_metting_begingmt;
+                        String scalendar_metting_beginday, scalendar_metting_beginmonth, scalendar_metting_beginyear, scalendar_metting_begindate, scalendar_metting_begintime, scalendar_metting_begingmt;
 
                         scalendar_metting_beginday = items[0];
                         scalendar_metting_beginmonth = items[1];
@@ -117,27 +121,27 @@ public class ReadCalendar
                         scalendar_metting_beginyear = items[5];
 
 
-                        String  calendar_metting_beginday = scalendar_metting_beginday;
-                        String  calendar_metting_beginmonth = scalendar_metting_beginmonth.toString().trim();
+                        String calendar_metting_beginday = scalendar_metting_beginday;
+                        String calendar_metting_beginmonth = scalendar_metting_beginmonth.toString().trim();
 
-                        int  calendar_metting_begindate = Integer.parseInt(scalendar_metting_begindate.trim());
+                        int calendar_metting_begindate = Integer.parseInt(scalendar_metting_begindate.trim());
 
                         String calendar_metting_begintime = scalendar_metting_begintime.toString().trim();
                         String calendar_metting_begingmt = scalendar_metting_begingmt;
                         int calendar_metting_beginyear = Integer.parseInt(scalendar_metting_beginyear.trim());
 
 
-                        Log.i("readcalendar","calendar_metting_beginday="+calendar_metting_beginday);
+                        Log.i("readcalendar", "calendar_metting_beginday=" + calendar_metting_beginday);
 
-                        Log.i("readcalendar","calendar_metting_beginmonth ="+calendar_metting_beginmonth);
+                        Log.i("readcalendar", "calendar_metting_beginmonth =" + calendar_metting_beginmonth);
 
-                        Log.i("readcalendar","calendar_metting_begindate ="+calendar_metting_begindate);
+                        Log.i("readcalendar", "calendar_metting_begindate =" + calendar_metting_begindate);
 
-                        Log.i("readcalendar","calendar_metting_begintime="+calendar_metting_begintime);
+                        Log.i("readcalendar", "calendar_metting_begintime=" + calendar_metting_begintime);
 
-                        Log.i("readcalendar","calendar_metting_begingmt ="+calendar_metting_begingmt);
+                        Log.i("readcalendar", "calendar_metting_begingmt =" + calendar_metting_begingmt);
 
-                        Log.i("readcalendar","calendar_metting_beginyear ="+calendar_metting_beginyear);
+                        Log.i("readcalendar", "calendar_metting_beginyear =" + calendar_metting_beginyear);
 
                         /* the calendar control metting-begin events Respose  sub-string (starts....ends) */
 
@@ -145,7 +149,7 @@ public class ReadCalendar
 
                         Pattern p1 = Pattern.compile(" ");
                         String[] enditems = p.split(end.toString());
-                        String scalendar_metting_endday,scalendar_metting_endmonth,scalendar_metting_endyear,scalendar_metting_enddate,scalendar_metting_endtime,scalendar_metting_endgmt;
+                        String scalendar_metting_endday, scalendar_metting_endmonth, scalendar_metting_endyear, scalendar_metting_enddate, scalendar_metting_endtime, scalendar_metting_endgmt;
 
                         scalendar_metting_endday = enditems[0];
                         scalendar_metting_endmonth = enditems[1];
@@ -155,42 +159,42 @@ public class ReadCalendar
                         scalendar_metting_endyear = enditems[5];
 
 
-                        String  calendar_metting_endday = scalendar_metting_endday;
-                        String  calendar_metting_endmonth = scalendar_metting_endmonth.toString().trim();
+                        String calendar_metting_endday = scalendar_metting_endday;
+                        String calendar_metting_endmonth = scalendar_metting_endmonth.toString().trim();
 
-                        int  calendar_metting_enddate = Integer.parseInt(scalendar_metting_enddate.trim());
+                        int calendar_metting_enddate = Integer.parseInt(scalendar_metting_enddate.trim());
 
                         String calendar_metting_endtime = scalendar_metting_endtime.toString().trim();
                         String calendar_metting_endgmt = scalendar_metting_endgmt;
                         int calendar_metting_endyear = Integer.parseInt(scalendar_metting_endyear.trim());
 
 
-                        Log.i("readcalendar","calendar_metting_beginday="+calendar_metting_endday);
+                        Log.i("readcalendar", "calendar_metting_beginday=" + calendar_metting_endday);
 
-                        Log.i("readcalendar","calendar_metting_beginmonth ="+calendar_metting_endmonth);
+                        Log.i("readcalendar", "calendar_metting_beginmonth =" + calendar_metting_endmonth);
 
-                        Log.i("readcalendar","calendar_metting_begindate ="+calendar_metting_enddate);
+                        Log.i("readcalendar", "calendar_metting_begindate =" + calendar_metting_enddate);
 
-                        Log.i("readcalendar","calendar_metting_begintime="+calendar_metting_endtime);
+                        Log.i("readcalendar", "calendar_metting_begintime=" + calendar_metting_endtime);
 
-                        Log.i("readcalendar","calendar_metting_begingmt ="+calendar_metting_endgmt);
+                        Log.i("readcalendar", "calendar_metting_begingmt =" + calendar_metting_endgmt);
 
-                        Log.i("readcalendar","calendar_metting_beginyear ="+calendar_metting_endyear);
+                        Log.i("readcalendar", "calendar_metting_beginyear =" + calendar_metting_endyear);
 
                         /* the calendar control metting-end events Respose  sub-string (starts....ends) */
 
-                        Log.i("readcalendar","only date begin of events="+begin.getDate());
-                        Log.i("readcalendar","only begin time of events="+begin.getHours() + ":" +begin.getMinutes() + ":" +begin.getSeconds());
+                        Log.i("readcalendar", "only date begin of events=" + begin.getDate());
+                        Log.i("readcalendar", "only begin time of events=" + begin.getHours() + ":" + begin.getMinutes() + ":" + begin.getSeconds());
 
 
-                        Log.i("readcalendar","only date begin of events="+end.getDate());
-                        Log.i("readcalendar","only begin time of events="+end.getHours() + ":" +end.getMinutes() + ":" +end.getSeconds());
+                        Log.i("readcalendar", "only date begin of events=" + end.getDate());
+                        Log.i("readcalendar", "only begin time of events=" + end.getHours() + ":" + end.getMinutes() + ":" + end.getSeconds());
 
                         beg_date = begin.getDate();
-                        mbeg_date = begin.getDate()+"/"+calendar_metting_beginmonth+"/"+calendar_metting_beginyear;
+                        mbeg_date = begin.getDate() + "/" + calendar_metting_beginmonth + "/" + calendar_metting_beginyear;
                         beg_time = begin.getHours();
 
-                        System.out.println("the vaule of mbeg_date="+mbeg_date.toString().trim());
+                        System.out.println("the vaule of mbeg_date=" + mbeg_date.toString().trim());
                         end_date = end.getDate();
                         end_time = end.getHours();
 
@@ -205,24 +209,27 @@ public class ReadCalendar
 //                        CallHandlerUI.metting_end_mtime.add(calendar_metting_endtime.toString());
 
                     }
-                    while(eventCursor.moveToNext());
+                    while (eventCursor.moveToNext());
                 }
             }
             break;
         }
     }
 
-    public static String getSelection(){
+    public static String getSelection() {
         Calendar startTime = Calendar.getInstance();
 
-        startTime.set(Calendar.HOUR_OF_DAY,0);
-        startTime.set(Calendar.MINUTE,0);
+        startTime.set(Calendar.HOUR_OF_DAY, 0);
+        startTime.set(Calendar.MINUTE, 0);
         startTime.set(Calendar.SECOND, 0);
 
-        Calendar endTime= Calendar.getInstance();
+        Calendar endTime = Calendar.getInstance();
         endTime.add(Calendar.DATE, 30);
 
-        String selection = "(( " + CalendarContract.Events.DTSTART + " >= " + startTime.getTimeInMillis() + " ) AND ( " + CalendarContract.Events.DTSTART + " <= " + endTime.getTimeInMillis() + " ) AND ( deleted != 1 ))";
+        String selection = "(( " + CalendarContract.Events.DTSTART + " >= " + startTime.getTimeInMillis()
+                + " ) AND ( " + CalendarContract.Events.DTSTART + " <= " + endTime.getTimeInMillis()
+        + " ) AND ( deleted != 1 ) AND " + CalendarContract.Events.OWNER_ACCOUNT + " = 'kuba.wu1910@gmail.com')";
+
         return selection;
     }
 }
