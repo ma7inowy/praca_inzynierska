@@ -29,7 +29,7 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
     Button addCalendarNewTaskBtn, setDateBtn, setTimeBtn;
     DatabaseReference reference;
     Integer number;
-    Integer yearEvent, monthEvent, dayEvent, hourEvent,minuteEvent;
+    Integer yearEvent, monthEvent, dayEvent, hourEvent, minuteEvent;
     Calendar calendar;
 
     @Override
@@ -65,6 +65,7 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
                 map.put("day", dayEvent);
                 map.put("hour", hourEvent);
                 map.put("minute", minuteEvent);
+                map.put("description", addDescriptionEvent.getText().toString());
                 map.put("id", number.toString());
                 reference.updateChildren(map);
                 Toast.makeText(CalendarNewTaskActivity.this, "done!", Toast.LENGTH_SHORT).show();

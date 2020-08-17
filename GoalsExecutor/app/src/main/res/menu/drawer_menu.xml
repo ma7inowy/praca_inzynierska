@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item android:id="@+id/nav_message"
-            android:icon="@drawable/ic_message"
-            android:title="Message"/>
+        <item android:id="@+id/nav_kontener"
+            android:icon="@drawable/ic_kontener"
+            android:title="Kontener/BOX"/>
 
         <item android:id="@+id/nav_next_action"
             android:icon="@drawable/ic_next_action"

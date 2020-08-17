@@ -2,9 +2,12 @@ package jakubw.pracainz.goalsexecutor;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 import android.content.ContentResolver;
@@ -30,7 +33,8 @@ public class ReadCalendar {
 
     static Cursor cursor;
 
-    public static void readCalendar(Context context) {
+    public static ArrayList<CalendarEvent> readCalendar(Context context) {
+        ArrayList eventList = new ArrayList<CalendarEvent>();
 
         ContentResolver contentResolver = context.getContentResolver();
 
@@ -73,7 +77,7 @@ public class ReadCalendar {
             ContentUris.appendId(builder, now + DateUtils.DAY_IN_MILLIS * 1000);
 
             Cursor eventCursor = contentResolver.query(builder.build(),
-                    new String[]{"title", "begin", "end", "allDay"}, null,
+                    new String[]{"title", "begin", "end", "allDay"}, getSelection(),
                     null, null);
 
             Log.i("readcalendar", ("eventCursor count=" + eventCursor.getCount()));
@@ -100,6 +104,9 @@ public class ReadCalendar {
                         int day = Integer.parseInt(table[1]);
                         int month = Integer.parseInt(table[2]);
                         int year = Integer.parseInt(table[3]);
+                        int id_event = new Random().nextInt();
+                        eventList.add(new CalendarEvent(title,String.valueOf(id_event),hour,day,month,year));
+
 //                        LocalDate dataa = new LocalDate(year,month,day,hour,0); tak sie NIE DA :(
 //                        LocalDate dataa = new LocalDate(year,month,day);
 //                        Date dataa = new Date(year, month, day);
@@ -214,6 +221,7 @@ public class ReadCalendar {
             }
             break;
         }
+        return eventList;
     }
 
     public static String getSelection() {

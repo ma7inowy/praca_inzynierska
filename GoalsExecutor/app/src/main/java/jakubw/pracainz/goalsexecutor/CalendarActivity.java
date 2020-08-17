@@ -78,17 +78,6 @@ public class CalendarActivity extends AppCompatActivity implements CalendarAdapt
         btnAddNewEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId()).child("Does" + number);
-////                HashMap map = new HashMap();
-////                map.put("title", "Tytul Eventu");
-////                map.put("year", 1910);
-////                map.put("month", 07);
-////                map.put("day", 23);
-////                map.put("id", number.toString());
-////                reference.updateChildren(map);
-////                Toast.makeText(CalendarActivity.this, "done!", Toast.LENGTH_SHORT).show();
-////                finish();
-
                 Intent intent = new Intent(CalendarActivity.this, CalendarNewTaskActivity.class);
                 startActivity(intent);
             }
@@ -97,18 +86,38 @@ public class CalendarActivity extends AppCompatActivity implements CalendarAdapt
         btnsortEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ReadCalendar.readCalendar(CalendarActivity.this);
-                Toast.makeText(CalendarActivity.this, "toast", Toast.LENGTH_SHORT).show();
+                handleEventsFromPhoneCalendars();
             }
         });
+    }
+
+    private void handleEventsFromPhoneCalendars() {
+        ArrayList<CalendarEvent> events = ReadCalendar.readCalendar(CalendarActivity.this);
+        if (!events.isEmpty()) {
+            for (CalendarEvent event : events) {
+                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId()).child("Does" + event.getId());
+                HashMap map = new HashMap();
+                map.put("title", event.getTitle());
+                map.put("year", event.getYear());
+                map.put("month", event.getMonth());
+                map.put("day", event.getDay());
+                map.put("hour", event.getHour());
+                map.put("minute", 0);
+                map.put("description", "desc");
+                map.put("id", event.getId());
+                reference.updateChildren(map);
+            }
+            Toast.makeText(CalendarActivity.this, "Events loaded!", Toast.LENGTH_SHORT).show();
+            finish();
+        } else
+            Toast.makeText(CalendarActivity.this, "No events to load!", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onNoteClick(int position) {
         final CalendarEvent event = eventList.get(position);
         Toast.makeText(this, "id" + event.getId(), Toast.LENGTH_SHORT).show();
-
-
     }
 
     public void setAdapter(ArrayList<CalendarEvent> list) {

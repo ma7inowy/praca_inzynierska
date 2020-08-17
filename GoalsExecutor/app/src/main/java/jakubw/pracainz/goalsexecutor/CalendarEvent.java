@@ -1,7 +1,7 @@
 package jakubw.pracainz.goalsexecutor;
 
 public class CalendarEvent {
-    private String title, id;
+    private String title, id, description;
     private int hour;
     private int day;
     private int month;
@@ -74,5 +74,13 @@ public class CalendarEvent {
 
     public void setMinute(int minute) {
         this.minute = minute;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

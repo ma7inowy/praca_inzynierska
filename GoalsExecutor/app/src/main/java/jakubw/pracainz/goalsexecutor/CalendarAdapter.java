@@ -38,12 +38,11 @@ class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.MyViewHolder>
         calendar1.set(Calendar.DATE, eventList.get(i).getDay());
         calendar1.set(Calendar.HOUR, eventList.get(i).getHour());
         calendar1.set(Calendar.MINUTE, eventList.get(i).getMinute());
-        CharSequence dataCharSequence = DateFormat.format("MM-dd-yyyy HH:mm",calendar1);
+        CharSequence dataCharSequence = DateFormat.format("dd MMM yyyy HH:mm", calendar1);
+
         holder.eventTitle.setText(eventList.get(i).getTitle());
         holder.eventBeginDate.setText(dataCharSequence);
         holder.eventDuration.setText("CZAS trwania");
-        //holder.descdoes.setText(eventList.get(i).getDescdoes());
-
     }
 
     @Override
