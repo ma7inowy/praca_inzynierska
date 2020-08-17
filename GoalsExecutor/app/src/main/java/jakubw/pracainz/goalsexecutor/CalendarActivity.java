@@ -5,6 +5,7 @@ package jakubw.pracainz.goalsexecutor;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -117,6 +119,28 @@ public class CalendarActivity extends AppCompatActivity implements CalendarAdapt
     @Override
     public void onNoteClick(int position) {
         final CalendarEvent event = eventList.get(position);
+        Intent intent = new Intent(this, EditCalendarEventActivity.class);
+        intent.putExtra("title", event.getTitle());
+        intent.putExtra("yearEvent", event.getYear());
+        intent.putExtra("monthEvent", event.getMonth());
+        intent.putExtra("dayEvent", event.getDay());
+        intent.putExtra("hourEvent", event.getHour());
+        intent.putExtra("minuteEvent", event.getMinute());
+        intent.putExtra("description", event.getDescription());
+        intent.putExtra("id", event.getId());
+        // jeszcze cos zeby wysylac date na button
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.set(Calendar.YEAR, event.getYear());
+        calendar1.set(Calendar.MONTH, event.getMonth());
+        calendar1.set(Calendar.DATE, event.getDay());
+        calendar1.set(Calendar.HOUR, event.getHour());
+        calendar1.set(Calendar.MINUTE, event.getMinute());
+        CharSequence dataCharSequenceForDate = DateFormat.format("dd MMM yyyy", calendar1);
+        CharSequence dataCharSequenceForTime = DateFormat.format("HH:mm", calendar1);
+
+        intent.putExtra("dateEvent", dataCharSequenceForDate);
+        intent.putExtra("timeEvent",dataCharSequenceForTime);
+        startActivity(intent);
         Toast.makeText(this, "id" + event.getId(), Toast.LENGTH_SHORT).show();
     }
 
