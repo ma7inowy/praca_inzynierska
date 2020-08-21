@@ -26,6 +26,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -41,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //google signin
     GoogleSignInAccount signInAccount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()){
+        switch (menuItem.getItemId()) {
             case R.id.nav_next_action:
                 Intent intent = new Intent(MainActivity.this, KontenerActivity.class);
                 startActivity(intent);
@@ -108,16 +118,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 signOut();
                 break;
             case R.id.nav_calendar:
-                Intent intent2 = new Intent(MainActivity.this, CalendarActivity.class);
-                startActivity(intent2);
+                String requiredPermission = android.Manifest.permission.READ_CALENDAR;
+                String requiredPermission2 = android.Manifest.permission.WRITE_CALENDAR;
+                int checkValRead = this.checkCallingOrSelfPermission(requiredPermission);
+                int checkValWrite = this.checkCallingOrSelfPermission(requiredPermission2);
+                //jesli permisson zaakceptowane to cyk wlacz kalendarz i NIE wczytaj dane z kalendarza z tele
+                if (checkValRead == PackageManager.PERMISSION_GRANTED && checkValWrite == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent2 = new Intent(MainActivity.this, CalendarActivity.class);
+                    startActivity(intent2);
+                }
+                checkPermission(callbackId, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR);
                 break;
             case R.id.nav_profile:
-                showCalendarsData();
+                Intent intent3 = new Intent(MainActivity.this, LabelsActivity.class);
+                startActivity(intent3);
                 break;
             case R.id.nav_settings:
-                synchronized(this) {
-                    checkPermission(callbackId, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR);
-                }
+                checkPermission(callbackId, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR);
                 break;
         }
         return true;
@@ -134,13 +151,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void showCalendarsData() {
-//        CalendarContentResolver contentResolver = new CalendarContentResolver(this);
-//        String rozmiar = contentResolver.getCalendars().toString();
-//        return  rozmiar;
         ReadCalendar.readCalendar(this);
     }
 
     private void signOut() {
+        FirebaseAuth.getInstance().signOut();
         mGoogleSignInClient.signOut()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
@@ -152,5 +167,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         finish();
                     }
                 });
+//        FirebaseAuth.getInstance().signOut();
+//        Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+//        startActivity(intent);
+//        finish();
+
+    }
+    //jesli bede robil "permission check denied albo allow to wtedy sie wywoluje WIEC JESTLI ZAAKCEPTUJE TO WLACZ
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        List<Integer> list = new ArrayList<>(grantResults.length);
+
+        for (int i : grantResults) {
+            list.add(Integer.valueOf(i));
+        }
+
+        if (callbackId == requestCode) {
+            if (!list.contains(PackageManager.PERMISSION_DENIED)) {
+                //all permissions have been granted
+                handleEventsFromPhoneCalendars();
+                Intent intent2 = new Intent(MainActivity.this, CalendarActivity.class);
+                startActivity(intent2);
+
+            }
+        }
+
+    }
+
+    private void handleEventsFromPhoneCalendars() {
+        DatabaseReference reference;
+        ArrayList<CalendarEvent> events = ReadCalendar.readCalendar(MainActivity.this);
+        if (!events.isEmpty()) {
+            for (CalendarEvent event : events) {
+                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId()).child("Does" + event.getId());
+                HashMap map = new HashMap();
+                map.put("title", event.getTitle());
+                map.put("year", event.getYear());
+                map.put("month", event.getMonth());
+                map.put("day", event.getDay());
+                map.put("hour", event.getHour());
+                map.put("minute", 0);
+                map.put("description", "desc");
+                map.put("id", event.getId());
+                reference.updateChildren(map);
+            }
+            Toast.makeText(MainActivity.this, "Events loaded!", Toast.LENGTH_SHORT).show();
+            finish();
+        } else
+            Toast.makeText(MainActivity.this, "No events to load!", Toast.LENGTH_SHORT).show();
     }
 }

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -43,8 +44,10 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
     TextView titlepage, endpage;
     Button btnAddNew, btnSort;
     DatabaseReference reference;
+    DatabaseReference referenceLabels;
     RecyclerView ourdoes;
     ArrayList<MyDoes> list;
+    ArrayList<Label> labelList;
     DoesAdapter doesAdapter;
     GoogleSignInAccount signInAccount;
 
@@ -59,6 +62,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
         ourdoes = findViewById(R.id.ourdoes);
         ourdoes.setLayoutManager(new LinearLayoutManager(this));
         list = new ArrayList<>();
+        labelList = new ArrayList<>();
 
         //google signin
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
@@ -73,6 +77,24 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
                     list.add(p);
                 }
                 setAdapter(list);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //pobieranie labelow
+        referenceLabels = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Labels").child(signInAccount.getId().toString());
+        referenceLabels.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                labelList.clear();
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    Label p = dataSnapshot1.getValue(Label.class);
+                    labelList.add(p);
+                }
             }
 
             @Override
@@ -107,11 +129,10 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
         itemTouchHelper.attachToRecyclerView(ourdoes);
 
 
-
     }
 
     // swipe left to delete task
-    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, LEFT){
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, LEFT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
             return false;
@@ -121,7 +142,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             final int postion = viewHolder.getAdapterPosition();
 
-            switch (direction){
+            switch (direction) {
                 case LEFT:
                     final MyDoes deletedTask = list.get(postion);
                     String id = list.get(postion).getId();
@@ -129,7 +150,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
                     list.remove(postion);
 //                    doesAdapter.notifyItemRemoved(postion);
                     setAdapter(list);
-                    Snackbar.make(ourdoes, "Task " + deletedTask.getTitledoes() + "deleted!",Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                    Snackbar.make(ourdoes, "Task " + deletedTask.getTitledoes() + "deleted!", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             list.add(postion, deletedTask);
@@ -138,7 +159,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
                             map.put("titledoes", deletedTask.getTitledoes());
                             map.put("descdoes", deletedTask.getDescdoes());
                             map.put("datedoes", deletedTask.getDatedoes());
-                            map.put("id",deletedTask.getId());
+                            map.put("id", deletedTask.getId());
                             reference.child("Does" + deletedTask.getId()).updateChildren(map);
                         }
                     }).show();
@@ -210,21 +231,46 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item2:
-                Toast.makeText(this, "akcja", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.item3:
-                Toast.makeText(this, "item3", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.etykieta_dom:
-                Toast.makeText(this, "dom", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.etykieta_miasto:
-                sortByMiasto();
-                Toast.makeText(this, "miasto", Toast.LENGTH_SHORT).show();
+                setAdapter(list);
                 return true;
         }
+
+//            case R.id.item2:
+//                Toast.makeText(this, "akcja", Toast.LENGTH_SHORT).show();
+//                return true;
+//            case R.id.item3:
+//                Toast.makeText(this, "item3", Toast.LENGTH_SHORT).show();
+//                return true;
+//            case R.id.etykieta_dom:
+//                Toast.makeText(this, "dom", Toast.LENGTH_SHORT).show();
+//                return true;
+//            case R.id.etykieta_miasto:
+//                sortByMiasto();
+//                Toast.makeText(this, "miasto", Toast.LENGTH_SHORT).show();
+//                return true;
+
+        ArrayList<MyDoes> listnew = new ArrayList<>();
+        if(!item.getTitle().equals("FILTRUJ...")) {
+            for (MyDoes does : list) {
+                if (item.getTitle().equals(does.getTitledoes())) {
+                    listnew.add(does);
+                }
+            }
+            setAdapter(listnew);
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        invalidateOptionsMenu();
+        int i = 0;
+        for (Label item : labelList) {
+//            menu.add(0,i, Menu.NONE,item.getTitledoes());
+              menu.getItem(1).getSubMenu().add(0,i,Menu.NONE,item.getName());
+            i++;
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_marginBottom="20dp"
+    android:background="#EED7D7"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/labeltitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="In home"
+        android:textColor="#000C5D"
+        android:textSize="30sp" />
+
+
+</LinearLayout>
