@@ -264,6 +264,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        // albo ondatachange albo po prostu pobrac wszystkie labely ????
         invalidateOptionsMenu();
         int i = 0;
         for (Label item : labelList) {

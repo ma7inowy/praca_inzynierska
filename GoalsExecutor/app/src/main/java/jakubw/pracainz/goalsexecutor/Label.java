@@ -2,10 +2,10 @@ package jakubw.pracainz.goalsexecutor;
 
 public class Label {
     String name;
-    String color;
+    int color;
     String id;
 
-    public Label(String name, String color, String id) {
+    public Label(String name, int color, String id) {
         this.name = name;
         this.color = color;
         this.id = id;
@@ -22,11 +22,11 @@ public class Label {
         this.name = name;
     }
 
-    public String getColor() {
+    public int getColor() {
         return color;
     }
 
-    public void setColor(String color) {
+    public void setColor(int color) {
         this.color = color;
     }
 

@@ -4,7 +4,8 @@
     android:layout_height="100dp"
     android:layout_marginBottom="20dp"
     android:background="#EED7D7"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:id="@+id/labellayout">
 
     <TextView
         android:id="@+id/labeltitle"

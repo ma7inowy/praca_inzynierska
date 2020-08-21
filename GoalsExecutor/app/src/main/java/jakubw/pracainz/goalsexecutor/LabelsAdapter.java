@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,7 @@ public class LabelsAdapter extends RecyclerView.Adapter<LabelsAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int i) {
         holder.labeltitle.setText(labels.get(i).getName());
+        holder.linearLayout.setBackgroundColor(labels.get(i).getColor());
     }
 
     @Override
@@ -42,11 +44,13 @@ public class LabelsAdapter extends RecyclerView.Adapter<LabelsAdapter.MyViewHold
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView labeltitle;
+        LinearLayout linearLayout;
         OnNoteListener onNoteListener;
 
         public MyViewHolder(@NonNull View itemView, OnNoteListener onNoteListener) {
             super(itemView);
             labeltitle = (TextView) itemView.findViewById(R.id.labeltitle);
+            linearLayout = (LinearLayout) itemView.findViewById(R.id.labellayout);
             this.onNoteListener = onNoteListener;
             itemView.setOnClickListener(this);
         }

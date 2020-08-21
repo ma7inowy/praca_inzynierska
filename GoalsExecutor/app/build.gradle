@@ -52,6 +52,9 @@ dependencies {
 
     //swipe left for delete
     implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'
+    //color picker
+    implementation 'com.github.yukuku:ambilwarna:2.0.1'
+
 
 
 }
