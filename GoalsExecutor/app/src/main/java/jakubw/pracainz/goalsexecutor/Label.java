@@ -1,5 +1,7 @@
 package jakubw.pracainz.goalsexecutor;
 
+import androidx.annotation.NonNull;
+
 public class Label {
     String name;
     int color;
@@ -36,5 +38,11 @@ public class Label {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return name;
     }
 }

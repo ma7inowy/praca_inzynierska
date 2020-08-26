@@ -35,7 +35,8 @@ public class DoesAdapter extends RecyclerView.Adapter<DoesAdapter.MyViewHolder> 
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int i) {
         holder.titledoes.setText(myDoes.get(i).getTitledoes());
         holder.datedoes.setText(myDoes.get(i).getDatedoes());
-        //holder.descdoes.setText(myDoes.get(i).getDescdoes());
+//        holder.labeldoes.setText(myDoes.get(i).getLabel().getName());
+//        holder.labeldoes.setBackgroundColor(myDoes.get(i).getLabel().getColor());
 
     }
 
@@ -46,13 +47,13 @@ public class DoesAdapter extends RecyclerView.Adapter<DoesAdapter.MyViewHolder> 
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView titledoes, descdoes, datedoes;
+        TextView titledoes, labeldoes, datedoes;
         OnNoteListener onNoteListener;
 
         public MyViewHolder(@NonNull View itemView, OnNoteListener onNoteListener) {
             super(itemView);
             titledoes = (TextView) itemView.findViewById(R.id.titledoes);
-//          descdoes = (TextView) itemView.findViewById(R.id.descdoes);
+            labeldoes = (TextView) itemView.findViewById(R.id.labeldoes);
             datedoes = (TextView) itemView.findViewById(R.id.datedoes);
             this.onNoteListener = onNoteListener;
             itemView.setOnClickListener(this);

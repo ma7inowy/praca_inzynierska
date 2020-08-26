@@ -85,7 +85,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
             }
         });
 
-        //pobieranie labelow
+        //pobieranie labelow MOZE ZROB TYLKO ZEBY RAZ POBIERALO? ? ?
         referenceLabels = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Labels").child(signInAccount.getId().toString());
         referenceLabels.addValueEventListener(new ValueEventListener() {
             @Override
@@ -249,6 +249,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
 //                Toast.makeText(this, "miasto", Toast.LENGTH_SHORT).show();
 //                return true;
 
+        //nasluchuje ktore filtrowanie zostalo wcisnelo
         ArrayList<MyDoes> listnew = new ArrayList<>();
         if(!item.getTitle().equals("FILTRUJ...")) {
             for (MyDoes does : list) {
