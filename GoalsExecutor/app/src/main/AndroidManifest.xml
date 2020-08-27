@@ -3,6 +3,8 @@
     package="jakubw.pracainz.goalsexecutor">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <application
         android:allowBackup="true"
@@ -11,11 +13,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-<!--        <activity android:name=".SignInActivity"></activity>-->
+        <activity android:name=".LabelsActivity"></activity>
+        <activity android:name=".EditCalendarEventActivity" />
+        <activity android:name=".CalendarNewTaskActivity" />
+        <activity android:name=".CalendarActivity" /> <!-- <activity android:name=".SignInActivity"></activity> -->
         <activity android:name=".EditDoesActivity" />
-        <activity android:name=".MainActivity2" />
-        <activity android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".NewTaskActivity" />
         <activity android:name=".KontenerActivity" />
         <activity

@@ -17,12 +17,14 @@ public class DoesAdapter extends RecyclerView.Adapter<DoesAdapter.MyViewHolder> 
 
     private Context context;
     private ArrayList<MyDoes> myDoes;
+    private ArrayList<Label> labels;
     private OnNoteListener onNoteListener;
 
-    public DoesAdapter(Context context, ArrayList<MyDoes> myDoes, OnNoteListener onNoteListener) {
+    public DoesAdapter(Context context, ArrayList<MyDoes> myDoes, OnNoteListener onNoteListener, ArrayList<Label> labels) {
         this.context = context;
         this.myDoes = myDoes;
         this.onNoteListener = onNoteListener;
+        this.labels = labels;
     }
 
     @NonNull
@@ -33,9 +35,20 @@ public class DoesAdapter extends RecyclerView.Adapter<DoesAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int i) {
+        Label label1 = new Label("error",0,"69");
+        for(Label label : labels){
+            if(label.getName().equals(myDoes.get(i).getLabelName())){
+                label1 = label;}
+        }
+
+
         holder.titledoes.setText(myDoes.get(i).getTitledoes());
         holder.datedoes.setText(myDoes.get(i).getDatedoes());
-        //holder.descdoes.setText(myDoes.get(i).getDescdoes());
+        holder.labeldoes.setBackgroundColor(label1.getColor());
+        holder.labeldoes.setText(label1.getName());
+        //czy przekazac do doesadapter jeszcze liste wszystkich labelow?? i wtedy getbyid czy wsadzac tam obiekt caly?
+//        holder.labeldoes.setText(myDoes.get(i).getLabel().getName());
+//        holder.labeldoes.setBackgroundColor(myDoes.get(i).getLabel().getColor());
 
     }
 
@@ -46,13 +59,13 @@ public class DoesAdapter extends RecyclerView.Adapter<DoesAdapter.MyViewHolder> 
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView titledoes, descdoes, datedoes;
+        TextView titledoes, labeldoes, datedoes;
         OnNoteListener onNoteListener;
 
         public MyViewHolder(@NonNull View itemView, OnNoteListener onNoteListener) {
             super(itemView);
             titledoes = (TextView) itemView.findViewById(R.id.titledoes);
-//          descdoes = (TextView) itemView.findViewById(R.id.descdoes);
+            labeldoes = (TextView) itemView.findViewById(R.id.labeldoes);
             datedoes = (TextView) itemView.findViewById(R.id.datedoes);
             this.onNoteListener = onNoteListener;
             itemView.setOnClickListener(this);
