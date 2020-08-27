@@ -47,9 +47,11 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
     DatabaseReference referenceLabels;
     RecyclerView ourdoes;
     ArrayList<MyDoes> list;
+    ArrayList<MyDoes> filteredList;
     ArrayList<Label> labelList;
     DoesAdapter doesAdapter;
     GoogleSignInAccount signInAccount;
+    boolean isFiltered = false; //gdzie te flage tu czy oncreate?
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
         ourdoes.setLayoutManager(new LinearLayoutManager(this));
         list = new ArrayList<>();
         labelList = new ArrayList<>();
+        filteredList = new ArrayList<>();
 
         //google signin
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
@@ -76,7 +79,8 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
                     MyDoes p = dataSnapshot1.getValue(MyDoes.class);
                     list.add(p);
                 }
-                setAdapter(list);
+                setAdapter(list);// zrob tak zeby tylko dodawalo 1 a nie od nowa czyscilo liste
+                isFiltered = false;
             }
 
             @Override
@@ -95,6 +99,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
                     Label p = dataSnapshot1.getValue(Label.class);
                     labelList.add(p);
                 }
+                setAdapter(list); // tu dodalem bo tak to wczytuje mi puste labele
             }
 
             @Override
@@ -144,22 +149,40 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
 
             switch (direction) {
                 case LEFT:
-                    final MyDoes deletedTask = list.get(postion);
-                    String id = list.get(postion).getId();
+//                    final MyDoes deletedTask = list.get(postion);
+                    ArrayList<MyDoes> listForDelete;
+                    final MyDoes deletedTask;
+                    if (isFiltered) {
+                        deletedTask = filteredList.get(postion);
+                        listForDelete = filteredList;
+                    } else {
+                        deletedTask = list.get(postion);
+                        listForDelete = list;
+                    }
+
+
+                    String id = listForDelete.get(postion).getId();
                     reference.child("Does" + id).removeValue(); // usuwa z bazy
-                    list.remove(postion);
-//                    doesAdapter.notifyItemRemoved(postion);
-                    setAdapter(list);
-                    Snackbar.make(ourdoes, "Task " + deletedTask.getTitledoes() + "deleted!", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                    listForDelete.remove(postion);
+                    setAdapter(listForDelete);
+                    Snackbar.make(ourdoes, "Task " + deletedTask.getTitledoes() + " deleted!", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            list.add(postion, deletedTask);
-                            setAdapter(list); // moze lepiej nasluchiwac na jedna pozycje?
+                            Toast.makeText(KontenerActivity.this, String.valueOf(isFiltered), Toast.LENGTH_SHORT).show();
+                            if (isFiltered) {
+                                filteredList.add(postion, deletedTask);
+                                setAdapter(filteredList); // moze lepiej nasluchiwac na jedna pozycje?
+
+                            } else {
+                                list.add(postion, deletedTask);
+                                setAdapter(list);
+                            }
                             HashMap map = new HashMap();
                             map.put("titledoes", deletedTask.getTitledoes());
                             map.put("descdoes", deletedTask.getDescdoes());
                             map.put("datedoes", deletedTask.getDatedoes());
                             map.put("id", deletedTask.getId());
+                            map.put("labelName", deletedTask.getLabelName());
                             reference.child("Does" + deletedTask.getId()).updateChildren(map);
                         }
                     }).show();
@@ -181,42 +204,25 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
     };
 
     public void setAdapter(ArrayList<MyDoes> list) {
-        doesAdapter = new DoesAdapter(KontenerActivity.this, list, this);
+        doesAdapter = new DoesAdapter(KontenerActivity.this, list, this, labelList);
         ourdoes.setAdapter(doesAdapter); // wypelni wszystkie pola ViewHolderami
         doesAdapter.notifyDataSetChanged();
     }
 
-
     @Override
     public void onNoteClick(int position) {
-        final MyDoes myDoes = list.get(position);
+        final MyDoes myDoes;
+        if (isFiltered) myDoes = filteredList.get(position);
+        else myDoes = list.get(position);
+
         Intent intent = new Intent(this, EditDoesActivity.class);
         intent.putExtra("title", myDoes.getTitledoes());
         intent.putExtra("desc", myDoes.getDescdoes());
         intent.putExtra("date", myDoes.getDatedoes());
         intent.putExtra("id", myDoes.getId());
+        intent.putExtra("labelName", myDoes.getLabelName());
         startActivity(intent);
         Toast.makeText(this, "id" + myDoes.getId(), Toast.LENGTH_SHORT).show();
-    }
-
-    public ArrayList<MyDoes> sort(List<MyDoes> list) {
-        ArrayList<MyDoes> listnew = new ArrayList<>();
-        listnew.add(0, list.get(list.size() - 1));
-        listnew.add(1, list.get(list.size() - 2));
-        listnew.add(2, list.get(list.size() - 3));
-
-        return listnew;
-
-    }
-
-    public void sortByMiasto() {
-        ArrayList<MyDoes> listnew = new ArrayList<>();
-        for (MyDoes item : list) {
-            if (item.getTitledoes().toLowerCase().equals("miasto")) {
-                listnew.add(item);
-            }
-        }
-        setAdapter(listnew);
     }
 
     // menu w prawym gornym do filtrowania
@@ -232,6 +238,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
         switch (item.getItemId()) {
             case R.id.item2:
                 setAdapter(list);
+                isFiltered = false;
                 return true;
         }
 
@@ -250,14 +257,15 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
 //                return true;
 
         //nasluchuje ktore filtrowanie zostalo wcisnelo
-        ArrayList<MyDoes> listnew = new ArrayList<>();
-        if(!item.getTitle().equals("FILTRUJ...")) {
+        filteredList = new ArrayList<>();
+        if (!item.getTitle().equals("FILTRUJ...")) {
             for (MyDoes does : list) {
-                if (item.getTitle().equals(does.getTitledoes())) {
-                    listnew.add(does);
+                if (item.getTitle().equals(does.getLabelName())) {
+                    filteredList.add(does);
                 }
             }
-            setAdapter(listnew);
+            setAdapter(filteredList);
+            isFiltered = true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -270,7 +278,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
         int i = 0;
         for (Label item : labelList) {
 //            menu.add(0,i, Menu.NONE,item.getTitledoes());
-              menu.getItem(1).getSubMenu().add(0,i,Menu.NONE,item.getName());
+            menu.getItem(1).getSubMenu().add(0, i, Menu.NONE, item.getName());
             i++;
         }
         return super.onPrepareOptionsMenu(menu);

@@ -17,12 +17,14 @@ public class DoesAdapter extends RecyclerView.Adapter<DoesAdapter.MyViewHolder> 
 
     private Context context;
     private ArrayList<MyDoes> myDoes;
+    private ArrayList<Label> labels;
     private OnNoteListener onNoteListener;
 
-    public DoesAdapter(Context context, ArrayList<MyDoes> myDoes, OnNoteListener onNoteListener) {
+    public DoesAdapter(Context context, ArrayList<MyDoes> myDoes, OnNoteListener onNoteListener, ArrayList<Label> labels) {
         this.context = context;
         this.myDoes = myDoes;
         this.onNoteListener = onNoteListener;
+        this.labels = labels;
     }
 
     @NonNull
@@ -33,8 +35,18 @@ public class DoesAdapter extends RecyclerView.Adapter<DoesAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int i) {
+        Label label1 = new Label("error",0,"69");
+        for(Label label : labels){
+            if(label.getName().equals(myDoes.get(i).getLabelName())){
+                label1 = label;}
+        }
+
+
         holder.titledoes.setText(myDoes.get(i).getTitledoes());
         holder.datedoes.setText(myDoes.get(i).getDatedoes());
+        holder.labeldoes.setBackgroundColor(label1.getColor());
+        holder.labeldoes.setText(label1.getName());
+        //czy przekazac do doesadapter jeszcze liste wszystkich labelow?? i wtedy getbyid czy wsadzac tam obiekt caly?
 //        holder.labeldoes.setText(myDoes.get(i).getLabel().getName());
 //        holder.labeldoes.setBackgroundColor(myDoes.get(i).getLabel().getColor());
 

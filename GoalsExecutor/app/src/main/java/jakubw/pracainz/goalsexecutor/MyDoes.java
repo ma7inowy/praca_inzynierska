@@ -3,17 +3,17 @@ package jakubw.pracainz.goalsexecutor;
 public class MyDoes {
 
     String titledoes, datedoes, descdoes, id;
-    Label label;
-
+//    Label label;
+    String labelName;
     public MyDoes() {
     }
 
-    public MyDoes(String titledoes, String datedoes, String descdoes, String id, Label label) {
+    public MyDoes(String titledoes, String datedoes, String descdoes, String id, String labelName) {
         this.titledoes = titledoes;
         this.datedoes = datedoes;
         this.descdoes = descdoes;
         this.id = id;
-        this.label = label;
+        this.labelName = labelName;
     }
 
     public String getTitledoes() {
@@ -48,11 +48,11 @@ public class MyDoes {
         this.id = id;
     }
 
-    public Label getLabel() {
-        return label;
+    public String getLabelName() {
+        return labelName;
     }
 
-    public void setLabel(Label label) {
-        this.label = label;
+    public void setLabelName(String labelName) {
+        this.labelName = labelName;
     }
 }

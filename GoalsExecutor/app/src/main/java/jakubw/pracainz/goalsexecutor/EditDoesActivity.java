@@ -32,6 +32,8 @@ public class EditDoesActivity extends AppCompatActivity {
     DatabaseReference reference;
     GoogleSignInAccount signInAccount;
 
+    String labelId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,7 @@ public class EditDoesActivity extends AppCompatActivity {
         editDate.setText(intent.getStringExtra("date"));
         editDescription.setText(intent.getStringExtra("desc"));
         id = intent.getStringExtra("id");
+        labelId = intent.getStringExtra("labelName");
 
         reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("NextAction").child(signInAccount.getId().toString()).child("Does" + id);
         editTaskBtn.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +61,7 @@ public class EditDoesActivity extends AppCompatActivity {
                 map.put("titledoes", editTitle.getText().toString());
                 map.put("descdoes", editDescription.getText().toString());
                 map.put("datedoes", editDate.getText().toString());
+                map.put("labelName","blad");
                 reference.updateChildren(map);
                 Toast.makeText(EditDoesActivity.this, editTitle.getText().toString() + " " + editDescription.getText().toString(), Toast.LENGTH_SHORT).show();
                 finish();

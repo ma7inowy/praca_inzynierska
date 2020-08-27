@@ -3,11 +3,10 @@ package jakubw.pracainz.goalsexecutor;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,6 +37,9 @@ public class NewTaskActivity extends AppCompatActivity {
     Integer number;
     ArrayList<Label> labelList;
     Spinner labelsSpinner;
+    String labelName = "labelName";
+    ArrayAdapter<Label> labelAdapter;
+
 
 
     @Override
@@ -68,6 +70,7 @@ public class NewTaskActivity extends AppCompatActivity {
                     Label p = dataSnapshot1.getValue(Label.class);
                     labelList.add(p);
                 }
+                setLabelAdapter(labelList);
             }
 
             @Override
@@ -80,25 +83,46 @@ public class NewTaskActivity extends AppCompatActivity {
         addNewTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("NextAction").child(signInAccount.getId()).child("Does" + number);
+                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("NextAction").child(signInAccount.getId()).child("Does" + number);
                 HashMap map = new HashMap();
                 map.put("titledoes", addTitle.getText().toString());
                 map.put("descdoes", addDescription.getText().toString());
                 map.put("datedoes", addDate.getText().toString());
-                map.put("id",number.toString());
+                map.put("id", number.toString());
+                map.put("labelName", labelName);
                 reference.updateChildren(map);
                 Toast.makeText(NewTaskActivity.this, addTitle.getText().toString() + " " + addDescription.getText().toString(), Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
 
+        labelsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Label label = (Label) parent.getSelectedItem();
+                labelName = label.getName();
+                Toast.makeText(parent.getContext(), labelName, Toast.LENGTH_LONG).show();
+                Log.e("labelName","wcisniete");
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Toast.makeText(NewTaskActivity.this, "nothing selected", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setLabelAdapter(ArrayList<Label> list) {
         //adding labels to spinner
-        ArrayAdapter<Label> labelAdapter = new ArrayAdapter<Label>(this,android.R.layout.simple_spinner_item,labelList);
+        labelAdapter = new ArrayAdapter<Label>(this, android.R.layout.simple_spinner_item, list);
         labelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         labelsSpinner.setAdapter(labelAdapter);
+        labelAdapter.notifyDataSetChanged();
+    }
 
-
+    public void getSelectedLabel(View view){
+        Label label = (Label) labelsSpinner.getSelectedItem();
+        Toast.makeText(this, label.getId(), Toast.LENGTH_SHORT).show();
     }
 
 //    public void saveNote(){
