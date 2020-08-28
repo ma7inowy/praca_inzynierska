@@ -1,9 +1,16 @@
 package jakubw.pracainz.goalsexecutor;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -20,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -52,6 +60,7 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
         hourEvent = 0;
         minuteEvent = 0;
         final GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        createNotificationChanel();
 
         addCalendarNewTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +77,7 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
                 map.put("description", addDescriptionEvent.getText().toString());
                 map.put("id", number.toString());
                 reference.updateChildren(map);
+                makeNotification();
                 Toast.makeText(CalendarNewTaskActivity.this, "done!", Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -129,5 +139,37 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
         dateListInt.add(Integer.parseInt(dateTable[3]));
         return dateListInt;
         //h,d,m,y
+    }
+
+    // dla api >= 26
+    private void createNotificationChanel() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "GoalsExecutorChannel";
+            String description = "Channel for GoalsExecutor";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("notifyGoalsExecutor",name,importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void makeNotification() {
+        Intent intent = new Intent(CalendarNewTaskActivity.this,ReminderBroadcast.class);
+        intent.putExtra("desc", addTitleEvent.getText().toString());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(CalendarNewTaskActivity.this,0,intent,0);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        long currentTime = System.currentTimeMillis();
+        Calendar calendar = new GregorianCalendar(yearEvent, monthEvent, dayEvent, hourEvent, minuteEvent);
+        long alarmTime = calendar.getTimeInMillis();
+        long tenSec = 1000 *10;
+        Log.e("timealarm", "Alarm " + alarmTime);
+        Log.e("timealarm", "current " + currentTime);
+        long diff = alarmTime-currentTime;
+        Log.e("timealarm", "difference " + diff);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,alarmTime,pendingIntent);
+
     }
 }
