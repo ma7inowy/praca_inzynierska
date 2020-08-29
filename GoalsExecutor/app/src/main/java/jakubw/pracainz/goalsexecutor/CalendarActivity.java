@@ -6,13 +6,17 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,7 +34,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Random;
 
-public class CalendarActivity extends AppCompatActivity implements CalendarAdapter.OnNoteListener {
+public class CalendarActivity extends Fragment implements CalendarAdapter.OnNoteListener {
 
     Button btnsortEvents;
     Button btnAddNewEvent;
@@ -41,22 +45,26 @@ public class CalendarActivity extends AppCompatActivity implements CalendarAdapt
     CalendarAdapter calendarAdapter;
     Integer number;
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        return inflater.inflate(R.layout.activity_calendar, container, false);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar);
-
-        btnsortEvents = findViewById(R.id.btnsortEvents);
-        btnAddNewEvent = findViewById(R.id.btnAddNewEvent);
-        calendarEvents = findViewById(R.id.calendarEvents);
-        calendarEvents.setLayoutManager(new LinearLayoutManager(this));
+    public void onStart() {
+        super.onStart();
+        btnsortEvents = getView().findViewById(R.id.btnsortEvents);
+        btnAddNewEvent = getView().findViewById(R.id.btnAddNewEvent);
+        calendarEvents = getView().findViewById(R.id.calendarEvents);
+        calendarEvents.setLayoutManager(new LinearLayoutManager(getActivity()));
         eventList = new ArrayList<>();
         number = new Random().nextInt();
 
 
         //google signin
-        signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity());
 
         reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId().toString());
         reference.addValueEventListener(new ValueEventListener() {
@@ -72,7 +80,7 @@ public class CalendarActivity extends AppCompatActivity implements CalendarAdapt
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -80,7 +88,7 @@ public class CalendarActivity extends AppCompatActivity implements CalendarAdapt
         btnAddNewEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CalendarActivity.this, CalendarNewTaskActivity.class);
+                Intent intent = new Intent(getActivity(), CalendarNewTaskActivity.class);
                 startActivity(intent);
             }
         });
@@ -93,8 +101,59 @@ public class CalendarActivity extends AppCompatActivity implements CalendarAdapt
         });
     }
 
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_calendar);
+//
+//        btnsortEvents = findViewById(R.id.btnsortEvents);
+//        btnAddNewEvent = findViewById(R.id.btnAddNewEvent);
+//        calendarEvents = findViewById(R.id.calendarEvents);
+//        calendarEvents.setLayoutManager(new LinearLayoutManager(this));
+//        eventList = new ArrayList<>();
+//        number = new Random().nextInt();
+//
+//
+//        //google signin
+//        signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+//
+//        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId().toString());
+//        reference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                eventList.clear();
+//                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+//                    CalendarEvent p = dataSnapshot1.getValue(CalendarEvent.class);
+//                    eventList.add(p);
+//                }
+//                setAdapter(eventList);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
+//
+//            }
+//        });
+//
+//        btnAddNewEvent.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(CalendarActivity.this, CalendarNewTaskActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//
+//        btnsortEvents.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                handleEventsFromPhoneCalendars();
+//            }
+//        });
+//    }
+
     private void handleEventsFromPhoneCalendars() {
-        ArrayList<CalendarEvent> events = ReadCalendar.readCalendar(CalendarActivity.this);
+        ArrayList<CalendarEvent> events = ReadCalendar.readCalendar(getActivity());
         if (!events.isEmpty()) {
             for (CalendarEvent event : events) {
                 reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId()).child("Does" + event.getId());
@@ -109,17 +168,17 @@ public class CalendarActivity extends AppCompatActivity implements CalendarAdapt
                 map.put("id", event.getId());
                 reference.updateChildren(map);
             }
-            Toast.makeText(CalendarActivity.this, "Events loaded!", Toast.LENGTH_SHORT).show();
-            finish();
+//            Toast.makeText(getContext(), "Events loaded!", Toast.LENGTH_SHORT).show();
+            getActivity().finish();
         } else
-            Toast.makeText(CalendarActivity.this, "No events to load!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "No events to load!", Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
     public void onNoteClick(int position) {
         final CalendarEvent event = eventList.get(position);
-        Intent intent = new Intent(this, EditCalendarEventActivity.class);
+        Intent intent = new Intent(getActivity(), EditCalendarEventActivity.class);
         intent.putExtra("title", event.getTitle());
         intent.putExtra("yearEvent", event.getYear());
         intent.putExtra("monthEvent", event.getMonth());
@@ -141,11 +200,11 @@ public class CalendarActivity extends AppCompatActivity implements CalendarAdapt
         intent.putExtra("dateEvent", dataCharSequenceForDate);
         intent.putExtra("timeEvent",dataCharSequenceForTime);
         startActivity(intent);
-        Toast.makeText(this, "id" + event.getId(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "id" + event.getId(), Toast.LENGTH_SHORT).show();
     }
 
     public void setAdapter(ArrayList<CalendarEvent> list) {
-        calendarAdapter = new CalendarAdapter(CalendarActivity.this, list, this);
+        calendarAdapter = new CalendarAdapter(getActivity(), list, this);
         calendarEvents.setAdapter(calendarAdapter); // wypelni wszystkie pola ViewHolderami
         calendarAdapter.notifyDataSetChanged();
     }

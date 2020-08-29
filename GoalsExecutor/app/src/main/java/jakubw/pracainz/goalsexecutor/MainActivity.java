@@ -125,8 +125,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 int checkValWrite = this.checkCallingOrSelfPermission(requiredPermission2);
                 //jesli permisson zaakceptowane to cyk wlacz kalendarz i NIE wczytaj dane z kalendarza z tele
                 if (checkValRead == PackageManager.PERMISSION_GRANTED && checkValWrite == PackageManager.PERMISSION_GRANTED) {
-                    Intent intent2 = new Intent(MainActivity.this, CalendarActivity.class);
-                    startActivity(intent2);
+//                    Intent intent2 = new Intent(MainActivity.this, CalendarActivity.class);
+//                    startActivity(intent2);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CalendarActivity()).commit();
+
                 }
                 checkPermission(callbackId, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR);
                 break;
@@ -188,8 +190,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (!list.contains(PackageManager.PERMISSION_DENIED)) {
                 //all permissions have been granted
                 handleEventsFromPhoneCalendars();
-                Intent intent2 = new Intent(MainActivity.this, CalendarActivity.class);
-                startActivity(intent2);
+//                Intent intent2 = new Intent(MainActivity.this, CalendarActivity.class);
+//                startActivity(intent2);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CalendarActivity()).commit();
+
 
             }
         }
