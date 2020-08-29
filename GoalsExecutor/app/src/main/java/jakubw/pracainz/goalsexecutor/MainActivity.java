@@ -109,8 +109,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_next_action:
-                Intent intent = new Intent(MainActivity.this, KontenerActivity.class);
-                startActivity(intent);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new KontenerActivity()).commit();
+//                Intent intent = new Intent(MainActivity.this, KontenerActivity.class);
+//                startActivity(intent);
                 break;
             case R.id.nav_kontener:
                 break;
