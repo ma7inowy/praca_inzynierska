@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LabelsActivity"></activity>
+        <activity android:name=".ProjectsActivity"></activity>
+        <activity android:name=".LabelsActivity" />
         <activity android:name=".EditCalendarEventActivity" />
         <activity android:name=".CalendarNewTaskActivity" />
         <activity android:name=".CalendarActivity" /> <!-- <activity android:name=".SignInActivity"></activity> -->
@@ -33,8 +34,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".ReminderBroadcast"></receiver>
-
+        <receiver android:name=".ReminderBroadcast" />
     </application>
 
 </manifest>

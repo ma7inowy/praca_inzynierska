@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_marginBottom="20dp"
+    android:background="#FF6F00"
+    android:orientation="horizontal"
+    android:id="@+id/projectlayout">
+
+    <TextView
+        android:id="@+id/projectTitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Project 1"
+        android:textColor="#000C5D"
+        android:textSize="30sp" />
+
+</LinearLayout>
