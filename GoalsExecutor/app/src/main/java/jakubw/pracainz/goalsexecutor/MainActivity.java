@@ -109,8 +109,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_next_action:
-                Intent intent = new Intent(MainActivity.this, KontenerActivity.class);
-                startActivity(intent);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new KontenerActivity()).commit();
+//                Intent intent = new Intent(MainActivity.this, KontenerActivity.class);
+//                startActivity(intent);
                 break;
             case R.id.nav_kontener:
                 break;
@@ -124,8 +125,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 int checkValWrite = this.checkCallingOrSelfPermission(requiredPermission2);
                 //jesli permisson zaakceptowane to cyk wlacz kalendarz i NIE wczytaj dane z kalendarza z tele
                 if (checkValRead == PackageManager.PERMISSION_GRANTED && checkValWrite == PackageManager.PERMISSION_GRANTED) {
-                    Intent intent2 = new Intent(MainActivity.this, CalendarActivity.class);
-                    startActivity(intent2);
+//                    Intent intent2 = new Intent(MainActivity.this, CalendarActivity.class);
+//                    startActivity(intent2);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CalendarActivity()).commit();
+
                 }
                 checkPermission(callbackId, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR);
                 break;
@@ -134,7 +137,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent3);
                 break;
             case R.id.nav_settings:
-                checkPermission(callbackId, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR);
+//                checkPermission(callbackId, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR);
+                break;
+            case R.id.nav_projects:
+                Intent intent4 = new Intent(MainActivity.this, ProjectsActivity.class);
+                startActivity(intent4);
                 break;
         }
         return true;
@@ -187,8 +194,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (!list.contains(PackageManager.PERMISSION_DENIED)) {
                 //all permissions have been granted
                 handleEventsFromPhoneCalendars();
-                Intent intent2 = new Intent(MainActivity.this, CalendarActivity.class);
-                startActivity(intent2);
+//                Intent intent2 = new Intent(MainActivity.this, CalendarActivity.class);
+//                startActivity(intent2);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CalendarActivity()).commit();
+
 
             }
         }

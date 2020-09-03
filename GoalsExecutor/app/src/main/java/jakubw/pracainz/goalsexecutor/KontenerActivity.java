@@ -1,8 +1,10 @@
 package jakubw.pracainz.goalsexecutor;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,10 +13,12 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +43,7 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 import static androidx.recyclerview.widget.ItemTouchHelper.*;
 
-public class KontenerActivity extends AppCompatActivity implements DoesAdapter.OnNoteListener {
+public class KontenerActivity extends Fragment implements DoesAdapter.OnNoteListener {
 
     TextView titlepage, endpage;
     Button btnAddNew, btnSort;
@@ -53,22 +57,30 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
     GoogleSignInAccount signInAccount;
     boolean isFiltered = false; //gdzie te flage tu czy oncreate?
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_kontener);
-        titlepage = findViewById(R.id.titlepage);
-        endpage = findViewById(R.id.endpage);
-        btnAddNew = findViewById(R.id.btnAddNew);
-        btnSort = findViewById(R.id.btnsort);
-        ourdoes = findViewById(R.id.ourdoes);
-        ourdoes.setLayoutManager(new LinearLayoutManager(this));
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        return inflater.inflate(R.layout.activity_kontener, container, false);
+    }
+
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        titlepage = getView().findViewById(R.id.titlepage);
+        endpage = getView().findViewById(R.id.endpage);
+        btnAddNew = getView().findViewById(R.id.btnAddNew);
+        btnSort = getView().findViewById(R.id.btnsort);
+        ourdoes = getView().findViewById(R.id.ourdoes);
+        ourdoes.setLayoutManager(new LinearLayoutManager(getActivity()));
         list = new ArrayList<>();
         labelList = new ArrayList<>();
         filteredList = new ArrayList<>();
 
         //google signin
-        signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity());
 
         reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("NextAction").child(signInAccount.getId().toString());
         reference.addValueEventListener(new ValueEventListener() {
@@ -85,7 +97,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -104,14 +116,14 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
             }
         });
 
         btnAddNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(KontenerActivity.this, NewTaskActivity.class);
+                Intent intent = new Intent(getActivity(), NewTaskActivity.class);
                 startActivity(intent);
             }
         });
@@ -133,8 +145,65 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(ourdoes);
 
-
     }
+
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_kontener);
+//        titlepage = findViewById(R.id.titlepage);
+//        endpage = findViewById(R.id.endpage);
+//        btnAddNew = findViewById(R.id.btnAddNew);
+//        btnSort = findViewById(R.id.btnsort);
+//        ourdoes = findViewById(R.id.ourdoes);
+//        ourdoes.setLayoutManager(new LinearLayoutManager(this));
+//        list = new ArrayList<>();
+//        labelList = new ArrayList<>();
+//        filteredList = new ArrayList<>();
+//
+//        //google signin
+//        signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+
+//        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("NextAction").child(signInAccount.getId().toString());
+//        reference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                list.clear();
+//                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+//                    MyDoes p = dataSnapshot1.getValue(MyDoes.class);
+//                    list.add(p);
+//                }
+//                setAdapter(list);// zrob tak zeby tylko dodawalo 1 a nie od nowa czyscilo liste
+//                isFiltered = false;
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+//        //pobieranie labelow MOZE ZROB TYLKO ZEBY RAZ POBIERALO? ? ?
+//        referenceLabels = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Labels").child(signInAccount.getId().toString());
+//        referenceLabels.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                labelList.clear();
+//                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+//                    Label p = dataSnapshot1.getValue(Label.class);
+//                    labelList.add(p);
+//                }
+//                setAdapter(list); // tu dodalem bo tak to wczytuje mi puste labele
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+
+//    }
 
     // swipe left to delete task
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, LEFT) {
@@ -168,7 +237,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
                     Snackbar.make(ourdoes, "Task " + deletedTask.getTitledoes() + " deleted!", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(KontenerActivity.this, String.valueOf(isFiltered), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), String.valueOf(isFiltered), Toast.LENGTH_SHORT).show();
                             if (isFiltered) {
                                 filteredList.add(postion, deletedTask);
                                 setAdapter(filteredList); // moze lepiej nasluchiwac na jedna pozycje?
@@ -193,7 +262,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
         @Override
         public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
             new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(KontenerActivity.this, R.color.colorDeleteTask))
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorDeleteTask))
 //                    .addBackgroundColor(ContextCompat.getColor(KontenerActivity.this, R.color.colorPrimary))
                     .addSwipeLeftActionIcon(R.drawable.ic_delete_black_)
                     .create()
@@ -204,7 +273,7 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
     };
 
     public void setAdapter(ArrayList<MyDoes> list) {
-        doesAdapter = new DoesAdapter(KontenerActivity.this, list, this, labelList);
+        doesAdapter = new DoesAdapter(getContext(), list, this, labelList);
         ourdoes.setAdapter(doesAdapter); // wypelni wszystkie pola ViewHolderami
         doesAdapter.notifyDataSetChanged();
     }
@@ -215,22 +284,29 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
         if (isFiltered) myDoes = filteredList.get(position);
         else myDoes = list.get(position);
 
-        Intent intent = new Intent(this, EditDoesActivity.class);
+        Intent intent = new Intent(getActivity(), EditDoesActivity.class);
         intent.putExtra("title", myDoes.getTitledoes());
         intent.putExtra("desc", myDoes.getDescdoes());
         intent.putExtra("date", myDoes.getDatedoes());
         intent.putExtra("id", myDoes.getId());
         intent.putExtra("labelName", myDoes.getLabelName());
         startActivity(intent);
-        Toast.makeText(this, "id" + myDoes.getId(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "id" + myDoes.getId(), Toast.LENGTH_SHORT).show();
     }
 
     // menu w prawym gornym do filtrowania
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.settings_menu, menu);
+//        return true;
+//    }
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.settings_menu, menu);
-        return true;
+        super.onCreateOptionsMenu(menu,inflater);
     }
 
     @Override
@@ -271,16 +347,20 @@ public class KontenerActivity extends AppCompatActivity implements DoesAdapter.O
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
+    public void onPrepareOptionsMenu(Menu menu) {
         // albo ondatachange albo po prostu pobrac wszystkie labely ????
-        invalidateOptionsMenu();
+        getActivity().invalidateOptionsMenu();
         int i = 0;
         for (Label item : labelList) {
 //            menu.add(0,i, Menu.NONE,item.getTitledoes());
             menu.getItem(1).getSubMenu().add(0, i, Menu.NONE, item.getName());
             i++;
         }
-        return super.onPrepareOptionsMenu(menu);
+        super.onPrepareOptionsMenu(menu);
+
+
     }
+
 }
