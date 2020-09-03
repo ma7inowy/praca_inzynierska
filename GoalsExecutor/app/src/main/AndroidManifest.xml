@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ProjectsActivity"></activity>
+        <activity android:name=".BoxActivity"></activity>
+        <activity android:name=".ProjectsActivity" />
         <activity android:name=".LabelsActivity" />
         <activity android:name=".EditCalendarEventActivity" />
         <activity android:name=".CalendarNewTaskActivity" />

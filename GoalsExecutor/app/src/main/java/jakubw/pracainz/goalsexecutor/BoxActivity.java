@@ -22,41 +22,40 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class ProjectsActivity extends AppCompatActivity implements ProjectsAdapter.OnNoteListener {
+public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.OnNoteListener{
 
-    FloatingActionButton addNewProjectFloatingBtn;
-    RecyclerView myProjects;
+    FloatingActionButton addNewBoxTaskFloatingBtn;
+    RecyclerView myBoxTasks;
     DatabaseReference reference;
-    ArrayList<Project> projectList;
+    ArrayList<BoxTask> boxTasksList;
     GoogleSignInAccount signInAccount;
-    ProjectsAdapter projectsAdapter;
+    BoxTasksAdapter boxTasksAdapter;
     Integer number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_projects);
+        setContentView(R.layout.activity_box);
 
-        addNewProjectFloatingBtn = findViewById(R.id.addNewProjectFloatingBtn);
-        myProjects = findViewById(R.id.myProjects);
-        projectList = new ArrayList<>();
+        addNewBoxTaskFloatingBtn = findViewById(R.id.addNewBoxTaskFloatingBtn);
+        myBoxTasks = findViewById(R.id.myBoxTasks);
+        boxTasksList = new ArrayList<>();
         number = new Random().nextInt();
-        myProjects.setLayoutManager(new LinearLayoutManager(this));
+        myBoxTasks.setLayoutManager(new LinearLayoutManager(this));
         //google signin
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
 
-        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Projects").child(signInAccount.getId().toString());
-
+        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Box").child(signInAccount.getId().toString());
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                projectList.clear();
+                boxTasksList.clear();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    Project p = dataSnapshot1.getValue(Project.class);
-                    projectList.add(p);
-                    Log.e("projects", p.getTitle());
+                    BoxTask p = dataSnapshot1.getValue(BoxTask.class);
+                    boxTasksList.add(p);
+                    Log.e("box", p.getTitle());
                 }
-                setAdapter(projectList);
+                setAdapter(boxTasksList);
             }
 
             @Override
@@ -65,30 +64,31 @@ public class ProjectsActivity extends AppCompatActivity implements ProjectsAdapt
 
             }
         });
-        addNewProjectFloatingBtn.setOnClickListener(new View.OnClickListener() {
+
+        addNewBoxTaskFloatingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDialogToAddNewProject();
-                Toast.makeText(ProjectsActivity.this, "New Proj", Toast.LENGTH_SHORT).show();
+                openDialogToAddNewBoxTask();
+                Toast.makeText(BoxActivity.this, "New box task", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
-    public void setAdapter(ArrayList<Project> projectList) {
-        projectsAdapter = new ProjectsAdapter(ProjectsActivity.this, projectList, this);
-        myProjects.setAdapter(projectsAdapter); // wypelni wszystkie pola ViewHolderami
-        projectsAdapter.notifyDataSetChanged();
+    public void setAdapter(ArrayList<BoxTask> boxTasksList) {
+        boxTasksAdapter = new BoxTasksAdapter(BoxActivity.this, boxTasksList, this);
+        myBoxTasks.setAdapter(boxTasksAdapter); // wypelni wszystkie pola ViewHolderami
+        boxTasksAdapter.notifyDataSetChanged();
+    }
+
+    private void openDialogToAddNewBoxTask() {
+        NewBoxTaskDialog newBoxTaskDialog = new NewBoxTaskDialog();
+        newBoxTaskDialog.show(getSupportFragmentManager(),"Example");
     }
 
     @Override
     public void onNoteClick(int position) {
-        final Project project = projectList.get(position);
-        Toast.makeText(this, "id" + project.getId(), Toast.LENGTH_SHORT).show();
-    }
+        final BoxTask boxTask = boxTasksList.get(position);
+        Toast.makeText(this, "id" + boxTask.getId(), Toast.LENGTH_SHORT).show();
 
-    private void openDialogToAddNewProject() {
-        NewProjectDialog newProjectDialog = new NewProjectDialog();
-        newProjectDialog.show(getSupportFragmentManager(),"Example");
     }
 }

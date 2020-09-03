@@ -114,6 +114,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                startActivity(intent);
                 break;
             case R.id.nav_kontener:
+                Intent intent5 = new Intent(MainActivity.this, BoxActivity.class);
+                startActivity(intent5);
                 break;
             case R.id.nav_logout:
                 signOut();
