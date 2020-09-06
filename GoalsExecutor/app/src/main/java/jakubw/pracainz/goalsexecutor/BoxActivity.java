@@ -1,11 +1,13 @@
 package jakubw.pracainz.goalsexecutor;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.OnNoteListener{
+public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.OnNoteListener {
 
     FloatingActionButton addNewBoxTaskFloatingBtn;
     RecyclerView myBoxTasks;
@@ -31,6 +33,7 @@ public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.On
     GoogleSignInAccount signInAccount;
     BoxTasksAdapter boxTasksAdapter;
     Integer number;
+    AlertDialog newActivityDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,13 +85,24 @@ public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.On
 
     private void openDialogToAddNewBoxTask() {
         NewBoxTaskDialog newBoxTaskDialog = new NewBoxTaskDialog();
-        newBoxTaskDialog.show(getSupportFragmentManager(),"Example");
+        newBoxTaskDialog.show(getSupportFragmentManager(), "Example");
     }
 
     @Override
-    public void onNoteClick(int position) {
+    public void onNoteClick(final int position) {
         final BoxTask boxTask = boxTasksList.get(position);
-        Toast.makeText(this, "id" + boxTask.getId(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "id?" + boxTask.getId(), Toast.LENGTH_SHORT).show();
 
+        // otworz okienko aby wybrać do jakiej aktywności przekierować
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final CharSequence[] activityList = {"NextAction", "Calendar", "Someday"};
+        builder.setTitle("Co to za zadanie?").setItems(activityList, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(BoxActivity.this, activityList[which].toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        newActivityDialog = builder.create();
+        newActivityDialog.show();
     }
 }
