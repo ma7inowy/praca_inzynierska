@@ -62,7 +62,11 @@ public class NewTaskActivity extends AppCompatActivity {
         number = new Random().nextInt();
         labelList = new ArrayList<>();
 
-
+        // do tworzenia zadania z BoxActivity
+        Intent intent = getIntent();
+        if (intent.hasExtra("title")) {
+            addTitle.setText(intent.getStringExtra("title"));
+        }
 
 //        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor");
 

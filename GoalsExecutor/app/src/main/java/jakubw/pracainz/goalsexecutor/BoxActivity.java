@@ -1,6 +1,7 @@
 package jakubw.pracainz.goalsexecutor;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -91,7 +92,7 @@ public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.On
     @Override
     public void onNoteClick(final int position) {
         final BoxTask boxTask = boxTasksList.get(position);
-        Toast.makeText(this, "id?" + boxTask.getId(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "id?" + boxTask.getId(), Toast.LENGTH_SHORT).show();
 
         // otworz okienko aby wybrać do jakiej aktywności przekierować
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -99,7 +100,16 @@ public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.On
         builder.setTitle("Co to za zadanie?").setItems(activityList, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(BoxActivity.this, activityList[which].toString(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(BoxActivity.this, activityList[which].toString(), Toast.LENGTH_SHORT).show();
+                if (activityList[which].toString().equals("NextAction")) {
+                    Intent intent = new Intent(BoxActivity.this, NewTaskActivity.class);
+                    intent.putExtra("title", boxTask.getTitle());
+                    Toast.makeText(BoxActivity.this, "na", Toast.LENGTH_SHORT).show();
+                    startActivity(intent);
+
+                    reference.child("Box" + boxTask.getId()).removeValue(); // czy na pewno tak robic
+                }
+
             }
         });
         newActivityDialog = builder.create();
