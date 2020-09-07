@@ -110,6 +110,25 @@ public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.On
                     reference.child("Box" + boxTask.getId()).removeValue(); // czy na pewno tak robic
                 }
 
+                if (activityList[which].toString().equals("Calendar")) {
+                    Intent intent = new Intent(BoxActivity.this, CalendarNewTaskActivity.class);
+                    intent.putExtra("title", boxTask.getTitle());
+//                    Toast.makeText(BoxActivity.this, "ca", Toast.LENGTH_SHORT).show();
+                    startActivity(intent);
+
+                    reference.child("Box" + boxTask.getId()).removeValue(); // czy na pewno tak robic
+                }
+
+                if (activityList[which].toString().equals("Someday")) {
+//                    Intent intent = new Intent(BoxActivity.this, CalendarNewTaskActivity.class);
+//                    intent.putExtra("title", boxTask.getTitle());
+//                    startActivity(intent);
+//                    reference.child("Box" + boxTask.getId()).removeValue(); // czy na pewno tak robic
+                    Toast.makeText(BoxActivity.this, "Someday", Toast.LENGTH_SHORT).show();
+
+
+                }
+
             }
         });
         newActivityDialog = builder.create();

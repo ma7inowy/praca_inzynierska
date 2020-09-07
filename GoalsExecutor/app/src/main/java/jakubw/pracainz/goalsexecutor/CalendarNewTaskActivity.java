@@ -62,6 +62,12 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
         final GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         createNotificationChanel();
 
+        // do tworzenia zadania z BoxActivity
+        Intent intent = getIntent();
+        if (intent.hasExtra("title")) {
+            addTitleEvent.setText(intent.getStringExtra("title"));
+        }
+
         addCalendarNewTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,6 +114,7 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 hourEvent = hourOfDay;
                 minuteEvent = minute;
+                setTimeBtn.setText(getDataCharSequenceForTime());
             }
         }, HOUR, MINUTE, is24HourFormat);
 
@@ -124,6 +131,7 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
                 yearEvent = year;
                 monthEvent = month;
                 dayEvent = dayOfMonth;
+                setDateBtn.setText(getDataCharSequenceForDate());
             }
         }, YEAR, MONTH, DATE);
         datePickerDialog.show();
@@ -139,6 +147,25 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
         dateListInt.add(Integer.parseInt(dateTable[3]));
         return dateListInt;
         //h,d,m,y
+    }
+
+    public CharSequence getDataCharSequenceForTime(){
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.set(Calendar.HOUR, hourEvent);
+        calendar1.set(Calendar.MINUTE, minuteEvent);
+        CharSequence dataCharSequenceForTime = DateFormat.format("HH:mm", calendar1);
+
+        return dataCharSequenceForTime;
+    }
+
+    public CharSequence getDataCharSequenceForDate(){
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.set(Calendar.YEAR, yearEvent);
+        calendar1.set(Calendar.MONTH, monthEvent);
+        calendar1.set(Calendar.DATE, dayEvent);
+        CharSequence dataCharSequenceForDate = DateFormat.format("dd MMM yyyy", calendar1);
+
+        return dataCharSequenceForDate;
     }
 
     // dla api >= 26
@@ -170,6 +197,5 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
         long diff = alarmTime-currentTime;
         Log.e("timealarm", "difference " + diff);
         alarmManager.set(AlarmManager.RTC_WAKEUP,alarmTime,pendingIntent);
-
     }
 }
