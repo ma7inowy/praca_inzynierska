@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,13 +38,13 @@ import java.util.Random;
 public class CalendarActivity extends Fragment implements CalendarAdapter.OnNoteListener {
 
     Button btnsortEvents;
-    Button btnAddNewEvent;
     DatabaseReference reference;
     RecyclerView calendarEvents;
     ArrayList<CalendarEvent> eventList;
     GoogleSignInAccount signInAccount;
     CalendarAdapter calendarAdapter;
     Integer number;
+    FloatingActionButton addNewCalendarEventFloatingBtn;
 
     @Nullable
     @Override
@@ -56,11 +57,11 @@ public class CalendarActivity extends Fragment implements CalendarAdapter.OnNote
     public void onStart() {
         super.onStart();
         btnsortEvents = getView().findViewById(R.id.btnsortEvents);
-        btnAddNewEvent = getView().findViewById(R.id.btnAddNewEvent);
         calendarEvents = getView().findViewById(R.id.calendarEvents);
         calendarEvents.setLayoutManager(new LinearLayoutManager(getActivity()));
         eventList = new ArrayList<>();
         number = new Random().nextInt();
+        addNewCalendarEventFloatingBtn = getView().findViewById(R.id.addNewCalendarEventFloatingBtn);
 
 
         //google signin
@@ -85,7 +86,7 @@ public class CalendarActivity extends Fragment implements CalendarAdapter.OnNote
             }
         });
 
-        btnAddNewEvent.setOnClickListener(new View.OnClickListener() {
+        addNewCalendarEventFloatingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), CalendarNewTaskActivity.class);
