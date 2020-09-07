@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseApiNotAvailableException;
 import com.google.firebase.database.DataSnapshot;
@@ -46,7 +47,7 @@ import static androidx.recyclerview.widget.ItemTouchHelper.*;
 public class KontenerActivity extends Fragment implements DoesAdapter.OnNoteListener {
 
     TextView titlepage, endpage;
-    Button btnAddNew, btnSort;
+    Button btnSort;
     DatabaseReference reference;
     DatabaseReference referenceLabels;
     RecyclerView ourdoes;
@@ -54,6 +55,8 @@ public class KontenerActivity extends Fragment implements DoesAdapter.OnNoteList
     ArrayList<MyDoes> filteredList;
     ArrayList<Label> labelList;
     DoesAdapter doesAdapter;
+    FloatingActionButton addNewTaskFloatingBtn;
+
     GoogleSignInAccount signInAccount;
     boolean isFiltered = false; //gdzie te flage tu czy oncreate?
 
@@ -71,10 +74,10 @@ public class KontenerActivity extends Fragment implements DoesAdapter.OnNoteList
         super.onStart();
         titlepage = getView().findViewById(R.id.titlepage);
         endpage = getView().findViewById(R.id.endpage);
-        btnAddNew = getView().findViewById(R.id.btnAddNew);
         btnSort = getView().findViewById(R.id.btnsort);
         ourdoes = getView().findViewById(R.id.ourdoes);
         ourdoes.setLayoutManager(new LinearLayoutManager(getActivity()));
+        addNewTaskFloatingBtn = getView().findViewById(R.id.addNewTaskFloatingBtn);
         list = new ArrayList<>();
         labelList = new ArrayList<>();
         filteredList = new ArrayList<>();
@@ -120,9 +123,10 @@ public class KontenerActivity extends Fragment implements DoesAdapter.OnNoteList
             }
         });
 
-        btnAddNew.setOnClickListener(new View.OnClickListener() {
+
+        addNewTaskFloatingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), NewTaskActivity.class);
                 startActivity(intent);
             }
