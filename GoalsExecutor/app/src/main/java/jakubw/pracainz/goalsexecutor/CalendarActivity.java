@@ -3,6 +3,7 @@ package jakubw.pracainz.goalsexecutor;
 //import android.support.v7.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -16,13 +17,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +38,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Random;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
+
+import static androidx.recyclerview.widget.ItemTouchHelper.LEFT;
 
 public class CalendarActivity extends Fragment implements CalendarAdapter.OnNoteListener {
 
@@ -100,6 +108,9 @@ public class CalendarActivity extends Fragment implements CalendarAdapter.OnNote
                 handleEventsFromPhoneCalendars();
             }
         });
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(calendarEvents);
     }
 
 //    @Override
@@ -210,4 +221,57 @@ public class CalendarActivity extends Fragment implements CalendarAdapter.OnNote
         calendarEvents.setAdapter(calendarAdapter); // wypelni wszystkie pola ViewHolderami
         calendarAdapter.notifyDataSetChanged();
     }
+
+    // swipe left to delete task
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, LEFT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            final int postion = viewHolder.getAdapterPosition();
+
+            switch (direction) {
+                case LEFT: // zrobic cos ze w momencie usuniecia ewentu usuwa sie alarm!
+                    final CalendarEvent deletedTask = eventList.get(postion);
+
+                    String id = deletedTask.getId();
+                    reference.child("Does" + id).removeValue(); // usuwa z bazy
+                    eventList.remove(postion);
+                    setAdapter(eventList);
+                    Snackbar.make(calendarEvents, "Event " + deletedTask.getTitle() + " deleted!", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            eventList.add(postion, deletedTask);
+                            setAdapter(eventList);
+                            HashMap map = new HashMap();
+                            map.put("title", deletedTask.getTitle());
+                            map.put("year", deletedTask.getYear());
+                            map.put("month", deletedTask.getMonth());
+                            map.put("day", deletedTask.getDay());
+                            map.put("hour", deletedTask.getHour());
+                            map.put("minute", deletedTask.getMinute());
+                            map.put("description", deletedTask.getDescription());
+                            map.put("id", deletedTask.getId());
+                            reference.child("Does" + deletedTask.getId()).updateChildren(map);
+                        }
+                    }).show();
+                    break;
+            }
+        }
+
+        @Override
+        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+            new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorDeleteTask))
+//                    .addBackgroundColor(ContextCompat.getColor(KontenerActivity.this, R.color.colorPrimary))
+                    .addSwipeLeftActionIcon(R.drawable.ic_delete_black_)
+                    .create()
+                    .decorate();
+
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        }
+    };
 }
