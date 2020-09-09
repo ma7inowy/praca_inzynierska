@@ -1,10 +1,16 @@
 package jakubw.pracainz.goalsexecutor;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -20,7 +26,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Random;
 
 public class EditCalendarEventActivity extends AppCompatActivity {
 
@@ -58,6 +66,7 @@ public class EditCalendarEventActivity extends AppCompatActivity {
         dayEvent = intent.getIntExtra("dayEvent",1);
         hourEvent = intent.getIntExtra("hourEvent",0);
         minuteEvent = intent.getIntExtra("minuteEvent",0);
+        createNotificationChanel();
 
         id = intent.getStringExtra("id");
 
@@ -88,6 +97,7 @@ public class EditCalendarEventActivity extends AppCompatActivity {
                 map.put("minute", minuteEvent);
                 map.put("description", editDescriptionEvent.getText().toString());
                 reference.updateChildren(map);
+                editNotification();
 //                Toast.makeText(EditDoesActivity.this, editTitle.getText().toString() + " " + editDescription.getText().toString(), Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -143,5 +153,38 @@ public class EditCalendarEventActivity extends AppCompatActivity {
         CharSequence dataCharSequenceForTime = DateFormat.format("HH:mm", calendar1);
 
         return dataCharSequenceForTime;
+    }
+
+    // dla api >= 26
+    private void createNotificationChanel() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "GoalsExecutorChannel";
+            String description = "Channel for GoalsExecutor";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("notifyGoalsExecutor",name,importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void editNotification() {
+        Intent intent = new Intent(EditCalendarEventActivity.this,ReminderBroadcast.class);
+        intent.putExtra("desc", editTitleEvent.getText().toString());
+        int requestcode = Integer.valueOf(id);
+        //https://stackoverflow.com/questions/18649728/android-cannot-pass-intent-extras-though-alarmmanager/28203623 flaga do update
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(EditCalendarEventActivity.this,requestcode,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        long currentTime = System.currentTimeMillis();
+        Calendar calendar = new GregorianCalendar(yearEvent, monthEvent, dayEvent, hourEvent, minuteEvent);
+        long alarmTime = calendar.getTimeInMillis();
+        long tenSec = 1000 *10;
+        Log.e("timealarm", "Alarm " + alarmTime);
+        Log.e("timealarm", "current " + currentTime);
+        long diff = alarmTime-currentTime;
+        Log.e("timealarm", "difference " + diff);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,alarmTime,pendingIntent);
     }
 }

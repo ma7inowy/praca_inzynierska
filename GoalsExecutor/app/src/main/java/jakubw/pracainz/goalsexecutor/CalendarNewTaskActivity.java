@@ -185,8 +185,8 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
     private void makeNotification() {
         Intent intent = new Intent(CalendarNewTaskActivity.this,ReminderBroadcast.class);
         intent.putExtra("desc", addTitleEvent.getText().toString());
-        int requestcode = new Random().nextInt();
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(CalendarNewTaskActivity.this,requestcode,intent,0);
+        int requestcode = number;
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(CalendarNewTaskActivity.this,requestcode,intent,PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         long currentTime = System.currentTimeMillis();
