@@ -97,7 +97,7 @@ public class EditCalendarEventActivity extends AppCompatActivity {
     private void handleTimeButton() {
         int HOUR = hourEvent;
         int MINUTE = minuteEvent;
-        boolean is24HourFormat = DateFormat.is24HourFormat(this);
+//        boolean is24HourFormat = DateFormat.is24HourFormat(this);
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -105,7 +105,7 @@ public class EditCalendarEventActivity extends AppCompatActivity {
                 minuteEvent = minute;
                 editTimeBtn.setText(getDataCharSequenceForTime());
             }
-        }, HOUR, MINUTE, is24HourFormat);
+        }, HOUR, MINUTE, true);
 
         timePickerDialog.show();
     }

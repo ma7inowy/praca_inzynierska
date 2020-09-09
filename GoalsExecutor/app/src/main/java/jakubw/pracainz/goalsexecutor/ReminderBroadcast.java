@@ -8,13 +8,16 @@ import android.content.Intent;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import java.util.Random;
+
 public class ReminderBroadcast extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String desc = intent.getStringExtra("desc");
         //call when i tap on notification
         Intent intent2 = new Intent(context,MainActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(context,0,intent2,0);
+        int requestcode = new Random().nextInt();
+        PendingIntent contentIntent = PendingIntent.getActivity(context,requestcode,intent2,0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"notifyGoalsExecutor")
                 .setSmallIcon(R.drawable.ic_message)
@@ -24,6 +27,6 @@ public class ReminderBroadcast extends BroadcastReceiver {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-        notificationManagerCompat.notify(200,builder.build());
+        notificationManagerCompat.notify(requestcode,builder.build());
     }
 }

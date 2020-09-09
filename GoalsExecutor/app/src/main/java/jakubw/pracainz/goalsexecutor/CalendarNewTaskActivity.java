@@ -106,9 +106,9 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
     }
 
     private void handleTimeButton() {
-        int HOUR = calendar.get(Calendar.HOUR);
+        int HOUR = calendar.get(Calendar.HOUR_OF_DAY);
         int MINUTE = calendar.get(Calendar.MINUTE);
-        boolean is24HourFormat = DateFormat.is24HourFormat(this);
+//        boolean is24HourFormat = DateFormat.is24HourFormat(this);
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -116,7 +116,7 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
                 minuteEvent = minute;
                 setTimeBtn.setText(getDataCharSequenceForTime());
             }
-        }, HOUR, MINUTE, is24HourFormat);
+        }, HOUR, MINUTE, true);
 
         timePickerDialog.show();
     }
@@ -151,7 +151,7 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
 
     public CharSequence getDataCharSequenceForTime(){
         Calendar calendar1 = Calendar.getInstance();
-        calendar1.set(Calendar.HOUR, hourEvent);
+        calendar1.set(Calendar.HOUR_OF_DAY, hourEvent);
         calendar1.set(Calendar.MINUTE, minuteEvent);
         CharSequence dataCharSequenceForTime = DateFormat.format("HH:mm", calendar1);
 
@@ -185,7 +185,8 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
     private void makeNotification() {
         Intent intent = new Intent(CalendarNewTaskActivity.this,ReminderBroadcast.class);
         intent.putExtra("desc", addTitleEvent.getText().toString());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(CalendarNewTaskActivity.this,0,intent,0);
+        int requestcode = new Random().nextInt();
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(CalendarNewTaskActivity.this,requestcode,intent,0);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         long currentTime = System.currentTimeMillis();

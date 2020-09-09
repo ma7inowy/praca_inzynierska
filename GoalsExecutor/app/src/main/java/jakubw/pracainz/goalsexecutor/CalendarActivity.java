@@ -203,7 +203,7 @@ public class CalendarActivity extends Fragment implements CalendarAdapter.OnNote
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set(Calendar.YEAR, event.getYear());
         calendar1.set(Calendar.MONTH, event.getMonth());
-        calendar1.set(Calendar.DATE, event.getDay() -1); //bo data od 0 dzien
+        calendar1.set(Calendar.DATE, event.getDay() - 1); //bo data od 0 dzien
         calendar1.set(Calendar.HOUR, event.getHour());
         calendar1.set(Calendar.MINUTE, event.getMinute());
         CharSequence dataCharSequenceForDate = DateFormat.format("dd MMM yyyy", calendar1);

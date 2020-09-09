@@ -35,8 +35,8 @@ class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.MyViewHolder>
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set(Calendar.YEAR, eventList.get(i).getYear());
         calendar1.set(Calendar.MONTH, eventList.get(i).getMonth());
-        calendar1.set(Calendar.DATE, eventList.get(i).getDay() - 1); //bo taki format ze dni od 0
-        calendar1.set(Calendar.HOUR, eventList.get(i).getHour());
+        calendar1.set(Calendar.DATE, eventList.get(i).getDay()); //bo taki format ze dni od 0
+        calendar1.set(Calendar.HOUR_OF_DAY, eventList.get(i).getHour());
         calendar1.set(Calendar.MINUTE, eventList.get(i).getMinute());
         CharSequence dataCharSequence = DateFormat.format("dd MMM yyyy HH:mm", calendar1);
 
