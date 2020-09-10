@@ -2,11 +2,15 @@ package jakubw.pracainz.goalsexecutor;
 
 //import android.support.v7.app.AppCompatActivity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +40,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -241,6 +246,7 @@ public class CalendarActivity extends Fragment implements CalendarAdapter.OnNote
                     reference.child("Does" + id).removeValue(); // usuwa z bazy
                     eventList.remove(postion);
                     setAdapter(eventList);
+                    deleteAlarm(id);
                     Snackbar.make(calendarEvents, "Event " + deletedTask.getTitle() + " deleted!", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -256,6 +262,7 @@ public class CalendarActivity extends Fragment implements CalendarAdapter.OnNote
                             map.put("description", deletedTask.getDescription());
                             map.put("id", deletedTask.getId());
                             reference.child("Does" + deletedTask.getId()).updateChildren(map);
+                            undoDeletingAlarm(deletedTask);
                         }
                     }).show();
                     break;
@@ -274,4 +281,28 @@ public class CalendarActivity extends Fragment implements CalendarAdapter.OnNote
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
     };
+
+    private void undoDeletingAlarm(CalendarEvent calendarEvent) {
+        Intent intent = new Intent(getActivity(),ReminderBroadcast.class);
+        intent.putExtra("desc", calendarEvent.getTitle());
+        int requestcode = Integer.valueOf(calendarEvent.getId());
+        //https://stackoverflow.com/questions/18649728/android-cannot-pass-intent-extras-though-alarmmanager/28203623 flaga do update
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(),requestcode,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        Calendar calendar = new GregorianCalendar(calendarEvent.getYear(), calendarEvent.getMonth(), calendarEvent.getDay(), calendarEvent.getHour(), calendarEvent.getMinute());
+        long alarmTime = calendar.getTimeInMillis();
+        alarmManager.set(AlarmManager.RTC_WAKEUP,alarmTime,pendingIntent);
+    }
+
+    // when swipe left then you can delete
+    private void deleteAlarm(String id) {
+        Intent intent = new Intent(getActivity(),ReminderBroadcast.class);
+        int requestcode = Integer.valueOf(id);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(),requestcode,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        pendingIntent.cancel();
+    }
 }
