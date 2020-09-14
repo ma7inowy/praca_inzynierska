@@ -126,10 +126,34 @@
             android:maxLength="200" />
     </LinearLayout>
 
-    <Spinner
-        android:id="@+id/labelsSpinner"
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="#808090"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:paddingLeft="11dp"
+        android:paddingRight="11dp"
+        android:paddingBottom="11dp"
+        android:paddingTop="11dp"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:text="Etykieta"
+            android:textSize="20dp"
+            android:layout_gravity="center"
+            android:textColor="#FFFFFF"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+        </TextView>
+        <Spinner
+            android:id="@+id/labelsSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/addNewTaskBtn"
