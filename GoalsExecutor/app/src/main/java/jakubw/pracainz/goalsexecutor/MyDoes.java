@@ -4,16 +4,18 @@ public class MyDoes {
 
     String titledoes, datedoes, descdoes, id;
 //    Label label;
-    String labelName;
+    String labelName, priority;
+
     public MyDoes() {
     }
 
-    public MyDoes(String titledoes, String datedoes, String descdoes, String id, String labelName) {
+    public MyDoes(String titledoes, String datedoes, String descdoes, String id, String labelName, String priority) {
         this.titledoes = titledoes;
         this.datedoes = datedoes;
         this.descdoes = descdoes;
         this.id = id;
         this.labelName = labelName;
+        this.priority = priority;
     }
 
     public String getTitledoes() {
@@ -54,5 +56,13 @@ public class MyDoes {
 
     public void setLabelName(String labelName) {
         this.labelName = labelName;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
     }
 }

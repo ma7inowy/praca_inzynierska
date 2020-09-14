@@ -256,6 +256,7 @@ public class KontenerActivity extends Fragment implements DoesAdapter.OnNoteList
                             map.put("datedoes", deletedTask.getDatedoes());
                             map.put("id", deletedTask.getId());
                             map.put("labelName", deletedTask.getLabelName());
+                            map.put("priority", deletedTask.getPriority());
                             reference.child("Does" + deletedTask.getId()).updateChildren(map);
                         }
                     }).show();
@@ -294,6 +295,7 @@ public class KontenerActivity extends Fragment implements DoesAdapter.OnNoteList
         intent.putExtra("date", myDoes.getDatedoes());
         intent.putExtra("id", myDoes.getId());
         intent.putExtra("labelName", myDoes.getLabelName());
+        intent.putExtra("priority", myDoes.getPriority());
         startActivity(intent);
         Toast.makeText(getContext(), "id" + myDoes.getId(), Toast.LENGTH_SHORT).show();
     }

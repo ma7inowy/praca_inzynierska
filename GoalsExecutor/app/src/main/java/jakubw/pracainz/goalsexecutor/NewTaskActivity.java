@@ -49,7 +49,7 @@ public class NewTaskActivity extends AppCompatActivity {
     String labelName = "labelName";
     ArrayAdapter<Label> labelAdapter;
     AlertDialog addPriorityDialog;
-    String priority = "Low";
+    String priority = "1";
 
 
 
@@ -108,6 +108,7 @@ public class NewTaskActivity extends AppCompatActivity {
                 map.put("datedoes", addDate.getText().toString());
                 map.put("id", number.toString());
                 map.put("labelName", labelName);
+                map.put("priority", priority);
                 reference.updateChildren(map);
                 Toast.makeText(NewTaskActivity.this, addTitle.getText().toString() + " " + addDescription.getText().toString(), Toast.LENGTH_SHORT).show();
                 finish();
@@ -144,14 +145,15 @@ public class NewTaskActivity extends AppCompatActivity {
         builder.setSingleChoiceItems(priorities, 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                priority = priorities[which];
+                priority = String.valueOf(which+1);
                 Toast.makeText(NewTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
             }
         });
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                addPriorityBtn.setText("PRIORYTET: " + priority);
+                addPriorityBtn.setText("PRIORYTET: " + priorities[Integer.valueOf(priority)-1]);
+
                 Toast.makeText(NewTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
