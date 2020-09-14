@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,7 +39,7 @@ public class NewTaskActivity extends AppCompatActivity {
     EditText addDate;
     EditText addTitle;
     EditText addDescription;
-    Button addNewTaskBtn;
+    Button addNewTaskBtn,addPriorityBtn;
     DatabaseReference reference;
     DatabaseReference referenceLabels;
     //    MyDoes myDoes;
@@ -46,6 +48,8 @@ public class NewTaskActivity extends AppCompatActivity {
     Spinner labelsSpinner;
     String labelName = "labelName";
     ArrayAdapter<Label> labelAdapter;
+    AlertDialog addPriorityDialog;
+    String priority = "Low";
 
 
 
@@ -59,6 +63,7 @@ public class NewTaskActivity extends AppCompatActivity {
         addDescription = findViewById(R.id.addDescription);
         addNewTaskBtn = findViewById(R.id.addNewTaskBtn);
         labelsSpinner = findViewById(R.id.labelsSpinner);
+        addPriorityBtn = findViewById(R.id.addPriorityBtn);
         number = new Random().nextInt();
         labelList = new ArrayList<>();
 
@@ -109,6 +114,13 @@ public class NewTaskActivity extends AppCompatActivity {
             }
         });
 
+        addPriorityBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPrioritiesDialog();
+            }
+        });
+
         labelsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -123,6 +135,35 @@ public class NewTaskActivity extends AppCompatActivity {
                 Toast.makeText(NewTaskActivity.this, "nothing selected", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showPrioritiesDialog() {
+        final String[] priorities = {"High","Medium","Low"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(NewTaskActivity.this);
+        builder.setTitle("Choose priority");
+        builder.setSingleChoiceItems(priorities, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                priority = priorities[which];
+                Toast.makeText(NewTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                addPriorityBtn.setText("PRIORYTET: " + priority);
+                Toast.makeText(NewTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(NewTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 
     private void setLabelAdapter(ArrayList<Label> list) {
