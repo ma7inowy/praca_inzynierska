@@ -154,6 +154,7 @@
             android:layout_height="match_parent">
 
         </TextView>
+
         <Spinner
             android:id="@+id/labelsSpinner"
             android:layout_width="match_parent"

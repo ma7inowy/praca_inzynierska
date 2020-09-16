@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseApiNotAvailableException;
@@ -44,7 +46,7 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 import static androidx.recyclerview.widget.ItemTouchHelper.*;
 
-public class KontenerActivity extends Fragment implements DoesAdapter.OnNoteListener {
+public class KontenerActivity extends Fragment implements DoesAdapter.OnNoteListener, TaskFilterDialog.TaskFilterDialogListener {
 
     TextView titlepage, endpage;
     Button btnSort;
@@ -56,6 +58,7 @@ public class KontenerActivity extends Fragment implements DoesAdapter.OnNoteList
     ArrayList<Label> labelList;
     DoesAdapter doesAdapter;
     FloatingActionButton addNewTaskFloatingBtn;
+    FloatingActionButton addFilterFloatingBtn;
 
     GoogleSignInAccount signInAccount;
     boolean isFiltered = false; //gdzie te flage tu czy oncreate?
@@ -68,7 +71,6 @@ public class KontenerActivity extends Fragment implements DoesAdapter.OnNoteList
     }
 
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -78,6 +80,7 @@ public class KontenerActivity extends Fragment implements DoesAdapter.OnNoteList
         ourdoes = getView().findViewById(R.id.ourdoes);
         ourdoes.setLayoutManager(new LinearLayoutManager(getActivity()));
         addNewTaskFloatingBtn = getView().findViewById(R.id.addNewTaskFloatingBtn);
+        addFilterFloatingBtn = getView().findViewById(R.id.addFilterFloatingBtn);
         list = new ArrayList<>();
         labelList = new ArrayList<>();
         filteredList = new ArrayList<>();
@@ -132,6 +135,13 @@ public class KontenerActivity extends Fragment implements DoesAdapter.OnNoteList
             }
         });
 
+        addFilterFloatingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFilterDialog();
+            }
+        });
+
         //tylko do testowania
         btnSort.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,6 +159,12 @@ public class KontenerActivity extends Fragment implements DoesAdapter.OnNoteList
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(ourdoes);
 
+    }
+
+    private void openFilterDialog() {
+        TaskFilterDialog taskFilterDialog = new TaskFilterDialog();
+        taskFilterDialog.setTargetFragment(KontenerActivity.this, 1);
+        taskFilterDialog.show(getFragmentManager(), "Filter dialog");
     }
 
 //    @Override
@@ -312,7 +328,7 @@ public class KontenerActivity extends Fragment implements DoesAdapter.OnNoteList
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.settings_menu, menu);
-        super.onCreateOptionsMenu(menu,inflater);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -369,4 +385,23 @@ public class KontenerActivity extends Fragment implements DoesAdapter.OnNoteList
 
     }
 
+    //trzeba zmienic tez on click zeby bralo te liste przefiltrowana jak sie kliknie
+    // jak zatwierdze filtry to to sie wywola
+    @Override
+    public void applyFilterData(boolean priorityLow, boolean priorityMedium, boolean priorityHigh, String label) {
+        ArrayList<MyDoes> fList = new ArrayList<>();
+        for (MyDoes task : list) {
+            if (task.getPriority().equals("1") && priorityHigh) {
+                fList.add(task);
+            } else if (task.getPriority().equals("2") && priorityMedium) {
+                fList.add(task);
+            } else if (task.getPriority().equals("3") && priorityLow) {
+                fList.add(task);
+            }
+        }
+        if (!priorityHigh && !priorityLow && !priorityMedium)
+            setAdapter(list);
+        else
+            setAdapter(fList);
+    }
 }

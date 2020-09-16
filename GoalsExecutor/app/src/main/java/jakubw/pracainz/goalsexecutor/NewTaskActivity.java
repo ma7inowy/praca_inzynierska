@@ -49,7 +49,7 @@ public class NewTaskActivity extends AppCompatActivity {
     String labelName = "labelName";
     ArrayAdapter<Label> labelAdapter;
     AlertDialog addPriorityDialog;
-    String priority = "1";
+    String priority = "3";
 
 
 
