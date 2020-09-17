@@ -390,17 +390,22 @@ public class KontenerActivity extends Fragment implements DoesAdapter.OnNoteList
     @Override
     public void applyFilterData(boolean priorityLow, boolean priorityMedium, boolean priorityHigh, String label) {
         ArrayList<MyDoes> fList = new ArrayList<>();
+        ArrayList<MyDoes> fList2 = new ArrayList<>();
         for (MyDoes task : list) {
-            if (task.getPriority().equals("1") && priorityHigh) {
+            if (task.getPriority().equals("1") && priorityHigh && task.getLabelName().equals(label)) {
                 fList.add(task);
-            } else if (task.getPriority().equals("2") && priorityMedium) {
+            } else if (task.getPriority().equals("2") && priorityMedium && task.getLabelName().equals(label)) {
                 fList.add(task);
-            } else if (task.getPriority().equals("3") && priorityLow) {
+            } else if (task.getPriority().equals("3") && priorityLow && task.getLabelName().equals(label)) {
                 fList.add(task);
             }
         }
-        if (!priorityHigh && !priorityLow && !priorityMedium)
-            setAdapter(list);
+        if (!priorityHigh && !priorityLow && !priorityMedium){
+            for (MyDoes task2 : list) {
+                if(task2.getLabelName().equals(label)) fList2.add(task2);
+            }
+            setAdapter(fList2);
+        }
         else
             setAdapter(fList);
     }
