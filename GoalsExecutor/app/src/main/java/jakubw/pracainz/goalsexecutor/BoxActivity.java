@@ -206,5 +206,12 @@ public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.On
                     reference.child("Box" + boxTask.getId()).removeValue();
             }
         }
+
+        if (requestCode == CALENDAR_REQUEST && resultCode == RESULT_OK) {
+            if (data.getExtras().containsKey("taskAdded")) {
+                if (data.getBooleanExtra("taskAdded", false))
+                    reference.child("Box" + boxTask.getId()).removeValue();
+            }
+        }
     }
 }

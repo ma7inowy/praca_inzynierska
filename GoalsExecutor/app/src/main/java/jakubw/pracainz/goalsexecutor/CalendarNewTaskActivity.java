@@ -84,6 +84,7 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
                 map.put("id", number.toString());
                 reference.updateChildren(map);
                 makeNotification();
+                sendResultToBoxActivity();
                 Toast.makeText(CalendarNewTaskActivity.this, "done!", Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -198,5 +199,13 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
         long diff = alarmTime-currentTime;
         Log.e("timealarm", "difference " + diff);
         alarmManager.set(AlarmManager.RTC_WAKEUP,alarmTime,pendingIntent);
+    }
+
+    // dla usuwania zadania z BoxActiv
+    private void sendResultToBoxActivity() {
+        Intent i = getIntent();
+//        i.putExtra("taskAdded", true);
+        i.putExtra("taskAdded",true);
+        setResult(RESULT_OK,i);
     }
 }
