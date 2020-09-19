@@ -39,7 +39,7 @@ public class NewTaskActivity extends AppCompatActivity {
     EditText addDate;
     EditText addTitle;
     EditText addDescription;
-    Button addNewTaskBtn,addPriorityBtn;
+    Button addNewTaskBtn, addPriorityBtn;
     DatabaseReference reference;
     DatabaseReference referenceLabels;
     //    MyDoes myDoes;
@@ -50,7 +50,6 @@ public class NewTaskActivity extends AppCompatActivity {
     ArrayAdapter<Label> labelAdapter;
     AlertDialog addPriorityDialog;
     String priority = "3";
-
 
 
     @Override
@@ -110,6 +109,7 @@ public class NewTaskActivity extends AppCompatActivity {
                 map.put("labelName", labelName);
                 map.put("priority", priority);
                 reference.updateChildren(map);
+                sendResultToBoxActivity();
                 Toast.makeText(NewTaskActivity.this, addTitle.getText().toString() + " " + addDescription.getText().toString(), Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -128,7 +128,7 @@ public class NewTaskActivity extends AppCompatActivity {
                 Label label = (Label) parent.getSelectedItem();
                 labelName = label.getName();
                 Toast.makeText(parent.getContext(), labelName, Toast.LENGTH_LONG).show();
-                Log.e("labelName","wcisniete");
+                Log.e("labelName", "wcisniete");
             }
 
             @Override
@@ -137,22 +137,29 @@ public class NewTaskActivity extends AppCompatActivity {
             }
         });
     }
+    // dla usuwania zadania z BoxActiv
+    private void sendResultToBoxActivity() {
+        Intent i = getIntent();
+//        i.putExtra("taskAdded", true);
+        i.putExtra("taskAdded",true);
+        setResult(RESULT_OK,i);
+    }
 
     private void showPrioritiesDialog() {
-        final String[] priorities = {"High","Medium","Low"};
+        final String[] priorities = {"High", "Medium", "Low"};
         AlertDialog.Builder builder = new AlertDialog.Builder(NewTaskActivity.this);
         builder.setTitle("Choose priority");
         builder.setSingleChoiceItems(priorities, 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                priority = String.valueOf(which+1);
+                priority = String.valueOf(which + 1);
                 Toast.makeText(NewTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
             }
         });
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                addPriorityBtn.setText("PRIORYTET: " + priorities[Integer.valueOf(priority)-1]);
+                addPriorityBtn.setText("PRIORYTET: " + priorities[Integer.valueOf(priority) - 1]);
 
                 Toast.makeText(NewTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
@@ -176,16 +183,10 @@ public class NewTaskActivity extends AppCompatActivity {
         labelAdapter.notifyDataSetChanged();
     }
 
-    public void getSelectedLabel(View view){
+    public void getSelectedLabel(View view) {
         Label label = (Label) labelsSpinner.getSelectedItem();
         Toast.makeText(this, label.getId(), Toast.LENGTH_SHORT).show();
     }
 
-//    public void saveNote(){
-////        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Does" + number);
-//        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Does" + number);
-//        MyDoes myDoes = new MyDoes(addTitle.getText().toString(),addDate.getText().toString(), "jakis opis");
-//        reference.push().getRef().child("titleEvent").setValue(addTitle.getText().toString());
-//        finish();
-//    }
+
 }

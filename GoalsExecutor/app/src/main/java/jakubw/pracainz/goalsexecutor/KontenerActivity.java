@@ -302,8 +302,10 @@ public class KontenerActivity extends Fragment implements DoesAdapter.OnNoteList
     @Override
     public void onNoteClick(int position) {
         final MyDoes myDoes;
-        if (isFiltered) myDoes = filteredList.get(position);
-        else myDoes = list.get(position);
+        if (isFiltered) {
+            myDoes = filteredList.get(position);
+            isFiltered = false;
+        } else myDoes = list.get(position);
 
         Intent intent = new Intent(getActivity(), EditDoesActivity.class);
         intent.putExtra("title", myDoes.getTitledoes());
@@ -400,13 +402,17 @@ public class KontenerActivity extends Fragment implements DoesAdapter.OnNoteList
                 fList.add(task);
             }
         }
-        if (!priorityHigh && !priorityLow && !priorityMedium){
+        if (!priorityHigh && !priorityLow && !priorityMedium) {
             for (MyDoes task2 : list) {
-                if(task2.getLabelName().equals(label)) fList2.add(task2);
+                if (task2.getLabelName().equals(label)) fList2.add(task2);
             }
             setAdapter(fList2);
-        }
-        else
+            filteredList = fList2;
+        } else {
             setAdapter(fList);
+            filteredList =fList;
+        }
+
+        isFiltered = true;
     }
 }

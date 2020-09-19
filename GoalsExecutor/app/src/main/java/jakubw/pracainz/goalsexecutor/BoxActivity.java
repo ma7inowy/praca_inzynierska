@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -44,6 +45,11 @@ public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.On
     BoxTasksAdapter boxTasksAdapter;
     Integer number;
     AlertDialog newActivityDialog;
+    BoxTask boxTask; // tylko zeby miec globalnie id konkretnego wcisnietego zadania zeby mozna bylo zrobic onActivityResult
+
+    public static final int NEXT_ACTION_REQUEST = 11; //kody do otrzymania danych o dodaniu taskbox w jakies miejsce np do nextaction albo do calendar
+    public static final int CALENDAR_REQUEST = 12;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +109,7 @@ public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.On
 
     @Override
     public void onNoteClick(final int position) {
-        final BoxTask boxTask = boxTasksList.get(position);
+        boxTask = boxTasksList.get(position);
 //        Toast.makeText(this, "id?" + boxTask.getId(), Toast.LENGTH_SHORT).show();
 
         // otworz okienko aby wybrać do jakiej aktywności przekierować
@@ -117,18 +123,14 @@ public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.On
                     Intent intent = new Intent(BoxActivity.this, NewTaskActivity.class);
                     intent.putExtra("title", boxTask.getTitle());
                     Toast.makeText(BoxActivity.this, "na", Toast.LENGTH_SHORT).show();
-                    startActivity(intent);
-
-                    reference.child("Box" + boxTask.getId()).removeValue(); // czy na pewno tak robic
+                    startActivityForResult(intent, BoxActivity.NEXT_ACTION_REQUEST);
                 }
 
                 if (activityList[which].toString().equals("Calendar")) {
                     Intent intent = new Intent(BoxActivity.this, CalendarNewTaskActivity.class);
                     intent.putExtra("title", boxTask.getTitle());
 //                    Toast.makeText(BoxActivity.this, "ca", Toast.LENGTH_SHORT).show();
-                    startActivity(intent);
-
-                    reference.child("Box" + boxTask.getId()).removeValue(); // czy na pewno tak robic
+                    startActivityForResult(intent, BoxActivity.CALENDAR_REQUEST);
                 }
 
                 if (activityList[which].toString().equals("Someday")) {
@@ -170,7 +172,7 @@ public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.On
                         @Override
                         public void onClick(View v) {
                             boxTasksList.add(postion, deletedTask);
-                                setAdapter(boxTasksList);
+                            setAdapter(boxTasksList);
                             HashMap map = new HashMap();
                             map.put("title", deletedTask.getTitle());
                             map.put("id", deletedTask.getId());
@@ -194,4 +196,15 @@ public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.On
         }
     };
 
+    // zeby usuwac BoxTask z listy dopiero jesli dane zadanie zostanie utworzone jako np NextAct/Calendar
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == NEXT_ACTION_REQUEST && resultCode == RESULT_OK) {
+            if (data.getExtras().containsKey("taskAdded")) {
+                if (data.getBooleanExtra("taskAdded", false))
+                    reference.child("Box" + boxTask.getId()).removeValue();
+            }
+        }
+    }
 }
