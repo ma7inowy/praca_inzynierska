@@ -13,50 +13,50 @@ import java.util.ArrayList;
 
 public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.MyViewHolder> {
     private Context context;
-    private ArrayList<Project> projects;
-    private OnNoteListener onNoteListener;
+    private ArrayList<Project> projectList;
+    private OnItemListener onItemListener;
 
-    public ProjectsAdapter(Context context, ArrayList<Project> projects, OnNoteListener onNoteListener) {
+    public ProjectsAdapter(Context context, ArrayList<Project> projectList, OnItemListener onItemListener) {
         this.context = context;
-        this.projects = projects;
-        this.onNoteListener = onNoteListener;
+        this.projectList = projectList;
+        this.onItemListener = onItemListener;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_project, parent, false), onNoteListener);
+        return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_project, parent, false), onItemListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
-        holder.projectTitle.setText(projects.get(i).getTitle());
+        holder.projectTitle.setText(projectList.get(i).getTitle());
     }
 
     @Override
     public int getItemCount() {
-        return projects.size();
+        return projectList.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView projectTitle;
-        OnNoteListener onNoteListener;
+        OnItemListener onItemListener;
 
-        public MyViewHolder(@NonNull View itemView, OnNoteListener onNoteListener) {
+        public MyViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
             super(itemView);
             projectTitle = (TextView) itemView.findViewById(R.id.projectTitle);
-            this.onNoteListener = onNoteListener;
+            this.onItemListener = onItemListener;
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            onNoteListener.onNoteClick(getAdapterPosition());
+            onItemListener.onItemClick(getAdapterPosition());
         }
     }
 
-    public interface OnNoteListener {
-        void onNoteClick(int position);
+    public interface OnItemListener {
+        void onItemClick(int position);
     }
 }

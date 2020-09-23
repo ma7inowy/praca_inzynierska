@@ -1,45 +1,45 @@
 package jakubw.pracainz.goalsexecutor;
 
-public class MyDoes {
+public class NextAction {
 
-    String titledoes, datedoes, descdoes, id;
+    String title, datedoes, description, id;
 //    Label label;
     String labelName, priority;
 
-    public MyDoes() {
+    public NextAction() {
     }
 
-    public MyDoes(String titledoes, String datedoes, String descdoes, String id, String labelName, String priority) {
-        this.titledoes = titledoes;
+    public NextAction(String title, String datedoes, String description, String id, String labelName, String priority) {
+        this.title = title;
         this.datedoes = datedoes;
-        this.descdoes = descdoes;
+        this.description = description;
         this.id = id;
         this.labelName = labelName;
         this.priority = priority;
     }
 
-    public String getTitledoes() {
-        return titledoes;
+    public String getTitle() {
+        return title;
     }
 
     public String getDatedoes() {
         return datedoes;
     }
 
-    public String getDescdoes() {
-        return descdoes;
+    public String getDescription() {
+        return description;
     }
 
-    public void setTitledoes(String titledoes) {
-        this.titledoes = titledoes;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setDatedoes(String datedoes) {
         this.datedoes = datedoes;
     }
 
-    public void setDescdoes(String descdoes) {
-        this.descdoes = descdoes;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getId() {

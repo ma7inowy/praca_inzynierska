@@ -11,52 +11,52 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-class BoxTasksAdapter extends RecyclerView.Adapter<BoxTasksAdapter.MyViewHolder> {
+class BoxTaskAdapter extends RecyclerView.Adapter<BoxTaskAdapter.MyViewHolder> {
     private Context context;
-    private ArrayList<BoxTask> boxTasks;
-    private OnNoteListener onNoteListener;
+    private ArrayList<BoxTask> boxTaskList;
+    private OnItemListener onItemListener;
 
-    public BoxTasksAdapter(Context context, ArrayList<BoxTask> boxTasks, OnNoteListener onNoteListener) {
+    public BoxTaskAdapter(Context context, ArrayList<BoxTask> boxTaskList, OnItemListener onItemListener) {
         this.context = context;
-        this.boxTasks = boxTasks;
-        this.onNoteListener = onNoteListener;
+        this.boxTaskList = boxTaskList;
+        this.onItemListener = onItemListener;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_box, parent, false), onNoteListener);
+        return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_box, parent, false), onItemListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
-        holder.boxTaskTitle.setText(boxTasks.get(i).getTitle());
+        holder.boxTaskTitle.setText(boxTaskList.get(i).getTitle());
     }
 
     @Override
     public int getItemCount() {
-        return boxTasks.size();
+        return boxTaskList.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView boxTaskTitle;
-        OnNoteListener onNoteListener;
+        OnItemListener onItemListener;
 
-        public MyViewHolder(@NonNull View itemView, OnNoteListener onNoteListener) {
+        public MyViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
             super(itemView);
             boxTaskTitle = (TextView) itemView.findViewById(R.id.boxTaskTitle);
-            this.onNoteListener = onNoteListener;
+            this.onItemListener = onItemListener;
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            onNoteListener.onNoteClick(getAdapterPosition());
+            onItemListener.onItemClick(getAdapterPosition());
         }
     }
 
-    public interface OnNoteListener {
-        void onNoteClick(int position);
+    public interface OnItemListener {
+        void onItemClick(int position);
     }
 }

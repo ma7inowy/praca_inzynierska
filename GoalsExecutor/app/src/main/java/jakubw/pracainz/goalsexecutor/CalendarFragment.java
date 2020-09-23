@@ -1,26 +1,20 @@
 package jakubw.pracainz.goalsexecutor;
 
-//import android.support.v7.app.AppCompatActivity;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -37,7 +31,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -48,34 +41,33 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 import static androidx.recyclerview.widget.ItemTouchHelper.LEFT;
 
-public class CalendarActivity extends Fragment implements CalendarAdapter.OnNoteListener {
+public class CalendarFragment extends Fragment implements CalendarAdapter.OnItemListener {
 
-    Button btnsortEvents;
+    Button sortEventsBtn;
     DatabaseReference reference;
-    RecyclerView calendarEvents;
-    ArrayList<CalendarEvent> eventList;
+    RecyclerView recyclerCalendarEvent;
+    ArrayList<CalendarEvent> calendarEventList;
     GoogleSignInAccount signInAccount;
     CalendarAdapter calendarAdapter;
-    Integer number;
-    FloatingActionButton addNewCalendarEventFloatingBtn;
+    Integer idNumber;
+    FloatingActionButton addNewCalendarEventBtn;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.activity_calendar, container, false);
+        return inflater.inflate(R.layout.fragment_calendar, container, false);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        btnsortEvents = getView().findViewById(R.id.btnsortEvents);
-        calendarEvents = getView().findViewById(R.id.calendarEvents);
-        calendarEvents.setLayoutManager(new LinearLayoutManager(getActivity()));
-        eventList = new ArrayList<>();
-        number = new Random().nextInt();
-        addNewCalendarEventFloatingBtn = getView().findViewById(R.id.addNewCalendarEventFloatingBtn);
-
+        sortEventsBtn = getView().findViewById(R.id.btnsortEvents);
+        recyclerCalendarEvent = getView().findViewById(R.id.recyclerCalendarEvent);
+        recyclerCalendarEvent.setLayoutManager(new LinearLayoutManager(getActivity()));
+        calendarEventList = new ArrayList<>();
+        idNumber = new Random().nextInt();
+        addNewCalendarEventBtn = getView().findViewById(R.id.addNewCalendarEventBtn);
 
         //google signin
         signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity());
@@ -84,30 +76,29 @@ public class CalendarActivity extends Fragment implements CalendarAdapter.OnNote
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                eventList.clear();
+                calendarEventList.clear();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     CalendarEvent p = dataSnapshot1.getValue(CalendarEvent.class);
-                    eventList.add(p);
+                    calendarEventList.add(p);
                 }
-                setAdapter(eventList);
+                setAdapter(calendarEventList);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 //                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
-
             }
         });
 
-        addNewCalendarEventFloatingBtn.setOnClickListener(new View.OnClickListener() {
+        addNewCalendarEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CalendarNewTaskActivity.class);
+                Intent intent = new Intent(getActivity(), NewCalendarEventActivity.class);
                 startActivity(intent);
             }
         });
 
-        btnsortEvents.setOnClickListener(new View.OnClickListener() {
+        sortEventsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleEventsFromPhoneCalendars();
@@ -115,59 +106,8 @@ public class CalendarActivity extends Fragment implements CalendarAdapter.OnNote
         });
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(calendarEvents);
+        itemTouchHelper.attachToRecyclerView(recyclerCalendarEvent);
     }
-
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_calendar);
-//
-//        btnsortEvents = findViewById(R.id.btnsortEvents);
-//        btnAddNewEvent = findViewById(R.id.btnAddNewEvent);
-//        calendarEvents = findViewById(R.id.calendarEvents);
-//        calendarEvents.setLayoutManager(new LinearLayoutManager(this));
-//        eventList = new ArrayList<>();
-//        number = new Random().nextInt();
-//
-//
-//        //google signin
-//        signInAccount = GoogleSignIn.getLastSignedInAccount(this);
-//
-//        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId().toString());
-//        reference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                eventList.clear();
-//                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-//                    CalendarEvent p = dataSnapshot1.getValue(CalendarEvent.class);
-//                    eventList.add(p);
-//                }
-//                setAdapter(eventList);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
-//
-//            }
-//        });
-//
-//        btnAddNewEvent.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(CalendarActivity.this, CalendarNewTaskActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        btnsortEvents.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                handleEventsFromPhoneCalendars();
-//            }
-//        });
-//    }
 
     private void handleEventsFromPhoneCalendars() {
         ArrayList<CalendarEvent> events = ReadCalendar.readCalendar(getActivity());
@@ -185,16 +125,14 @@ public class CalendarActivity extends Fragment implements CalendarAdapter.OnNote
                 map.put("id", event.getId());
                 reference.updateChildren(map);
             }
-//            Toast.makeText(getContext(), "Events loaded!", Toast.LENGTH_SHORT).show();
             getActivity().finish();
         } else
             Toast.makeText(getContext(), "No events to load!", Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
-    public void onNoteClick(int position) {
-        final CalendarEvent event = eventList.get(position);
+    public void onItemClick(int position) {
+        final CalendarEvent event = calendarEventList.get(position);
         Intent intent = new Intent(getActivity(), EditCalendarEventActivity.class);
         intent.putExtra("title", event.getTitle());
         intent.putExtra("yearEvent", event.getYear());
@@ -204,7 +142,7 @@ public class CalendarActivity extends Fragment implements CalendarAdapter.OnNote
         intent.putExtra("minuteEvent", event.getMinute());
         intent.putExtra("description", event.getDescription());
         intent.putExtra("id", event.getId());
-        // jeszcze cos zeby wysylac date na button
+
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set(Calendar.YEAR, event.getYear());
         calendar1.set(Calendar.MONTH, event.getMonth());
@@ -215,15 +153,13 @@ public class CalendarActivity extends Fragment implements CalendarAdapter.OnNote
         CharSequence dataCharSequenceForTime = DateFormat.format("HH:mm", calendar1);
 
         intent.putExtra("dateEvent", dataCharSequenceForDate);
-        intent.putExtra("timeEvent",dataCharSequenceForTime);
+        intent.putExtra("timeEvent", dataCharSequenceForTime);
         startActivity(intent);
-//        Toast.makeText(getContext(), "id" + event.getId(), Toast.LENGTH_SHORT).show();
-        Toast.makeText(getContext(), "dzien" + event.getDay(), Toast.LENGTH_SHORT).show();
     }
 
     public void setAdapter(ArrayList<CalendarEvent> list) {
         calendarAdapter = new CalendarAdapter(getActivity(), list, this);
-        calendarEvents.setAdapter(calendarAdapter); // wypelni wszystkie pola ViewHolderami
+        recyclerCalendarEvent.setAdapter(calendarAdapter);
         calendarAdapter.notifyDataSetChanged();
     }
 
@@ -239,19 +175,19 @@ public class CalendarActivity extends Fragment implements CalendarAdapter.OnNote
             final int postion = viewHolder.getAdapterPosition();
 
             switch (direction) {
-                case LEFT: // zrobic cos ze w momencie usuniecia ewentu usuwa sie alarm!
-                    final CalendarEvent deletedTask = eventList.get(postion);
+                case LEFT:
+                    final CalendarEvent deletedTask = calendarEventList.get(postion);
 
                     String id = deletedTask.getId();
-                    reference.child("Does" + id).removeValue(); // usuwa z bazy
-                    eventList.remove(postion);
-                    setAdapter(eventList);
+                    reference.child("Does" + id).removeValue();
+                    calendarEventList.remove(postion);
+                    setAdapter(calendarEventList);
                     deleteAlarm(id);
-                    Snackbar.make(calendarEvents, "Event " + deletedTask.getTitle() + " deleted!", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                    Snackbar.make(recyclerCalendarEvent, "Event " + deletedTask.getTitle() + " deleted!", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            eventList.add(postion, deletedTask);
-                            setAdapter(eventList);
+                            calendarEventList.add(postion, deletedTask);
+                            setAdapter(calendarEventList);
                             HashMap map = new HashMap();
                             map.put("title", deletedTask.getTitle());
                             map.put("year", deletedTask.getYear());
@@ -273,7 +209,6 @@ public class CalendarActivity extends Fragment implements CalendarAdapter.OnNote
         public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
             new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                     .addSwipeLeftBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorDeleteTask))
-//                    .addBackgroundColor(ContextCompat.getColor(KontenerActivity.this, R.color.colorPrimary))
                     .addSwipeLeftActionIcon(R.drawable.ic_delete_black_)
                     .create()
                     .decorate();
@@ -283,24 +218,21 @@ public class CalendarActivity extends Fragment implements CalendarAdapter.OnNote
     };
 
     private void undoDeletingAlarm(CalendarEvent calendarEvent) {
-        Intent intent = new Intent(getActivity(),ReminderBroadcast.class);
+        Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
         intent.putExtra("desc", calendarEvent.getTitle());
         int requestcode = Integer.valueOf(calendarEvent.getId());
         //https://stackoverflow.com/questions/18649728/android-cannot-pass-intent-extras-though-alarmmanager/28203623 flaga do update
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(),requestcode,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), requestcode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = new GregorianCalendar(calendarEvent.getYear(), calendarEvent.getMonth(), calendarEvent.getDay(), calendarEvent.getHour(), calendarEvent.getMinute());
         long alarmTime = calendar.getTimeInMillis();
-        alarmManager.set(AlarmManager.RTC_WAKEUP,alarmTime,pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
     }
 
-    // when swipe left then you can delete
     private void deleteAlarm(String id) {
-        Intent intent = new Intent(getActivity(),ReminderBroadcast.class);
+        Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
         int requestcode = Integer.valueOf(id);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(),requestcode,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), requestcode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
         pendingIntent.cancel();

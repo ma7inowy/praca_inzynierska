@@ -2,16 +2,10 @@ package jakubw.pracainz.goalsexecutor;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,21 +28,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class NewTaskActivity extends AppCompatActivity {
+public class NewNextActionActivity extends AppCompatActivity {
 
     EditText addDate;
     EditText addTitle;
     EditText addDescription;
-    Button addNewTaskBtn, addPriorityBtn;
+    Button addNextActionBtn, addPriorityBtn;
     DatabaseReference reference;
-    DatabaseReference referenceLabels;
-    //    MyDoes myDoes;
-    Integer number;
+    DatabaseReference referenceLabel;
+    //    NextAction myDoes;
+    Integer idNumber;
     ArrayList<Label> labelList;
-    Spinner labelsSpinner;
+    Spinner labelSpinner;
     String labelName = "labelName";
     ArrayAdapter<Label> labelAdapter;
-    AlertDialog addPriorityDialog;
     String priority = "3";
 
 
@@ -60,10 +53,10 @@ public class NewTaskActivity extends AppCompatActivity {
         addDate = findViewById(R.id.addDate);
         addTitle = findViewById(R.id.addTitle);
         addDescription = findViewById(R.id.addDescription);
-        addNewTaskBtn = findViewById(R.id.addNewTaskBtn);
-        labelsSpinner = findViewById(R.id.labelsSpinner);
+        addNextActionBtn = findViewById(R.id.addNextActionBtn);
+        labelSpinner = findViewById(R.id.labelSpinner);
         addPriorityBtn = findViewById(R.id.addPriorityBtn);
-        number = new Random().nextInt();
+        idNumber = new Random().nextInt();
         labelList = new ArrayList<>();
 
         // do tworzenia zadania z BoxActivity
@@ -72,14 +65,12 @@ public class NewTaskActivity extends AppCompatActivity {
             addTitle.setText(intent.getStringExtra("title"));
         }
 
-//        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor");
-
         //google signin
         final GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
 
         //pobranie labelow z bazy MOZE ZNALEZC JAKIS LEPSZY SPOSOB?
-        referenceLabels = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Labels").child(signInAccount.getId().toString());
-        referenceLabels.addValueEventListener(new ValueEventListener() {
+        referenceLabel = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Labels").child(signInAccount.getId().toString());
+        referenceLabel.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 labelList.clear();
@@ -97,20 +88,20 @@ public class NewTaskActivity extends AppCompatActivity {
         });
 
 
-        addNewTaskBtn.setOnClickListener(new View.OnClickListener() {
+        addNextActionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("NextAction").child(signInAccount.getId()).child("Does" + number);
+                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("NextAction").child(signInAccount.getId()).child("Does" + idNumber);
                 HashMap map = new HashMap();
-                map.put("titledoes", addTitle.getText().toString());
-                map.put("descdoes", addDescription.getText().toString());
+                map.put("title", addTitle.getText().toString());
+                map.put("description", addDescription.getText().toString());
                 map.put("datedoes", addDate.getText().toString());
-                map.put("id", number.toString());
+                map.put("id", idNumber.toString());
                 map.put("labelName", labelName);
                 map.put("priority", priority);
                 reference.updateChildren(map);
                 sendResultToBoxActivity();
-                Toast.makeText(NewTaskActivity.this, addTitle.getText().toString() + " " + addDescription.getText().toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(NewNextActionActivity.this, addTitle.getText().toString() + " " + addDescription.getText().toString(), Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -122,7 +113,7 @@ public class NewTaskActivity extends AppCompatActivity {
             }
         });
 
-        labelsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        labelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Label label = (Label) parent.getSelectedItem();
@@ -133,27 +124,28 @@ public class NewTaskActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                Toast.makeText(NewTaskActivity.this, "nothing selected", Toast.LENGTH_SHORT).show();
+                Toast.makeText(NewNextActionActivity.this, "nothing selected", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
     // dla usuwania zadania z BoxActiv
     private void sendResultToBoxActivity() {
         Intent i = getIntent();
 //        i.putExtra("taskAdded", true);
-        i.putExtra("taskAdded",true);
-        setResult(RESULT_OK,i);
+        i.putExtra("taskAdded", true);
+        setResult(RESULT_OK, i);
     }
 
     private void showPrioritiesDialog() {
         final String[] priorities = {"High", "Medium", "Low"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(NewTaskActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(NewNextActionActivity.this);
         builder.setTitle("Choose priority");
-        builder.setSingleChoiceItems(priorities, 0, new DialogInterface.OnClickListener() {
+        builder.setSingleChoiceItems(priorities, Integer.valueOf(priority)-1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 priority = String.valueOf(which + 1);
-                Toast.makeText(NewTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
+                Toast.makeText(NewNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
             }
         });
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -161,14 +153,14 @@ public class NewTaskActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 addPriorityBtn.setText("PRIORYTET: " + priorities[Integer.valueOf(priority) - 1]);
 
-                Toast.makeText(NewTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
+                Toast.makeText(NewNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(NewTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
+                Toast.makeText(NewNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -179,12 +171,12 @@ public class NewTaskActivity extends AppCompatActivity {
         //adding labels to spinner
         labelAdapter = new ArrayAdapter<Label>(this, android.R.layout.simple_spinner_item, list);
         labelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        labelsSpinner.setAdapter(labelAdapter);
+        labelSpinner.setAdapter(labelAdapter);
         labelAdapter.notifyDataSetChanged();
     }
 
     public void getSelectedLabel(View view) {
-        Label label = (Label) labelsSpinner.getSelectedItem();
+        Label label = (Label) labelSpinner.getSelectedItem();
         Toast.makeText(this, label.getId(), Toast.LENGTH_SHORT).show();
     }
 

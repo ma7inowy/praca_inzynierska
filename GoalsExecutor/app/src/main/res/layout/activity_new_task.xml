@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewTaskActivity"
+    tools:context=".NewNextActionActivity"
     android:orientation="vertical">
 
     <LinearLayout
@@ -156,7 +156,7 @@
         </TextView>
 
         <Spinner
-            android:id="@+id/labelsSpinner"
+            android:id="@+id/labelSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -170,7 +170,7 @@
         android:text="Priorytet: Niski" />
 
     <Button
-        android:id="@+id/addNewTaskBtn"
+        android:id="@+id/addNextActionBtn"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
@@ -22,11 +21,11 @@ import java.util.Random;
 public class NewProjectDialog extends AppCompatDialogFragment {
     private EditText addProjectName;
     DatabaseReference reference;
-    Integer number;
+    Integer idNumber;
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getContext());
-        number = new Random().nextInt();
+        idNumber = new Random().nextInt();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.new_project_dialog, null);
@@ -38,14 +37,11 @@ public class NewProjectDialog extends AppCompatDialogFragment {
         }).setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //wyslij dane do bazy
-                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Projects").child(signInAccount.getId().toString()).child("Project" + number);;
+                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Projects").child(signInAccount.getId().toString()).child("Project" + idNumber);
                 HashMap map = new HashMap();
                 map.put("title", addProjectName.getText().toString());
-                map.put("id", number.toString());
+                map.put("id", idNumber.toString());
                 reference.updateChildren(map);
-//                Toast.makeText(getContext(), addTitle.getText().toString() + " " + addDescription.getText().toString(), Toast.LENGTH_SHORT).show();
-//                finish();
             }
         });
 

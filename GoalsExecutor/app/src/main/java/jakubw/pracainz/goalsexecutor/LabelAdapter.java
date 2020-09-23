@@ -12,56 +12,55 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class LabelsAdapter extends RecyclerView.Adapter<LabelsAdapter.MyViewHolder> {
+public class LabelAdapter extends RecyclerView.Adapter<LabelAdapter.MyViewHolder> {
     private Context context;
-    private ArrayList<Label> labels;
-    private OnNoteListener onNoteListener;
+    private ArrayList<Label> labelList;
+    private OnItemListener onItemListener;
 
-    public LabelsAdapter(Context context, ArrayList<Label> labels, OnNoteListener onNoteListener) {
+    public LabelAdapter(Context context, ArrayList<Label> labelList, OnItemListener onItemListener) {
         this.context = context;
-        this.labels = labels;
-        this.onNoteListener = onNoteListener;
+        this.labelList = labelList;
+        this.onItemListener = onItemListener;
     }
-
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_label, parent, false), onNoteListener);
+        return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_label, parent, false), onItemListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int i) {
-        holder.labeltitle.setText(labels.get(i).getName());
-        holder.linearLayout.setBackgroundColor(labels.get(i).getColor());
+        holder.titleLabel.setText(labelList.get(i).getName());
+        holder.linearLayout.setBackgroundColor(labelList.get(i).getColor());
     }
 
     @Override
     public int getItemCount() {
-        return labels.size();
+        return labelList.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView labeltitle;
+        TextView titleLabel;
         LinearLayout linearLayout;
-        OnNoteListener onNoteListener;
+        OnItemListener onItemListener;
 
-        public MyViewHolder(@NonNull View itemView, OnNoteListener onNoteListener) {
+        public MyViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
             super(itemView);
-            labeltitle = (TextView) itemView.findViewById(R.id.labeltitle);
+            titleLabel = (TextView) itemView.findViewById(R.id.labeltitle);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.labellayout);
-            this.onNoteListener = onNoteListener;
+            this.onItemListener = onItemListener;
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            onNoteListener.onNoteClick(getAdapterPosition());
+            onItemListener.onItemClick(getAdapterPosition());
         }
     }
 
-    public interface OnNoteListener {
-        void onNoteClick(int position);
+    public interface OnItemListener {
+        void onItemClick(int position);
     }
 }

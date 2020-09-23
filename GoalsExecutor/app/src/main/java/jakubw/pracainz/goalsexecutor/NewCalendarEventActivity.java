@@ -31,27 +31,27 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Random;
 
-public class CalendarNewTaskActivity extends AppCompatActivity {
+public class NewCalendarEventActivity extends AppCompatActivity {
 
-    EditText addTitleEvent, addDateEvent, addDescriptionEvent;
-    Button addCalendarNewTaskBtn, setDateBtn, setTimeBtn;
+    EditText addEventTitle, addEventDate, addEventDescription;
+    Button addNewEventBtn, setDateBtn, setTimeBtn;
     DatabaseReference reference;
-    Integer number;
+    Integer idNumber;
     Integer yearEvent, monthEvent, dayEvent, hourEvent, minuteEvent;
     Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar_new_task);
+        setContentView(R.layout.activity_new_calendar_event);
 
-        addTitleEvent = findViewById(R.id.addTitleEvent);
-        addDateEvent = findViewById(R.id.addDateEvent);
-        addDescriptionEvent = findViewById(R.id.addDescriptionEvent);
-        addCalendarNewTaskBtn = findViewById(R.id.addCalendarNewTaskBtn);
+        addEventTitle = findViewById(R.id.addEventTitle);
+        addEventDate = findViewById(R.id.addEventDate);
+        addEventDescription = findViewById(R.id.addEventDescription);
+        addNewEventBtn = findViewById(R.id.addNewEventBtn);
         setDateBtn = findViewById(R.id.setDateBtn);
         setTimeBtn = findViewById(R.id.setTimeBtn);
-        number = new Random().nextInt();
+        idNumber = new Random().nextInt();
         calendar = Calendar.getInstance();
         //default data
         yearEvent = calendar.get(Calendar.YEAR);
@@ -65,27 +65,27 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
         // do tworzenia zadania z BoxActivity
         Intent intent = getIntent();
         if (intent.hasExtra("title")) {
-            addTitleEvent.setText(intent.getStringExtra("title"));
+            addEventTitle.setText(intent.getStringExtra("title"));
         }
 
-        addCalendarNewTaskBtn.setOnClickListener(new View.OnClickListener() {
+        addNewEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId()).child("Does" + number);
+                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId()).child("Does" + idNumber);
                 HashMap map = new HashMap();
 
-                map.put("title", addTitleEvent.getText().toString());
+                map.put("title", addEventTitle.getText().toString());
                 map.put("year", yearEvent);
                 map.put("month", monthEvent);
                 map.put("day", dayEvent);
                 map.put("hour", hourEvent);
                 map.put("minute", minuteEvent);
-                map.put("description", addDescriptionEvent.getText().toString());
-                map.put("id", number.toString());
+                map.put("description", addEventDescription.getText().toString());
+                map.put("id", idNumber.toString());
                 reference.updateChildren(map);
                 makeNotification();
                 sendResultToBoxActivity();
-                Toast.makeText(CalendarNewTaskActivity.this, "done!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(NewCalendarEventActivity.this, "done!", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -109,7 +109,6 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
     private void handleTimeButton() {
         int HOUR = calendar.get(Calendar.HOUR_OF_DAY);
         int MINUTE = calendar.get(Calendar.MINUTE);
-//        boolean is24HourFormat = DateFormat.is24HourFormat(this);
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -150,7 +149,7 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
         //h,d,m,y
     }
 
-    public CharSequence getDataCharSequenceForTime(){
+    public CharSequence getDataCharSequenceForTime() {
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set(Calendar.HOUR_OF_DAY, hourEvent);
         calendar1.set(Calendar.MINUTE, minuteEvent);
@@ -159,7 +158,7 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
         return dataCharSequenceForTime;
     }
 
-    public CharSequence getDataCharSequenceForDate(){
+    public CharSequence getDataCharSequenceForDate() {
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set(Calendar.YEAR, yearEvent);
         calendar1.set(Calendar.MONTH, monthEvent);
@@ -171,11 +170,11 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
 
     // dla api >= 26
     private void createNotificationChanel() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "GoalsExecutorChannel";
             String description = "Channel for GoalsExecutor";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("notifyGoalsExecutor",name,importance);
+            NotificationChannel channel = new NotificationChannel("notifyGoalsExecutor", name, importance);
             channel.setDescription(description);
 
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
@@ -184,28 +183,27 @@ public class CalendarNewTaskActivity extends AppCompatActivity {
     }
 
     private void makeNotification() {
-        Intent intent = new Intent(CalendarNewTaskActivity.this,ReminderBroadcast.class);
-        intent.putExtra("desc", addTitleEvent.getText().toString());
-        int requestcode = number;
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(CalendarNewTaskActivity.this,requestcode,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intent = new Intent(NewCalendarEventActivity.this, ReminderBroadcast.class);
+        intent.putExtra("desc", addEventTitle.getText().toString());
+        int requestcode = idNumber;
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(NewCalendarEventActivity.this, requestcode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         long currentTime = System.currentTimeMillis();
         Calendar calendar = new GregorianCalendar(yearEvent, monthEvent, dayEvent, hourEvent, minuteEvent);
         long alarmTime = calendar.getTimeInMillis();
-        long tenSec = 1000 *10;
+        long tenSec = 1000 * 10;
         Log.e("timealarm", "Alarm " + alarmTime);
         Log.e("timealarm", "current " + currentTime);
-        long diff = alarmTime-currentTime;
+        long diff = alarmTime - currentTime;
         Log.e("timealarm", "difference " + diff);
-        alarmManager.set(AlarmManager.RTC_WAKEUP,alarmTime,pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
     }
 
     // dla usuwania zadania z BoxActiv
     private void sendResultToBoxActivity() {
         Intent i = getIntent();
-//        i.putExtra("taskAdded", true);
-        i.putExtra("taskAdded",true);
-        setResult(RESULT_OK,i);
+        i.putExtra("taskAdded", true);
+        setResult(RESULT_OK, i);
     }
 }

@@ -53,7 +53,7 @@
             android:text="Label" />
 
         <Spinner
-            android:id="@+id/filterLabelsSpinner"
+            android:id="@+id/filterLabelSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CalendarNewTaskActivity"
+    tools:context=".NewCalendarEventActivity"
     android:orientation="vertical">
 
     <LinearLayout
@@ -56,7 +56,7 @@
         </TextView>
 
         <EditText
-            android:id="@+id/addTitleEvent"
+            android:id="@+id/addEventTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#FFFFFF"
@@ -87,7 +87,7 @@
         </TextView>
 
         <EditText
-            android:id="@+id/addDateEvent"
+            android:id="@+id/addEventDate"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#FFFFFF"
@@ -118,7 +118,7 @@
         </TextView>
 
         <EditText
-            android:id="@+id/addDescriptionEvent"
+            android:id="@+id/addEventDescription"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="#FFFFFF"
@@ -140,7 +140,7 @@
         android:text="Set time" />
 
     <Button
-        android:id="@+id/addCalendarNewTaskBtn"
+        android:id="@+id/addNewEventBtn"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

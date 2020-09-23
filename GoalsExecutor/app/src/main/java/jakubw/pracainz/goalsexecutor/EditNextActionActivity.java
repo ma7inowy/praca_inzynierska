@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,22 +23,21 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 
-public class EditDoesActivity extends AppCompatActivity {
+public class EditNextActionActivity extends AppCompatActivity {
 
     EditText editDate;
     EditText editTitle;
     EditText editDescription;
-    Button editTaskBtn;
+    Button editNextActionBtn;
     String id;
     DatabaseReference reference;
-    DatabaseReference referenceLabels;
+    DatabaseReference referenceLabel;
     ArrayList<Label> labelList;
 
     GoogleSignInAccount signInAccount;
-    Spinner labelsSpinnerEdit;
+    Spinner editLabelSpinner;
     String labelId;
     ArrayAdapter<Label> labelAdapter;
 
@@ -51,12 +49,12 @@ public class EditDoesActivity extends AppCompatActivity {
         editDate = findViewById(R.id.editDate);
         editTitle = findViewById(R.id.editTitle);
         editDescription = findViewById(R.id.editDescription);
-        editTaskBtn = findViewById(R.id.editTaskBtn);
+        editNextActionBtn = findViewById(R.id.editTaskBtn);
         //google signin
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         labelList = new ArrayList<>();
 
-        labelsSpinnerEdit = findViewById(R.id.labelsSpinnerEdit);
+        editLabelSpinner = findViewById(R.id.labelsSpinnerEdit);
         Intent intent = getIntent();
         editTitle.setText(intent.getStringExtra("title"));
         editDate.setText(intent.getStringExtra("date"));
@@ -65,8 +63,8 @@ public class EditDoesActivity extends AppCompatActivity {
         labelId = intent.getStringExtra("labelName");
 
         //pobranie labelow z bazy MOZE ZNALEZC JAKIS LEPSZY SPOSOB? raz pobrac najlepiej i tyle
-        referenceLabels = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Labels").child(signInAccount.getId().toString());
-        referenceLabels.addValueEventListener(new ValueEventListener() {
+        referenceLabel = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Labels").child(signInAccount.getId().toString());
+        referenceLabel.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 labelList.clear();
@@ -84,21 +82,21 @@ public class EditDoesActivity extends AppCompatActivity {
         });
 
         reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("NextAction").child(signInAccount.getId().toString()).child("Does" + id);
-        editTaskBtn.setOnClickListener(new View.OnClickListener() {
+        editNextActionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 HashMap map = new HashMap();
-                map.put("titledoes", editTitle.getText().toString());
-                map.put("descdoes", editDescription.getText().toString());
+                map.put("title", editTitle.getText().toString());
+                map.put("description", editDescription.getText().toString());
                 map.put("datedoes", editDate.getText().toString());
                 map.put("labelName", labelId);
                 reference.updateChildren(map);
-                Toast.makeText(EditDoesActivity.this, editTitle.getText().toString() + " " + editDescription.getText().toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditNextActionActivity.this, editTitle.getText().toString() + " " + editDescription.getText().toString(), Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
 
-        labelsSpinnerEdit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        editLabelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Label label = (Label) parent.getSelectedItem();
@@ -109,7 +107,7 @@ public class EditDoesActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                Toast.makeText(EditDoesActivity.this, "nothing selected", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditNextActionActivity.this, "nothing selected", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -118,8 +116,8 @@ public class EditDoesActivity extends AppCompatActivity {
         //adding labels to spinner
         labelAdapter = new ArrayAdapter<Label>(this, android.R.layout.simple_spinner_item, list);
         labelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        labelsSpinnerEdit.setAdapter(labelAdapter);
-        labelsSpinnerEdit.setSelection(getLabelForTask(list));
+        editLabelSpinner.setAdapter(labelAdapter);
+        editLabelSpinner.setSelection(getLabelForTask(list));
         labelAdapter.notifyDataSetChanged();
     }
 

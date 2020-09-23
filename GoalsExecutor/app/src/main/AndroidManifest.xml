@@ -15,16 +15,16 @@
         android:theme="@style/AppTheme">
         <activity android:name=".BoxActivity"></activity>
         <activity android:name=".ProjectsActivity" />
-        <activity android:name=".LabelsActivity" />
+        <activity android:name=".LabelActivity" />
         <activity android:name=".EditCalendarEventActivity" />
-        <activity android:name=".CalendarNewTaskActivity" />
-        <activity android:name=".CalendarActivity" /> <!-- <activity android:name=".SignInActivity"></activity> -->
-        <activity android:name=".EditDoesActivity" />
+        <activity android:name=".NewCalendarEventActivity" />
+        <activity android:name=".CalendarFragment" /> <!-- <activity android:name=".SignInActivity"></activity> -->
+        <activity android:name=".EditNextActionActivity" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".NewTaskActivity" />
-        <activity android:name=".KontenerActivity" />
+        <activity android:name=".NewNextActionActivity" />
+        <activity android:name=".NextActionActivity" />
         <activity
             android:name=".SignInActivity"
             android:theme="@style/AppTheme.NoActionBar">

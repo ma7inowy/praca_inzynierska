@@ -31,18 +31,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
-    private TextView username;
-    private CircleImageView userphoto;
+    private TextView userEmail;
+    private CircleImageView userPhoto;
     private TextView nickname;
     private GoogleSignInClient mGoogleSignInClient;
 
@@ -55,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        username = findViewById(R.id.username);
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         // do wylogowaina
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -63,8 +60,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        //
-
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -72,27 +67,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer = findViewById(R.id.drawer_layout); // to te 3 kreseczki
         // wciskanie navigation views
         NavigationView navigationView = findViewById(R.id.nav_view);
-        //test
-        View headerView = navigationView.getHeaderView(0);
-        username = headerView.findViewById(R.id.username);
-        username.setText(signInAccount.getEmail());
 
-        userphoto = headerView.findViewById(R.id.userphoto);
-        userphoto.getLayoutParams().width = 150;
-        userphoto.getLayoutParams().height = 150;
-        Glide.with(headerView).load(signInAccount.getPhotoUrl()).into(userphoto);
+        View headerView = navigationView.getHeaderView(0);
+        userEmail = headerView.findViewById(R.id.userEmail);
+        userEmail.setText(signInAccount.getEmail());
+
+        userPhoto = headerView.findViewById(R.id.userPhoto);
+        userPhoto.getLayoutParams().width = 150;
+        userPhoto.getLayoutParams().height = 150;
+        Glide.with(headerView).load(signInAccount.getPhotoUrl()).into(userPhoto);
 
         nickname = headerView.findViewById(R.id.nickname);
         nickname.setText(signInAccount.getDisplayName());
-        //
-        navigationView.setNavigationItemSelectedListener(this);
 
+        navigationView.setNavigationItemSelectedListener(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
 //        if(signInAccount!= null){
-//            username.setText(signInAccount.getEmail());
+//            userEmail.setText(signInAccount.getEmail());
 //        }
     }
 
@@ -109,9 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_next_action:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new KontenerActivity()).commit();
-//                Intent intent = new Intent(MainActivity.this, KontenerActivity.class);
-//                startActivity(intent);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NextActionActivity()).commit();
                 break;
             case R.id.nav_kontener:
                 Intent intent5 = new Intent(MainActivity.this, BoxActivity.class);
@@ -127,15 +119,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 int checkValWrite = this.checkCallingOrSelfPermission(requiredPermission2);
                 //jesli permisson zaakceptowane to cyk wlacz kalendarz i NIE wczytaj dane z kalendarza z tele
                 if (checkValRead == PackageManager.PERMISSION_GRANTED && checkValWrite == PackageManager.PERMISSION_GRANTED) {
-//                    Intent intent2 = new Intent(MainActivity.this, CalendarActivity.class);
-//                    startActivity(intent2);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CalendarActivity()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CalendarFragment()).commit();
 
                 }
                 checkPermission(callbackId, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR);
                 break;
             case R.id.nav_profile:
-                Intent intent3 = new Intent(MainActivity.this, LabelsActivity.class);
+                Intent intent3 = new Intent(MainActivity.this, LabelActivity.class);
                 startActivity(intent3);
                 break;
             case R.id.nav_settings:
@@ -176,12 +166,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         finish();
                     }
                 });
-//        FirebaseAuth.getInstance().signOut();
-//        Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-//        startActivity(intent);
-//        finish();
-
     }
+
     //jesli bede robil "permission check denied albo allow to wtedy sie wywoluje WIEC JESTLI ZAAKCEPTUJE TO WLACZ
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -196,11 +182,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (!list.contains(PackageManager.PERMISSION_DENIED)) {
                 //all permissions have been granted
                 handleEventsFromPhoneCalendars();
-//                Intent intent2 = new Intent(MainActivity.this, CalendarActivity.class);
-//                startActivity(intent2);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CalendarActivity()).commit();
-
-
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CalendarFragment()).commit();
             }
         }
 

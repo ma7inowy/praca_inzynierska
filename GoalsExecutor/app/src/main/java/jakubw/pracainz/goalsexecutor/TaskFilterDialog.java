@@ -1,6 +1,5 @@
 package jakubw.pracainz.goalsexecutor;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -27,19 +26,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class TaskFilterDialog extends AppCompatDialogFragment {
     RadioButton radioLowPrioBtn;
     RadioButton radioHighPrioBtn;
     RadioButton radioMediumPrioBtn;
-    Spinner filterLabelsSpinner;
-    DatabaseReference referenceLabels;
+    Spinner filterLabelSpinner;
+    DatabaseReference referenceLabel;
     ArrayList<Label> labelList;
     ArrayAdapter<Label> labelAdapter;
     String labelName = "labelname";
-
-
     private TaskFilterDialogListener filterDialogListener;
 
     @Override
@@ -59,23 +55,20 @@ public class TaskFilterDialog extends AppCompatDialogFragment {
                 boolean priorityMedium = radioMediumPrioBtn.isChecked();
                 boolean priorityHigh = radioHighPrioBtn.isChecked();
                 String label = labelName;
-
                 filterDialogListener.applyFilterData(priorityLow, priorityMedium, priorityHigh, label);
-
-
             }
         });
         radioLowPrioBtn = view.findViewById(R.id.radioLowPrioBtn);
         radioHighPrioBtn = view.findViewById(R.id.radioHighPrioBtn);
         radioMediumPrioBtn = view.findViewById(R.id.radioMediumPrioBtn);
-        filterLabelsSpinner = view.findViewById(R.id.filterLabelsSpinner);
+        filterLabelSpinner = view.findViewById(R.id.filterLabelSpinner);
         labelList = new ArrayList<>();
         //google signin
         final GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity());
 
         //pobranie labelow z bazy MOZE ZNALEZC JAKIS LEPSZY SPOSOB?
-        referenceLabels = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Labels").child(signInAccount.getId().toString());
-        referenceLabels.addValueEventListener(new ValueEventListener() {
+        referenceLabel = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Labels").child(signInAccount.getId().toString());
+        referenceLabel.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 labelList.clear();
@@ -95,7 +88,7 @@ public class TaskFilterDialog extends AppCompatDialogFragment {
             }
         });
 
-        filterLabelsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        filterLabelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Label label = (Label) parent.getSelectedItem();
@@ -117,7 +110,6 @@ public class TaskFilterDialog extends AppCompatDialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         try {
             filterDialogListener = (TaskFilterDialogListener) getTargetFragment();
         } catch (ClassCastException e) {
@@ -133,7 +125,7 @@ public class TaskFilterDialog extends AppCompatDialogFragment {
         //adding labels to spinner
         labelAdapter = new ArrayAdapter<Label>(getActivity(), android.R.layout.simple_spinner_item, list);
         labelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        filterLabelsSpinner.setAdapter(labelAdapter);
+        filterLabelSpinner.setAdapter(labelAdapter);
         labelAdapter.notifyDataSetChanged();
     }
 }

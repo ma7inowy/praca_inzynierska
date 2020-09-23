@@ -35,32 +35,30 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 import static androidx.recyclerview.widget.ItemTouchHelper.LEFT;
 
-public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.OnNoteListener {
+public class BoxActivity extends AppCompatActivity implements BoxTaskAdapter.OnItemListener {
 
-    FloatingActionButton addNewBoxTaskFloatingBtn;
-    RecyclerView myBoxTasks;
+    FloatingActionButton addNewBoxTaskBtn;
+    RecyclerView recyclerBoxTask;
     DatabaseReference reference;
-    ArrayList<BoxTask> boxTasksList;
+    ArrayList<BoxTask> boxTaskList;
     GoogleSignInAccount signInAccount;
-    BoxTasksAdapter boxTasksAdapter;
-    Integer number;
-    AlertDialog newActivityDialog;
+    BoxTaskAdapter boxTaskAdapter;
+    Integer idNumber;
+    AlertDialog chooseActivityDialog;
     BoxTask boxTask; // tylko zeby miec globalnie id konkretnego wcisnietego zadania zeby mozna bylo zrobic onActivityResult
-
-    public static final int NEXT_ACTION_REQUEST = 11; //kody do otrzymania danych o dodaniu taskbox w jakies miejsce np do nextaction albo do calendar
-    public static final int CALENDAR_REQUEST = 12;
-
+    public static final int NEXT_ACTION_REQUEST = 11; //kody do otrzymania danych o dodaniu taskbox w jakies miejsce np do nextaction albo do calendar (o dostaniu sie do odpowiedniego activity)
+    public static final int CALENDAR_REQUEST = 12; //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_box);
 
-        addNewBoxTaskFloatingBtn = findViewById(R.id.addNewBoxTaskFloatingBtn);
-        myBoxTasks = findViewById(R.id.myBoxTasks);
-        boxTasksList = new ArrayList<>();
-        number = new Random().nextInt();
-        myBoxTasks.setLayoutManager(new LinearLayoutManager(this));
+        addNewBoxTaskBtn = findViewById(R.id.addNewBoxTaskFloatingBtn);
+        recyclerBoxTask = findViewById(R.id.myBoxTasks);
+        boxTaskList = new ArrayList<>();
+        idNumber = new Random().nextInt();
+        recyclerBoxTask.setLayoutManager(new LinearLayoutManager(this));
         //google signin
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
 
@@ -68,23 +66,22 @@ public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.On
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                boxTasksList.clear();
+                boxTaskList.clear();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     BoxTask p = dataSnapshot1.getValue(BoxTask.class);
-                    boxTasksList.add(p);
+                    boxTaskList.add(p);
                     Log.e("box", p.getTitle());
                 }
-                setAdapter(boxTasksList);
+                setAdapter(boxTaskList);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
-
             }
         });
 
-        addNewBoxTaskFloatingBtn.setOnClickListener(new View.OnClickListener() {
+        addNewBoxTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openDialogToAddNewBoxTask();
@@ -93,13 +90,13 @@ public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.On
         });
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(myBoxTasks);
+        itemTouchHelper.attachToRecyclerView(recyclerBoxTask);
     }
 
     public void setAdapter(ArrayList<BoxTask> boxTasksList) {
-        boxTasksAdapter = new BoxTasksAdapter(BoxActivity.this, boxTasksList, this);
-        myBoxTasks.setAdapter(boxTasksAdapter); // wypelni wszystkie pola ViewHolderami
-        boxTasksAdapter.notifyDataSetChanged();
+        boxTaskAdapter = new BoxTaskAdapter(BoxActivity.this, boxTasksList, this);
+        recyclerBoxTask.setAdapter(boxTaskAdapter); // wypelni wszystkie pola ViewHolderami
+        boxTaskAdapter.notifyDataSetChanged();
     }
 
     private void openDialogToAddNewBoxTask() {
@@ -108,45 +105,35 @@ public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.On
     }
 
     @Override
-    public void onNoteClick(final int position) {
-        boxTask = boxTasksList.get(position);
-//        Toast.makeText(this, "id?" + boxTask.getId(), Toast.LENGTH_SHORT).show();
-
+    public void onItemClick(final int position) {
+        boxTask = boxTaskList.get(position);
         // otworz okienko aby wybrać do jakiej aktywności przekierować
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final CharSequence[] activityList = {"NextAction", "Calendar", "Someday"};
         builder.setTitle("Co to za zadanie?").setItems(activityList, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-//                Toast.makeText(BoxActivity.this, activityList[which].toString(), Toast.LENGTH_SHORT).show();
                 if (activityList[which].toString().equals("NextAction")) {
-                    Intent intent = new Intent(BoxActivity.this, NewTaskActivity.class);
+                    Intent intent = new Intent(BoxActivity.this, NewNextActionActivity.class);
                     intent.putExtra("title", boxTask.getTitle());
-                    Toast.makeText(BoxActivity.this, "na", Toast.LENGTH_SHORT).show();
                     startActivityForResult(intent, BoxActivity.NEXT_ACTION_REQUEST);
                 }
-
                 if (activityList[which].toString().equals("Calendar")) {
-                    Intent intent = new Intent(BoxActivity.this, CalendarNewTaskActivity.class);
+                    Intent intent = new Intent(BoxActivity.this, NewCalendarEventActivity.class);
                     intent.putExtra("title", boxTask.getTitle());
-//                    Toast.makeText(BoxActivity.this, "ca", Toast.LENGTH_SHORT).show();
                     startActivityForResult(intent, BoxActivity.CALENDAR_REQUEST);
                 }
-
                 if (activityList[which].toString().equals("Someday")) {
-//                    Intent intent = new Intent(BoxActivity.this, CalendarNewTaskActivity.class);
+//                    Intent intent = new Intent(BoxActivity.this, NewCalendarEventActivity.class);
 //                    intent.putExtra("title", boxTask.getTitle());
 //                    startActivity(intent);
 //                    reference.child("Box" + boxTask.getId()).removeValue(); // czy na pewno tak robic
                     Toast.makeText(BoxActivity.this, "Someday", Toast.LENGTH_SHORT).show();
-
-
                 }
-
             }
         });
-        newActivityDialog = builder.create();
-        newActivityDialog.show();
+        chooseActivityDialog = builder.create();
+        chooseActivityDialog.show();
     }
 
     // swipe left to delete task
@@ -158,21 +145,21 @@ public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.On
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            final int postion = viewHolder.getAdapterPosition();
+            final int position = viewHolder.getAdapterPosition();
 
             switch (direction) {
                 case LEFT:
-                    final BoxTask deletedTask = boxTasksList.get(postion);
+                    final BoxTask deletedTask = boxTaskList.get(position);
 
                     String id = deletedTask.getId();
                     reference.child("Box" + id).removeValue(); // usuwa z bazy
-                    boxTasksList.remove(postion);
-                    setAdapter(boxTasksList);
-                    Snackbar.make(myBoxTasks, "Task " + deletedTask.getTitle() + " deleted!", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                    boxTaskList.remove(position);
+                    setAdapter(boxTaskList);
+                    Snackbar.make(recyclerBoxTask, "Task " + deletedTask.getTitle() + " deleted!", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            boxTasksList.add(postion, deletedTask);
-                            setAdapter(boxTasksList);
+                            boxTaskList.add(position, deletedTask);
+                            setAdapter(boxTaskList);
                             HashMap map = new HashMap();
                             map.put("title", deletedTask.getTitle());
                             map.put("id", deletedTask.getId());
@@ -187,7 +174,6 @@ public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.On
         public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
             new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                     .addSwipeLeftBackgroundColor(ContextCompat.getColor(BoxActivity.this, R.color.colorDeleteTask))
-//                    .addBackgroundColor(ContextCompat.getColor(KontenerActivity.this, R.color.colorPrimary))
                     .addSwipeLeftActionIcon(R.drawable.ic_delete_black_)
                     .create()
                     .decorate();
@@ -206,7 +192,6 @@ public class BoxActivity extends AppCompatActivity implements BoxTasksAdapter.On
                     reference.child("Box" + boxTask.getId()).removeValue();
             }
         }
-
         if (requestCode == CALENDAR_REQUEST && resultCode == RESULT_OK) {
             if (data.getExtras().containsKey("taskAdded")) {
                 if (data.getBooleanExtra("taskAdded", false))

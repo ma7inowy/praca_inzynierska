@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,12 +27,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Random;
 
 public class EditCalendarEventActivity extends AppCompatActivity {
 
-    EditText editTitleEvent, editDescriptionEvent;
-    Button editDateBtn, editTimeBtn, editCalendarTaskBtn;
+    EditText editEventTitle, editEventDescription;
+    Button editEventDateBtn, editEventTimeBtn, editEventBtn;
     DatabaseReference reference;
     GoogleSignInAccount signInAccount;
     String id;
@@ -45,11 +43,11 @@ public class EditCalendarEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_calendar_event);
 
-        editTitleEvent = findViewById(R.id.editTitleEvent);
-        editDescriptionEvent = findViewById(R.id.editDescriptionEvent);
-        editDateBtn = findViewById(R.id.editDateBtn);
-        editTimeBtn = findViewById(R.id.editTimeBtn);
-        editCalendarTaskBtn = findViewById(R.id.editCalendarTaskBtn);
+        editEventTitle = findViewById(R.id.editEventTitle);
+        editEventDescription = findViewById(R.id.editEventDescription);
+        editEventDateBtn = findViewById(R.id.editEventDateBtn);
+        editEventTimeBtn = findViewById(R.id.editEventTimeBtn);
+        editEventBtn = findViewById(R.id.editEventBtn);
         calendar = Calendar.getInstance();
         //google signin
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
@@ -57,27 +55,25 @@ public class EditCalendarEventActivity extends AppCompatActivity {
 
         //set time and data
         Intent intent = getIntent();
-        editTitleEvent.setText(intent.getStringExtra("title"));
-        editDescriptionEvent.setText(intent.getStringExtra("description"));
-        editDateBtn.setText(intent.getCharSequenceExtra("dateEvent"));
-        editTimeBtn.setText(intent.getCharSequenceExtra("timeEvent"));
-        yearEvent = intent.getIntExtra("yearEvent",1970);
-        monthEvent = intent.getIntExtra("monthEvent",1);
-        dayEvent = intent.getIntExtra("dayEvent",1);
-        hourEvent = intent.getIntExtra("hourEvent",0);
-        minuteEvent = intent.getIntExtra("minuteEvent",0);
+        editEventTitle.setText(intent.getStringExtra("title"));
+        editEventDescription.setText(intent.getStringExtra("description"));
+        editEventDateBtn.setText(intent.getCharSequenceExtra("dateEvent"));
+        editEventTimeBtn.setText(intent.getCharSequenceExtra("timeEvent"));
+        yearEvent = intent.getIntExtra("yearEvent", 1970);
+        monthEvent = intent.getIntExtra("monthEvent", 1);
+        dayEvent = intent.getIntExtra("dayEvent", 1);
+        hourEvent = intent.getIntExtra("hourEvent", 0);
+        minuteEvent = intent.getIntExtra("minuteEvent", 0);
         createNotificationChanel();
-
         id = intent.getStringExtra("id");
 
-        editDateBtn.setOnClickListener(new View.OnClickListener() {
+        editEventDateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleDateButton();
             }
         });
-
-        editTimeBtn.setOnClickListener(new View.OnClickListener() {
+        editEventTimeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleTimeButton();
@@ -85,20 +81,19 @@ public class EditCalendarEventActivity extends AppCompatActivity {
         });
 
         reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId().toString()).child("Does" + id);
-        editCalendarTaskBtn.setOnClickListener(new View.OnClickListener() {
+        editEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 HashMap map = new HashMap();
-                map.put("title", editTitleEvent.getText().toString());
+                map.put("title", editEventTitle.getText().toString());
                 map.put("year", yearEvent);
                 map.put("month", monthEvent);
                 map.put("day", dayEvent);
                 map.put("hour", hourEvent);
                 map.put("minute", minuteEvent);
-                map.put("description", editDescriptionEvent.getText().toString());
+                map.put("description", editEventDescription.getText().toString());
                 reference.updateChildren(map);
                 editNotification();
-//                Toast.makeText(EditDoesActivity.this, editTitle.getText().toString() + " " + editDescription.getText().toString(), Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -107,13 +102,12 @@ public class EditCalendarEventActivity extends AppCompatActivity {
     private void handleTimeButton() {
         int HOUR = hourEvent;
         int MINUTE = minuteEvent;
-//        boolean is24HourFormat = DateFormat.is24HourFormat(this);
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 hourEvent = hourOfDay;
                 minuteEvent = minute;
-                editTimeBtn.setText(getDataCharSequenceForTime());
+                editEventTimeBtn.setText(getDataCharSequenceForTime());
             }
         }, HOUR, MINUTE, true);
 
@@ -130,13 +124,13 @@ public class EditCalendarEventActivity extends AppCompatActivity {
                 yearEvent = year;
                 monthEvent = month;
                 dayEvent = dayOfMonth;
-                editDateBtn.setText(getDataCharSequenceForDate());
+                editEventDateBtn.setText(getDataCharSequenceForDate());
             }
         }, YEAR, MONTH, DATE);
         datePickerDialog.show();
     }
 
-    public CharSequence getDataCharSequenceForDate(){
+    public CharSequence getDataCharSequenceForDate() {
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set(Calendar.YEAR, yearEvent);
         calendar1.set(Calendar.MONTH, monthEvent);
@@ -146,7 +140,7 @@ public class EditCalendarEventActivity extends AppCompatActivity {
         return dataCharSequenceForDate;
     }
 
-    public CharSequence getDataCharSequenceForTime(){
+    public CharSequence getDataCharSequenceForTime() {
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set(Calendar.HOUR, hourEvent);
         calendar1.set(Calendar.MINUTE, minuteEvent);
@@ -157,11 +151,11 @@ public class EditCalendarEventActivity extends AppCompatActivity {
 
     // dla api >= 26
     private void createNotificationChanel() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "GoalsExecutorChannel";
             String description = "Channel for GoalsExecutor";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("notifyGoalsExecutor",name,importance);
+            NotificationChannel channel = new NotificationChannel("notifyGoalsExecutor", name, importance);
             channel.setDescription(description);
 
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
@@ -170,21 +164,21 @@ public class EditCalendarEventActivity extends AppCompatActivity {
     }
 
     private void editNotification() {
-        Intent intent = new Intent(EditCalendarEventActivity.this,ReminderBroadcast.class);
-        intent.putExtra("desc", editTitleEvent.getText().toString());
+        Intent intent = new Intent(EditCalendarEventActivity.this, ReminderBroadcast.class);
+        intent.putExtra("desc", editEventTitle.getText().toString());
         int requestcode = Integer.valueOf(id);
         //https://stackoverflow.com/questions/18649728/android-cannot-pass-intent-extras-though-alarmmanager/28203623 flaga do update
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(EditCalendarEventActivity.this,requestcode,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(EditCalendarEventActivity.this, requestcode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         long currentTime = System.currentTimeMillis();
         Calendar calendar = new GregorianCalendar(yearEvent, monthEvent, dayEvent, hourEvent, minuteEvent);
         long alarmTime = calendar.getTimeInMillis();
-        long tenSec = 1000 *10;
+        long tenSec = 1000 * 10;
         Log.e("timealarm", "Alarm " + alarmTime);
         Log.e("timealarm", "current " + currentTime);
-        long diff = alarmTime-currentTime;
+        long diff = alarmTime - currentTime;
         Log.e("timealarm", "difference " + diff);
-        alarmManager.set(AlarmManager.RTC_WAKEUP,alarmTime,pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
     }
 }

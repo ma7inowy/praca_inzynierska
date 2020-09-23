@@ -21,12 +21,12 @@ import java.util.Random;
 public class NewBoxTaskDialog extends AppCompatDialogFragment {
     private EditText addBoxTaskName;
     DatabaseReference reference;
-    Integer number;
+    Integer idNumber;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getContext());
-        number = new Random().nextInt();
+        idNumber = new Random().nextInt();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.new_boxtask_dialog, null);
@@ -39,13 +39,11 @@ public class NewBoxTaskDialog extends AppCompatDialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //wyslij dane do bazy
-                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Box").child(signInAccount.getId().toString()).child("Box" + number);
+                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Box").child(signInAccount.getId().toString()).child("Box" + idNumber);
                 HashMap map = new HashMap();
                 map.put("title", addBoxTaskName.getText().toString());
-                map.put("id", number.toString());
+                map.put("id", idNumber.toString());
                 reference.updateChildren(map);
-//                Toast.makeText(getContext(), addTitle.getText().toString() + " " + addDescription.getText().toString(), Toast.LENGTH_SHORT).show();
-//                finish();
             }
         });
 

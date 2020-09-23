@@ -34,11 +34,6 @@ public class SignInActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-//        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-//        if (account != null) {
-//            startActivity(new Intent(SignInActivity.this, MainActivity.class));
-//        }
-//        super.onStart();
         super.onStart();
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null)
@@ -63,7 +58,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void createRequest() {
-// Configure Google Sign In
+        // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -77,14 +72,6 @@ public class SignInActivity extends AppCompatActivity {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == RC_SIGN_IN) {
-//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-//            handleSignInResult(task);
-//        }
-//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -122,9 +109,7 @@ public class SignInActivity extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             Log.w("GoogleSignIn", "signInWithCredential:failure", task.getException());
 //                            Snackbar.make(mBinding.mainLayout, "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-
                         }
-
                         // ...
                     }
                 });

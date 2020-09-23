@@ -56,7 +56,7 @@
         </TextView>
 
         <EditText
-            android:id="@+id/editTitleEvent"
+            android:id="@+id/editEventTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#FFFFFF"
@@ -87,7 +87,7 @@
         </TextView>
 
         <EditText
-            android:id="@+id/editDescriptionEvent"
+            android:id="@+id/editEventDescription"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="#FFFFFF"
@@ -96,20 +96,20 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/editDateBtn"
+        android:id="@+id/editEventDateBtn"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Set date" />
     <Button
-        android:id="@+id/editTimeBtn"
+        android:id="@+id/editEventTimeBtn"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Set time" />
 
     <Button
-        android:id="@+id/editCalendarTaskBtn"
+        android:id="@+id/editEventBtn"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
@@ -27,13 +26,13 @@ public class NewLabelDialog extends AppCompatDialogFragment {
     private EditText addLabelName;
     private Button addLabelColor2;
     DatabaseReference reference;
-    Integer number;
-    int colorLabel = 1;
+    Integer idNumber;
+    int labelColor = 1;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getContext());
-        number = new Random().nextInt();
+        idNumber = new Random().nextInt();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.new_label_dialog, null);
@@ -46,15 +45,12 @@ public class NewLabelDialog extends AppCompatDialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //wyslij dane do bazy
-                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Labels").child(signInAccount.getId()).child("Label" + number);
+                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Labels").child(signInAccount.getId()).child("Label" + idNumber);
                 HashMap map = new HashMap();
                 map.put("name", addLabelName.getText().toString());
-//                map.put("color", addLabelColor.getText().toString());
-                map.put("color", colorLabel);
-                map.put("id", number.toString());
+                map.put("color", labelColor);
+                map.put("id", idNumber.toString());
                 reference.updateChildren(map);
-//                Toast.makeText(getContext(), addTitle.getText().toString() + " " + addDescription.getText().toString(), Toast.LENGTH_SHORT).show();
-//                finish();
             }
         });
 
@@ -79,7 +75,7 @@ public class NewLabelDialog extends AppCompatDialogFragment {
 
             @Override
             public void onOk(AmbilWarnaDialog dialog, int color) {
-                colorLabel = color;
+                labelColor = color;
             }
         });
 

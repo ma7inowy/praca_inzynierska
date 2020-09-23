@@ -27,7 +27,7 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/myProjects"
+        android:id="@+id/recyclerProject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -36,7 +36,7 @@
     </androidx.recyclerview.widget.RecyclerView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addNewProjectFloatingBtn"
+        android:id="@+id/addNewProjectBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"

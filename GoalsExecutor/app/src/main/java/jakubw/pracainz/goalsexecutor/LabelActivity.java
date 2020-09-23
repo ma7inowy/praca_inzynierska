@@ -1,6 +1,5 @@
 package jakubw.pracainz.goalsexecutor;
 
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,26 +31,26 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 import static androidx.recyclerview.widget.ItemTouchHelper.LEFT;
 
-public class LabelsActivity extends AppCompatActivity implements LabelsAdapter.OnNoteListener {
+public class LabelActivity extends AppCompatActivity implements LabelAdapter.OnItemListener {
 
-    FloatingActionButton addNewLabelFloatingBtn;
-    RecyclerView myLabels;
+    FloatingActionButton addLabelBtn;
+    RecyclerView recyclerLabel;
     DatabaseReference reference;
     ArrayList<Label> labelList;
     GoogleSignInAccount signInAccount;
-    LabelsAdapter labelsAdapter;
-    Integer number;
+    LabelAdapter labelAdapter;
+    Integer idNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_labels);
+        setContentView(R.layout.activity_label);
 
-        addNewLabelFloatingBtn = findViewById(R.id.addNewLabelFloatingBtn);
-        myLabels = findViewById(R.id.mylabels);
+        addLabelBtn = findViewById(R.id.addLabelBtn);
+        recyclerLabel = findViewById(R.id.recyclerLabel);
         labelList = new ArrayList<>();
-        number = new Random().nextInt();
-        myLabels.setLayoutManager(new LinearLayoutManager(this));
+        idNumber = new Random().nextInt();
+        recyclerLabel.setLayoutManager(new LinearLayoutManager(this));
         //google signin
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Labels").child(signInAccount.getId().toString());
@@ -62,7 +61,7 @@ public class LabelsActivity extends AppCompatActivity implements LabelsAdapter.O
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     Label p = dataSnapshot1.getValue(Label.class);
                     labelList.add(p);
-                    Log.e("lablesxd",p.getName());
+                    Log.e("lablesxd", p.getName());
                 }
                 setAdapter(labelList);
             }
@@ -73,37 +72,31 @@ public class LabelsActivity extends AppCompatActivity implements LabelsAdapter.O
 
             }
         });
-        addNewLabelFloatingBtn.setOnClickListener(new View.OnClickListener() {
+        addLabelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openDialogToAddNewLabel();
             }
         });
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(myLabels);
+        itemTouchHelper.attachToRecyclerView(recyclerLabel);
     }
 
     private void openDialogToAddNewLabel() {
         NewLabelDialog newLabelDialog = new NewLabelDialog();
-        newLabelDialog.show(getSupportFragmentManager(),"Exeamplxd");
+        newLabelDialog.show(getSupportFragmentManager(), "Exeamplxd");
     }
 
     public void setAdapter(ArrayList<Label> labelList) {
-        labelsAdapter = new LabelsAdapter(LabelsActivity.this, labelList, this);
-        myLabels.setAdapter(labelsAdapter); // wypelni wszystkie pola ViewHolderami
-        labelsAdapter.notifyDataSetChanged();
+        labelAdapter = new LabelAdapter(LabelActivity.this, labelList, this);
+        recyclerLabel.setAdapter(labelAdapter); // wypelni wszystkie pola ViewHolderami
+        labelAdapter.notifyDataSetChanged();
     }
 
 
     @Override
-    public void onNoteClick(int position) {
+    public void onItemClick(int position) {
         final Label label = labelList.get(position);
-//        Intent intent = new Intent(this, EditDoesActivity.class);
-//        intent.putExtra("title", myDoes.getTitledoes());
-//        intent.putExtra("desc", myDoes.getDescdoes());
-//        intent.putExtra("date", myDoes.getDatedoes());
-//        intent.putExtra("id", myDoes.getId());
-//        startActivity(intent);
         Toast.makeText(this, "id" + label.getId(), Toast.LENGTH_SHORT).show();
     }
 
@@ -126,7 +119,7 @@ public class LabelsActivity extends AppCompatActivity implements LabelsAdapter.O
                     reference.child("Label" + id).removeValue(); // usuwa z bazy
                     labelList.remove(postion);
                     setAdapter(labelList);
-                    Snackbar.make(myLabels, "Label " + deletedTask.getName() + " deleted!", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                    Snackbar.make(recyclerLabel, "Label " + deletedTask.getName() + " deleted!", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             labelList.add(postion, deletedTask);
@@ -145,8 +138,7 @@ public class LabelsActivity extends AppCompatActivity implements LabelsAdapter.O
         @Override
         public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
             new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(LabelsActivity.this, R.color.colorDeleteTask))
-//                    .addBackgroundColor(ContextCompat.getColor(KontenerActivity.this, R.color.colorPrimary))
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(LabelActivity.this, R.color.colorDeleteTask))
                     .addSwipeLeftActionIcon(R.drawable.ic_delete_black_)
                     .create()
                     .decorate();
