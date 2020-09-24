@@ -29,7 +29,7 @@ public class SignInActivity extends AppCompatActivity {
 
     private GoogleSignInClient mGoogleSignInClient;
     private final static int RC_SIGN_IN = 123;
-    private SignInButton signInBtn;
+    private Button signInBtn;
     private FirebaseAuth mAuth;
 
     @Override

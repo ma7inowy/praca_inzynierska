@@ -221,6 +221,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
     };
+
     //moze tez dodawac nowy
     private void undoDeletingAlarm(CalendarEvent calendarEvent) {
         Intent intent = new Intent(getActivity(), ReminderBroadcast.class);

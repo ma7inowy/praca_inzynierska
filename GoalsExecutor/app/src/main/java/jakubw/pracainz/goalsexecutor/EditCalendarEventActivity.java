@@ -179,6 +179,8 @@ public class EditCalendarEventActivity extends AppCompatActivity {
         Log.e("timealarm", "current " + currentTime);
         long diff = alarmTime - currentTime;
         Log.e("timealarm", "difference " + diff);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
+
+        if (diff > 0)
+            alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
     }
 }
