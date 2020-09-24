@@ -35,8 +35,11 @@
         android:layout_above="@+id/linearLayout"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="100dp"
+        android:layout_marginRight="30dp"
         android:background="#44000000"
         android:drawableRight="@drawable/ic_google"
+        android:paddingRight="40dp"
+        android:paddingLeft="40dp"
         android:text="Sign in with Google">
 
 
