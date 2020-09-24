@@ -15,6 +15,7 @@ public class CalendarEvent {
         this.day = day;
         this.month = month;
         this.year = year;
+        this.description = "";
     }
 
     public CalendarEvent() {
@@ -82,5 +83,17 @@ public class CalendarEvent {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "CalendarEvent{" +
+                "title='" + title + '\'' +
+                ", hour=" + hour +
+                ", day=" + day +
+                ", month=" + month +
+                ", year=" + year +
+                ", minute=" + minute +
+                '}';
     }
 }

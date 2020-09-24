@@ -7,7 +7,11 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -110,7 +114,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
     }
 
     private void handleEventsFromPhoneCalendars() {
-        ArrayList<CalendarEvent> events = ReadCalendar.readCalendar(getActivity());
+        ArrayList<CalendarEvent> events = ReadCalendar.readCalendar(getActivity(), signInAccount.getEmail());
         if (!events.isEmpty()) {
             for (CalendarEvent event : events) {
                 reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId()).child("Does" + event.getId());
@@ -188,16 +192,17 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
                         public void onClick(View v) {
                             calendarEventList.add(postion, deletedTask);
                             setAdapter(calendarEventList);
-                            HashMap map = new HashMap();
-                            map.put("title", deletedTask.getTitle());
-                            map.put("year", deletedTask.getYear());
-                            map.put("month", deletedTask.getMonth());
-                            map.put("day", deletedTask.getDay());
-                            map.put("hour", deletedTask.getHour());
-                            map.put("minute", deletedTask.getMinute());
-                            map.put("description", deletedTask.getDescription());
-                            map.put("id", deletedTask.getId());
-                            reference.child("Does" + deletedTask.getId()).updateChildren(map);
+//                            HashMap map = new HashMap();
+//                            map.put("title", deletedTask.getTitle());
+//                            map.put("year", deletedTask.getYear());
+//                            map.put("month", deletedTask.getMonth());
+//                            map.put("day", deletedTask.getDay());
+//                            map.put("hour", deletedTask.getHour());
+//                            map.put("minute", deletedTask.getMinute());
+//                            map.put("description", deletedTask.getDescription());
+//                            map.put("id", deletedTask.getId());
+//                            reference.child("Does" + deletedTask.getId()).updateChildren(map);
+                            addNewEventToDB(deletedTask);
                             undoDeletingAlarm(deletedTask);
                         }
                     }).show();
@@ -216,7 +221,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
     };
-
+    //moze tez dodawac nowy
     private void undoDeletingAlarm(CalendarEvent calendarEvent) {
         Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
         intent.putExtra("desc", calendarEvent.getTitle());
@@ -237,4 +242,56 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
         alarmManager.cancel(pendingIntent);
         pendingIntent.cancel();
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.calendar_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.calendar_item_sync) {
+            syncAndRefreshDataFromGoogleCalendar();
+            Toast.makeText(getActivity(), "Sync", Toast.LENGTH_SHORT).show();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void syncAndRefreshDataFromGoogleCalendar() {
+        ArrayList<CalendarEvent> events = ReadCalendar.readCalendar(getActivity(), signInAccount.getEmail());
+        Toast.makeText(getActivity(), String.valueOf(calendarEventList.size()), Toast.LENGTH_SHORT).show();
+        if (events.isEmpty()) return;
+        for (CalendarEvent event : events) { //ewenty z kalendarza
+            int licznik = 0;
+            for (CalendarEvent event2 : calendarEventList) { //ewenty w recyclerview
+                if (event.toString().equals(event2.toString())) licznik++;
+                Log.i("CalendarRefresh", String.valueOf(licznik));
+            }
+            if (licznik == 0) {
+                calendarEventList.add(event);
+                addNewEventToDB(event);
+                undoDeletingAlarm(event);
+            }
+        }
+
+        setAdapter(calendarEventList);
+    }
+
+    private void addNewEventToDB(CalendarEvent event) {
+        HashMap map = new HashMap();
+        map.put("title", event.getTitle());
+        map.put("year", event.getYear());
+        map.put("month", event.getMonth());
+        map.put("day", event.getDay());
+        map.put("hour", event.getHour());
+        map.put("minute", event.getMinute());
+        map.put("description", event.getDescription());
+        map.put("id", event.getId());
+        reference.child("Does" + event.getId()).updateChildren(map);
+    }
+
+
 }

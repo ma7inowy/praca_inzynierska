@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void showCalendarsData() {
-        ReadCalendar.readCalendar(this);
+        ReadCalendar.readCalendar(this, signInAccount.getEmail());
     }
 
     private void signOut() {
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void handleEventsFromPhoneCalendars() {
         DatabaseReference reference;
-        ArrayList<CalendarEvent> events = ReadCalendar.readCalendar(MainActivity.this);
+        ArrayList<CalendarEvent> events = ReadCalendar.readCalendar(MainActivity.this, signInAccount.getEmail());
         if (!events.isEmpty()) {
             for (CalendarEvent event : events) {
                 reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId()).child("Does" + event.getId());

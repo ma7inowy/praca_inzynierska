@@ -33,7 +33,7 @@ public class ReadCalendar {
 
     static Cursor cursor;
 
-    public static ArrayList<CalendarEvent> readCalendar(Context context) {
+    public static ArrayList<CalendarEvent> readCalendar(Context context, String ownerEmail) {
         ArrayList eventList = new ArrayList<CalendarEvent>();
 
         ContentResolver contentResolver = context.getContentResolver();
@@ -77,7 +77,7 @@ public class ReadCalendar {
             ContentUris.appendId(builder, now + DateUtils.DAY_IN_MILLIS * 1000);
 
             Cursor eventCursor = contentResolver.query(builder.build(),
-                    new String[]{"title", "begin", "end", "allDay"}, getSelection(),
+                    new String[]{"title", "begin", "end", "allDay"}, getSelection(ownerEmail),
                     null, null);
 
             Log.i("readcalendar", ("eventCursor count=" + eventCursor.getCount()));
@@ -105,7 +105,8 @@ public class ReadCalendar {
                         int month = Integer.parseInt(table[2]);
                         int year = Integer.parseInt(table[3]);
                         int id_event = new Random().nextInt();
-                        eventList.add(new CalendarEvent(title,String.valueOf(id_event),hour,day,month,year));
+                        // month -1 bo od 0 sie licza miesiace
+                        eventList.add(new CalendarEvent(title, String.valueOf(id_event), hour, day, month - 1, year));
 
 //                        LocalDate dataa = new LocalDate(year,month,day,hour,0); tak sie NIE DA :(
 //                        LocalDate dataa = new LocalDate(year,month,day);
@@ -224,7 +225,7 @@ public class ReadCalendar {
         return eventList;
     }
 
-    public static String getSelection() {
+    public static String getSelection(String ownerEmail) {
         Calendar startTime = Calendar.getInstance();
 
         startTime.set(Calendar.HOUR_OF_DAY, 0);
@@ -232,11 +233,11 @@ public class ReadCalendar {
         startTime.set(Calendar.SECOND, 0);
 
         Calendar endTime = Calendar.getInstance();
-        endTime.add(Calendar.DATE, 30);
+        endTime.add(Calendar.DATE, 365);
 
         String selection = "(( " + CalendarContract.Events.DTSTART + " >= " + startTime.getTimeInMillis()
                 + " ) AND ( " + CalendarContract.Events.DTSTART + " <= " + endTime.getTimeInMillis()
-        + " ) AND ( deleted != 1 ) AND " + CalendarContract.Events.OWNER_ACCOUNT + " = 'kuba.wu1910@gmail.com')";
+                + " ) AND ( deleted != 1 ) AND " + CalendarContract.Events.OWNER_ACCOUNT + " = '" + ownerEmail + "')";
 
         return selection;
     }
