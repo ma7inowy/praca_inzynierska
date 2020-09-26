@@ -181,7 +181,7 @@ public class NextActionActivity extends Fragment implements NextActionAdapter.On
                             HashMap map = new HashMap();
                             map.put("title", deletedTask.getTitle());
                             map.put("description", deletedTask.getDescription());
-                            map.put("datedoes", deletedTask.getDatedoes());
+                            map.put("estimatedTime", deletedTask.getEstimatedTime());
                             map.put("id", deletedTask.getId());
                             map.put("labelName", deletedTask.getLabelName());
                             map.put("priority", deletedTask.getPriority());
@@ -221,7 +221,7 @@ public class NextActionActivity extends Fragment implements NextActionAdapter.On
         Intent intent = new Intent(getActivity(), EditNextActionActivity.class);
         intent.putExtra("title", nextAction.getTitle());
         intent.putExtra("description", nextAction.getDescription());
-        intent.putExtra("date", nextAction.getDatedoes());
+        intent.putExtra("estimatedTime", nextAction.getEstimatedTime());
         intent.putExtra("id", nextAction.getId());
         intent.putExtra("labelName", nextAction.getLabelName());
         intent.putExtra("priority", nextAction.getPriority());

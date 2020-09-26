@@ -3,15 +3,20 @@ package jakubw.pracainz.goalsexecutor;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -27,10 +32,9 @@ import java.util.HashMap;
 
 public class EditNextActionActivity extends AppCompatActivity {
 
-    EditText editDate;
     EditText editTitle;
     EditText editDescription;
-    Button editNextActionBtn;
+    Button editNextActionBtn,editEstimationTimeBtn,editPriorityBtn;
     String id;
     DatabaseReference reference;
     DatabaseReference referenceLabel;
@@ -40,16 +44,20 @@ public class EditNextActionActivity extends AppCompatActivity {
     Spinner editLabelSpinner;
     String labelId;
     ArrayAdapter<Label> labelAdapter;
+    int estimatedTime;
+    String priority;
+    final String[] priorities = {"High", "Medium", "Low"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_does);
 
-        editDate = findViewById(R.id.editDate);
         editTitle = findViewById(R.id.editTitle);
         editDescription = findViewById(R.id.editDescription);
         editNextActionBtn = findViewById(R.id.editTaskBtn);
+        editEstimationTimeBtn = findViewById(R.id.editEstimationTimeBtn);
+        editPriorityBtn = findViewById(R.id.editPriorityBtn);
         //google signin
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         labelList = new ArrayList<>();
@@ -57,10 +65,13 @@ public class EditNextActionActivity extends AppCompatActivity {
         editLabelSpinner = findViewById(R.id.labelsSpinnerEdit);
         Intent intent = getIntent();
         editTitle.setText(intent.getStringExtra("title"));
-        editDate.setText(intent.getStringExtra("date"));
-        editDescription.setText(intent.getStringExtra("desc"));
+        editDescription.setText(intent.getStringExtra("description"));
         id = intent.getStringExtra("id");
         labelId = intent.getStringExtra("labelName");
+        estimatedTime = intent.getIntExtra("estimatedTime",0);
+        editEstimationTimeBtn.setText("Potrzebny czas: " + estimatedTime + "minut");
+        priority = intent.getStringExtra("priority");
+        editPriorityBtn.setText("PRIORYTET: " + priorities[Integer.valueOf(priority) - 1]);
 
         //pobranie labelow z bazy MOZE ZNALEZC JAKIS LEPSZY SPOSOB? raz pobrac najlepiej i tyle
         referenceLabel = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Labels").child(signInAccount.getId().toString());
@@ -88,7 +99,8 @@ public class EditNextActionActivity extends AppCompatActivity {
                 HashMap map = new HashMap();
                 map.put("title", editTitle.getText().toString());
                 map.put("description", editDescription.getText().toString());
-                map.put("datedoes", editDate.getText().toString());
+                map.put("estimatedTime", estimatedTime);
+                map.put("priority",priority);
                 map.put("labelName", labelId);
                 reference.updateChildren(map);
                 Toast.makeText(EditNextActionActivity.this, editTitle.getText().toString() + " " + editDescription.getText().toString(), Toast.LENGTH_SHORT).show();
@@ -110,6 +122,20 @@ public class EditNextActionActivity extends AppCompatActivity {
                 Toast.makeText(EditNextActionActivity.this, "nothing selected", Toast.LENGTH_SHORT).show();
             }
         });
+
+        editEstimationTimeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEstimationTimeDialog();
+            }
+        });
+
+        editPriorityBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPrioritiesDialog();
+            }
+        });
     }
 
     private void setLabelAdapter(ArrayList<Label> list) {
@@ -127,6 +153,83 @@ public class EditNextActionActivity extends AppCompatActivity {
                 return i;
         }
         return 0;
+    }
+
+    private void showEstimationTimeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditNextActionActivity.this);
+        builder.setTitle("Choose estimated time");
+
+        View view  = LayoutInflater.from(EditNextActionActivity.this).inflate(R.layout.estimated_time_dialog, null);
+        final TextView estimatedTimeProgress = view.findViewById(R.id.estimatedTimeProgress);
+        final SeekBar estimatedTimeSeekBar = view.findViewById(R.id.estimatedTimeSeekBar);
+        estimatedTimeSeekBar.setMax(240);
+        estimatedTimeSeekBar.setProgress(estimatedTime);
+        estimatedTimeProgress.setText(estimatedTime + " min");
+        estimatedTimeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                estimatedTimeProgress.setText(progress  + " min");
+                estimatedTime = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(EditNextActionActivity.this, String.valueOf(estimatedTime), Toast.LENGTH_SHORT).show();
+                editEstimationTimeBtn.setText("Potrzebny czas: " + estimatedTime + "minut");
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(EditNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+        builder.setView(view);
+        builder.show();
+    }
+
+    private void showPrioritiesDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditNextActionActivity.this);
+        builder.setTitle("Choose priority");
+        builder.setSingleChoiceItems(priorities, Integer.valueOf(priority)-1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                priority = String.valueOf(which + 1);
+                Toast.makeText(EditNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                editPriorityBtn.setText("PRIORYTET: " + priorities[Integer.valueOf(priority) - 1]);
+
+                Toast.makeText(EditNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(EditNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 
 }

@@ -2,28 +2,25 @@ package jakubw.pracainz.goalsexecutor;
 
 public class NextAction {
 
-    String title, datedoes, description, id;
+    String title, description, id;
 //    Label label;
     String labelName, priority;
+    int estimatedTime;
 
     public NextAction() {
     }
 
-    public NextAction(String title, String datedoes, String description, String id, String labelName, String priority) {
+    public NextAction(String title, String description, String id, String labelName, String priority, int estimatedTime) {
         this.title = title;
-        this.datedoes = datedoes;
         this.description = description;
         this.id = id;
         this.labelName = labelName;
         this.priority = priority;
+        this.estimatedTime = estimatedTime;
     }
 
     public String getTitle() {
         return title;
-    }
-
-    public String getDatedoes() {
-        return datedoes;
     }
 
     public String getDescription() {
@@ -32,10 +29,6 @@ public class NextAction {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public void setDatedoes(String datedoes) {
-        this.datedoes = datedoes;
     }
 
     public void setDescription(String description) {
@@ -64,5 +57,13 @@ public class NextAction {
 
     public void setPriority(String priority) {
         this.priority = priority;
+    }
+
+    public int getEstimatedTime() {
+        return estimatedTime;
+    }
+
+    public void setEstimatedTime(int estimatedTime) {
+        this.estimatedTime = estimatedTime;
     }
 }

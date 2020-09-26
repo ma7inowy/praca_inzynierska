@@ -33,7 +33,6 @@ import java.util.Random;
 
 public class NewNextActionActivity extends AppCompatActivity {
 
-    EditText addDate;
     EditText addTitle;
     EditText addDescription;
     Button addNextActionBtn, addPriorityBtn, addEstimationTimeBtn;
@@ -54,7 +53,6 @@ public class NewNextActionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
 
-        addDate = findViewById(R.id.addDate);
         addTitle = findViewById(R.id.addTitle);
         addDescription = findViewById(R.id.addDescription);
         addNextActionBtn = findViewById(R.id.addNextActionBtn);
@@ -100,9 +98,9 @@ public class NewNextActionActivity extends AppCompatActivity {
                 HashMap map = new HashMap();
                 map.put("title", addTitle.getText().toString());
                 map.put("description", addDescription.getText().toString());
-                map.put("datedoes", addDate.getText().toString());
                 map.put("id", idNumber.toString());
                 map.put("labelName", labelName);
+                map.put("estimatedTime", estimatedTime);
                 map.put("priority", priority);
                 reference.updateChildren(map);
                 sendResultToBoxActivity();
@@ -171,6 +169,7 @@ public class NewNextActionActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(NewNextActionActivity.this, String.valueOf(estimatedTime), Toast.LENGTH_SHORT).show();
+                addEstimationTimeBtn.setText("Potrzebny czas: " + estimatedTime + "minut");
                 dialog.dismiss();
             }
         });
