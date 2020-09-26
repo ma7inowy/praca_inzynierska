@@ -8,12 +8,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -33,7 +36,7 @@ public class NewNextActionActivity extends AppCompatActivity {
     EditText addDate;
     EditText addTitle;
     EditText addDescription;
-    Button addNextActionBtn, addPriorityBtn;
+    Button addNextActionBtn, addPriorityBtn, addEstimationTimeBtn;
     DatabaseReference reference;
     DatabaseReference referenceLabel;
     //    NextAction myDoes;
@@ -43,6 +46,7 @@ public class NewNextActionActivity extends AppCompatActivity {
     String labelName = "labelName";
     ArrayAdapter<Label> labelAdapter;
     String priority = "3";
+    int estimatedTime = 0;
 
 
     @Override
@@ -56,6 +60,7 @@ public class NewNextActionActivity extends AppCompatActivity {
         addNextActionBtn = findViewById(R.id.addNextActionBtn);
         labelSpinner = findViewById(R.id.labelSpinner);
         addPriorityBtn = findViewById(R.id.addPriorityBtn);
+        addEstimationTimeBtn = findViewById(R.id.addEstimationTimeBtn);
         idNumber = new Random().nextInt();
         labelList = new ArrayList<>();
 
@@ -112,6 +117,12 @@ public class NewNextActionActivity extends AppCompatActivity {
                 showPrioritiesDialog();
             }
         });
+        addEstimationTimeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEstimationTimeDialog();
+            }
+        });
 
         labelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -127,6 +138,51 @@ public class NewNextActionActivity extends AppCompatActivity {
                 Toast.makeText(NewNextActionActivity.this, "nothing selected", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showEstimationTimeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(NewNextActionActivity.this);
+        builder.setTitle("Choose estimated time");
+
+        View view  = LayoutInflater.from(NewNextActionActivity.this).inflate(R.layout.estimated_time_dialog, null);
+        final TextView estimatedTimeProgress = view.findViewById(R.id.estimatedTimeProgress);
+        final SeekBar estimatedTimeSeekBar = view.findViewById(R.id.estimatedTimeSeekBar);
+        estimatedTimeSeekBar.setMax(240);
+        estimatedTimeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                estimatedTimeProgress.setText(""+ progress  + " min");
+                estimatedTime = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(NewNextActionActivity.this, String.valueOf(estimatedTime), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(NewNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+        builder.setView(view);
+        builder.show();
     }
 
     // dla usuwania zadania z BoxActiv
