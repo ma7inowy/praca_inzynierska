@@ -278,21 +278,22 @@ public class NextActionActivity extends Fragment implements NextActionAdapter.On
     //trzeba zmienic tez on click zeby bralo te liste przefiltrowana jak sie kliknie
     // jak zatwierdze filtry to to sie wywola
     @Override
-    public void applyFilterData(boolean priorityLow, boolean priorityMedium, boolean priorityHigh, String label) {
+    public void applyFilterData(boolean priorityLow, boolean priorityMedium, boolean priorityHigh, String label, String estimatedTime) {
         ArrayList<NextAction> fList = new ArrayList<>();
         ArrayList<NextAction> fList2 = new ArrayList<>();
+        int estimatedTimeInt = Integer.valueOf(estimatedTime);
         for (NextAction task : nextActionList) {
-            if (task.getPriority().equals("1") && priorityHigh && task.getLabelName().equals(label)) {
+            if (task.getPriority().equals("1") && priorityHigh && task.getLabelName().equals(label) && (task.getEstimatedTime() <= estimatedTimeInt)) {
                 fList.add(task);
-            } else if (task.getPriority().equals("2") && priorityMedium && task.getLabelName().equals(label)) {
+            } else if (task.getPriority().equals("2") && priorityMedium && task.getLabelName().equals(label) && (task.getEstimatedTime() <= estimatedTimeInt)) {
                 fList.add(task);
-            } else if (task.getPriority().equals("3") && priorityLow && task.getLabelName().equals(label)) {
+            } else if (task.getPriority().equals("3") && priorityLow && task.getLabelName().equals(label) && (task.getEstimatedTime() <= estimatedTimeInt)) {
                 fList.add(task);
             }
         }
         if (!priorityHigh && !priorityLow && !priorityMedium) {
             for (NextAction task2 : nextActionList) {
-                if (task2.getLabelName().equals(label)) fList2.add(task2);
+                if (task2.getLabelName().equals(label) && (task2.getEstimatedTime() <= estimatedTimeInt)) fList2.add(task2);
             }
             setAdapter(fList2);
             filteredNextActionList = fList2;

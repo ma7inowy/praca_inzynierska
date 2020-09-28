@@ -32,10 +32,13 @@ public class TaskFilterDialog extends AppCompatDialogFragment {
     RadioButton radioHighPrioBtn;
     RadioButton radioMediumPrioBtn;
     Spinner filterLabelSpinner;
+    Spinner filterEstimatedTimeSpinner;
     DatabaseReference referenceLabel;
     ArrayList<Label> labelList;
     ArrayAdapter<Label> labelAdapter;
+    ArrayAdapter<CharSequence> estimatedTimeAdapter;
     String labelName = "labelname";
+    String estimatedTime = "0";
     private TaskFilterDialogListener filterDialogListener;
 
     @Override
@@ -54,14 +57,15 @@ public class TaskFilterDialog extends AppCompatDialogFragment {
                 boolean priorityLow = radioLowPrioBtn.isChecked();
                 boolean priorityMedium = radioMediumPrioBtn.isChecked();
                 boolean priorityHigh = radioHighPrioBtn.isChecked();
-                String label = labelName;
-                filterDialogListener.applyFilterData(priorityLow, priorityMedium, priorityHigh, label);
+                filterDialogListener.applyFilterData(priorityLow, priorityMedium, priorityHigh, labelName, estimatedTime);
             }
         });
         radioLowPrioBtn = view.findViewById(R.id.radioLowPrioBtn);
         radioHighPrioBtn = view.findViewById(R.id.radioHighPrioBtn);
         radioMediumPrioBtn = view.findViewById(R.id.radioMediumPrioBtn);
         filterLabelSpinner = view.findViewById(R.id.filterLabelSpinner);
+        filterEstimatedTimeSpinner = view.findViewById(R.id.filterEstimatedTimeSpinner);
+        setEstimatedTimeAdapter();
         labelList = new ArrayList<>();
         //google signin
         final GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity());
@@ -103,6 +107,20 @@ public class TaskFilterDialog extends AppCompatDialogFragment {
             }
         });
 
+        filterEstimatedTimeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String text = parent.getItemAtPosition(position).toString();
+                Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();
+                estimatedTime = text;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         return builder.create();
     }
 
@@ -118,7 +136,7 @@ public class TaskFilterDialog extends AppCompatDialogFragment {
     }
 
     public interface TaskFilterDialogListener {
-        void applyFilterData(boolean priorityLow, boolean priorityMedium, boolean priorityHigh, String label);
+        void applyFilterData(boolean priorityLow, boolean priorityMedium, boolean priorityHigh, String label, String estimatedTime);
     }
 
     private void setLabelAdapter(ArrayList<Label> list) {
@@ -127,5 +145,12 @@ public class TaskFilterDialog extends AppCompatDialogFragment {
         labelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         filterLabelSpinner.setAdapter(labelAdapter);
         labelAdapter.notifyDataSetChanged();
+    }
+
+    private void setEstimatedTimeAdapter() {
+        estimatedTimeAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.estimatedTimePeriods,android.R.layout.simple_spinner_item);
+        estimatedTimeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        filterEstimatedTimeSpinner.setAdapter(estimatedTimeAdapter);
+
     }
 }
