@@ -22,7 +22,7 @@ public class ReminderBroadcast extends BroadcastReceiver {
         PendingIntent contentIntent = PendingIntent.getActivity(context,requestcode,intent2,0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"notifyGoalsExecutor")
-                .setSmallIcon(R.drawable.ic_message)
+                .setSmallIcon(R.drawable.ic_app_name_transparent)
                 .setContentTitle("Daily Tasks! Do it!")
                 .setContentText("Masz zrobic zadanko: " + desc)
                 .setContentIntent(contentIntent)

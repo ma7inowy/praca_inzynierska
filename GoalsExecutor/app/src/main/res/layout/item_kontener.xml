@@ -7,13 +7,13 @@
     android:orientation="horizontal">
 
     <LinearLayout
-        android:layout_width="220dp"
+        android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/itemNextActionTitle"
+            android:id="@+id/nextActionItemTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="19dp"
@@ -21,8 +21,11 @@
             android:textColor="#000C5D"
             android:textSize="22sp" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/labeldoes"
+            android:id="@+id/nextActionItemLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -31,19 +34,33 @@
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
 
+        <TextView
+            android:id="@+id/nextActionItemEstimatedTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:fontFamily="sans-serif-condensed"
+            android:text="estTime"
+            android:textColor="#FFFDFD"
+            android:background="@drawable/next_action_field_shape"
+            android:textSize="18sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/priorityBackground"
+        android:id="@+id/nextActionItemPriorityBackground"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="30dp"
-        android:background="#00FF00"
+        android:background="@drawable/next_action_priority_shape"
         android:gravity="center">
 
         <TextView
-            android:id="@+id/prioritydoes"
+            android:id="@+id/nextActionItemPriority"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1"

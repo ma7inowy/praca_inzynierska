@@ -1,6 +1,9 @@
 package jakubw.pracainz.goalsexecutor;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,11 +44,24 @@ public class NextActionAdapter extends RecyclerView.Adapter<NextActionAdapter.My
                 label1 = label;
             }
         }
-        holder.nextActionTitle.setText(nextActionList.get(i).getTitle());
-        holder.nextActionPriority.setText(nextActionList.get(i).getPriority());
-        holder.nextActionLabel.setBackgroundColor(label1.getColor());
-        holder.nextActionLabel.setText(label1.getName());
-        holder.priorityBackground.setBackgroundColor(setPriorityColor(nextActionList.get(i).getPriority()));
+        holder.nextActionItemTitle.setText(nextActionList.get(i).getTitle());
+        holder.nextActionItemPriority.setText(nextActionList.get(i).getPriority());
+        holder.nextActionItemLabel.setBackgroundColor(label1.getColor());
+        holder.nextActionItemLabel.setText(label1.getName());
+        holder.nextActionItemEstimatedTime.setText(nextActionList.get(i).getEstimatedTime() + "min");
+
+
+        //setting background of priority
+//        holder.nextActionItemPriorityBackground.getBackground().setColorFilter(setPriorityColor(nextActionList.get(i).getPriority()), PorterDuff.Mode.SRC_ATOP);
+        GradientDrawable drawable1 = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[] { setPriorityColor(nextActionList.get(i).getPriority()), Color.WHITE});
+        drawable1.setShape(GradientDrawable.RECTANGLE);
+        drawable1.setCornerRadii(new float[] { 60, 60, 60, 60, 60, 60, 60, 60 });
+
+        holder.nextActionItemPriorityBackground.setBackground(drawable1);
+
+//        //setting stroke (ramka)
+//        GradientDrawable drawable = (GradientDrawable) holder.nextActionItemPriorityBackground.getBackground();
+//        drawable.setStroke(10, setPriorityColor(nextActionList.get(i).getPriority()));
     }
 
     private int setPriorityColor(String priority) {
@@ -61,16 +77,17 @@ public class NextActionAdapter extends RecyclerView.Adapter<NextActionAdapter.My
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView nextActionTitle, nextActionLabel, nextActionPriority;
-        LinearLayout priorityBackground;
+        TextView nextActionItemTitle, nextActionItemLabel, nextActionItemPriority, nextActionItemEstimatedTime;
+        LinearLayout nextActionItemPriorityBackground;
         OnItemListener onItemListener;
 
         public MyViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
             super(itemView);
-            nextActionTitle = (TextView) itemView.findViewById(R.id.itemNextActionTitle);
-            nextActionLabel = (TextView) itemView.findViewById(R.id.labeldoes);
-            nextActionPriority = (TextView) itemView.findViewById(R.id.prioritydoes);
-            priorityBackground = (LinearLayout) itemView.findViewById(R.id.priorityBackground);
+            nextActionItemTitle = (TextView) itemView.findViewById(R.id.nextActionItemTitle);
+            nextActionItemLabel = (TextView) itemView.findViewById(R.id.nextActionItemLabel);
+            nextActionItemPriority = (TextView) itemView.findViewById(R.id.nextActionItemPriority);
+            nextActionItemPriorityBackground = (LinearLayout) itemView.findViewById(R.id.nextActionItemPriorityBackground);
+            nextActionItemEstimatedTime = (TextView) itemView.findViewById(R.id.nextActionItemEstimatedTime);
             this.onItemListener = onItemListener;
             itemView.setOnClickListener(this);
         }
