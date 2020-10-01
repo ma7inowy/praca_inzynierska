@@ -65,6 +65,7 @@ public class TaskFilterDialog extends AppCompatDialogFragment {
         radioMediumPrioBtn = view.findViewById(R.id.radioMediumPrioBtn);
         filterLabelSpinner = view.findViewById(R.id.filterLabelSpinner);
         filterEstimatedTimeSpinner = view.findViewById(R.id.filterEstimatedTimeSpinner);
+
         setEstimatedTimeAdapter();
         labelList = new ArrayList<>();
         //google signin

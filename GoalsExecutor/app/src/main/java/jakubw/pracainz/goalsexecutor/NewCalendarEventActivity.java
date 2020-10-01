@@ -186,6 +186,8 @@ public class NewCalendarEventActivity extends AppCompatActivity {
         Intent intent = new Intent(NewCalendarEventActivity.this, ReminderBroadcast.class);
         intent.putExtra("desc", addEventTitle.getText().toString());
         int requestcode = idNumber;
+
+        //z ta falg update po to zeby updatowac dane z powiadomieniu jak np zmienie tytul zadania
         PendingIntent pendingIntent = PendingIntent.getBroadcast(NewCalendarEventActivity.this, requestcode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);

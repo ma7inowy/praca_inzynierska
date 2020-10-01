@@ -294,5 +294,9 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
         reference.child("Does" + event.getId()).updateChildren(map);
     }
 
+//    public static ArrayList<CalendarEvent> getAllEventsToSetAlarmsAfterREBOOT(){
+//        return calendarEventList;
+//    }
+
 
 }
