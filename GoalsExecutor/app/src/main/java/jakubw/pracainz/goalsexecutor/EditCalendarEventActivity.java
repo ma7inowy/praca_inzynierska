@@ -142,7 +142,7 @@ public class EditCalendarEventActivity extends AppCompatActivity {
 
     public CharSequence getDataCharSequenceForTime() {
         Calendar calendar1 = Calendar.getInstance();
-        calendar1.set(Calendar.HOUR, hourEvent);
+        calendar1.set(Calendar.HOUR_OF_DAY, hourEvent);
         calendar1.set(Calendar.MINUTE, minuteEvent);
         CharSequence dataCharSequenceForTime = DateFormat.format("HH:mm", calendar1);
 

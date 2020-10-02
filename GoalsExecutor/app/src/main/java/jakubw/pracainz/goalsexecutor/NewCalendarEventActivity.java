@@ -33,7 +33,7 @@ import java.util.Random;
 
 public class NewCalendarEventActivity extends AppCompatActivity {
 
-    EditText addEventTitle, addEventDate, addEventDescription;
+    EditText addEventTitle, addEventDescription;
     Button addNewEventBtn, setDateBtn, setTimeBtn;
     DatabaseReference reference;
     Integer idNumber;
@@ -46,7 +46,6 @@ public class NewCalendarEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_calendar_event);
 
         addEventTitle = findViewById(R.id.addEventTitle);
-        addEventDate = findViewById(R.id.addEventDate);
         addEventDescription = findViewById(R.id.addEventDescription);
         addNewEventBtn = findViewById(R.id.addNewEventBtn);
         setDateBtn = findViewById(R.id.setDateBtn);
@@ -57,8 +56,8 @@ public class NewCalendarEventActivity extends AppCompatActivity {
         yearEvent = calendar.get(Calendar.YEAR);
         monthEvent = calendar.get(Calendar.MONTH);
         dayEvent = calendar.get(Calendar.DATE);
-        hourEvent = 0;
-        minuteEvent = 0;
+        hourEvent = calendar.get(Calendar.HOUR_OF_DAY);
+        minuteEvent = calendar.get(Calendar.MINUTE);
         final GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         createNotificationChanel();
 
@@ -107,8 +106,8 @@ public class NewCalendarEventActivity extends AppCompatActivity {
     }
 
     private void handleTimeButton() {
-        int HOUR = calendar.get(Calendar.HOUR_OF_DAY);
-        int MINUTE = calendar.get(Calendar.MINUTE);
+        int HOUR = hourEvent;
+        int MINUTE = minuteEvent;
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -122,9 +121,9 @@ public class NewCalendarEventActivity extends AppCompatActivity {
     }
 
     private void handleDateButton() {
-        int YEAR = calendar.get(Calendar.YEAR);
-        int MONTH = calendar.get(Calendar.MONTH);
-        int DATE = calendar.get(Calendar.DATE);
+        int YEAR = yearEvent;
+        int MONTH = monthEvent;
+        int DATE = dayEvent;
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {

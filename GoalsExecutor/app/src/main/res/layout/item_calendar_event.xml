@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="horizontal"
     android:background="#815084"
@@ -23,11 +23,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
         <TextView
             android:id="@+id/eventDate"
             android:textSize="18sp"
@@ -37,26 +32,28 @@
             android:text="8:00 23.07"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:layout_margin="10dp"/>
-        </LinearLayout>
+
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_marginTop="30dp"
-        android:layout_width="125dp"
-        android:layout_height="wrap_content">
+<!--    <LinearLayout-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:layout_width="125dp"-->
+<!--        android:layout_alignParentRight="true"-->
+<!--        android:layout_height="wrap_content">-->
 
-        <TextView
-            android:id="@+id/eventDuration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="right"
-            android:text="2 hours"
-            android:textColor="#F63EA5"
-            android:textSize="18sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/eventDuration"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:gravity="right"-->
+<!--            android:text="2 hours"-->
+<!--            android:textColor="#F63EA5"-->
+<!--            android:textSize="18sp" />-->
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
-</LinearLayout>
+</RelativeLayout>

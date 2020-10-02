@@ -65,38 +65,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#FFFFFF"
-            android:hint="Tytul eventu" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:background="#808090"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:paddingLeft="11dp"
-        android:paddingRight="11dp"
-        android:paddingBottom="11dp"
-        android:paddingTop="11dp"
-        android:layout_marginTop="20dp">
-
-        <TextView
-            android:text="Dodaj termin eventu"
-            android:textSize="20dp"
-            android:layout_gravity="center"
-            android:textColor="#FFFFFF"
-            android:layout_margin="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-        </TextView>
-
-        <EditText
-            android:id="@+id/addEventDate"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#FFFFFF"
-            android:hint="Termin" />
+            android:hint="Tytul eventu"
+            android:maxLength="20" />
     </LinearLayout>
 
     <LinearLayout

@@ -42,7 +42,7 @@ class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.MyViewHolder>
 
         holder.eventTitle.setText(calendarEventList.get(i).getTitle());
         holder.eventDate.setText(dataCharSequence);
-        holder.eventDuration.setText("CZAS trwania");
+//        holder.eventDuration.setText("CZAS trwania");
     }
 
     @Override
@@ -52,14 +52,14 @@ class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.MyViewHolder>
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView eventTitle, eventDate, eventDuration;
+        TextView eventTitle, eventDate;
         OnItemListener onItemListener;
 
         public MyViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
             super(itemView);
             eventTitle = (TextView) itemView.findViewById(R.id.eventTitle);
             eventDate = (TextView) itemView.findViewById(R.id.eventDate);
-            eventDuration = (TextView) itemView.findViewById(R.id.eventDuration);
+//            eventDuration = (TextView) itemView.findViewById(R.id.eventDuration);
             this.onItemListener = onItemListener;
             itemView.setOnClickListener(this);
         }

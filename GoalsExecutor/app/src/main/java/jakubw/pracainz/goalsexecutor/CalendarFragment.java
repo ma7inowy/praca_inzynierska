@@ -151,7 +151,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
         calendar1.set(Calendar.YEAR, event.getYear());
         calendar1.set(Calendar.MONTH, event.getMonth());
         calendar1.set(Calendar.DATE, event.getDay());
-        calendar1.set(Calendar.HOUR, event.getHour());
+        calendar1.set(Calendar.HOUR_OF_DAY, event.getHour());
         calendar1.set(Calendar.MINUTE, event.getMinute());
         CharSequence dataCharSequenceForDate = DateFormat.format("dd MMM yyyy", calendar1);
         CharSequence dataCharSequenceForTime = DateFormat.format("HH:mm", calendar1);
