@@ -29,7 +29,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_marginTop="20dp"
-                    android:text="Dodaj nowe zadanie"
+                    android:text="New task"
                     android:textAlignment="center"
                     android:textColor="#FFF"
                     android:textSize="32sp" />
@@ -55,7 +55,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:text="Dodaj tytuł"
+                android:text="Add title"
                 android:textColor="#FFFFFF"
                 android:textSize="20dp">
 
@@ -86,7 +86,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:text="Opis"
+                android:text="Add description"
                 android:textColor="#FFFFFF"
                 android:textSize="20dp">
 
@@ -118,7 +118,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:text="Etykieta"
+                android:text="Label"
                 android:textColor="#FFFFFF"
                 android:textSize="20dp">
 
@@ -137,7 +137,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="#00FF00"
-            android:text="Priorytet: LOW" />
+            android:text="Priority: LOW" />
 
         <Button
             android:id="@+id/addEstimationTimeBtn"
@@ -145,14 +145,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="#FFC800"
-            android:text="Potrzebny czas: 0min" />
+            android:text="Estimated time: 0min" />
 
         <Button
             android:id="@+id/addNextActionBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Button" />
+            android:text="Confirm" />
     </LinearLayout>
 
 

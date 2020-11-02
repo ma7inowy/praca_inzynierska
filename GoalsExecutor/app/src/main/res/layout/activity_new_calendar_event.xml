@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="Dodaj nowy Event"
+                android:text="Add new event"
                 android:textAlignment="center"
                 android:textColor="#FFF"
                 android:textSize="32sp"
@@ -50,7 +50,7 @@
         android:paddingTop="11dp">
 
         <TextView
-            android:text="Dodaj tytuł"
+            android:text="Add title"
             android:textColor="#FFFFFF"
             android:layout_gravity="center"
             android:layout_margin="10dp"
@@ -82,7 +82,7 @@
         android:layout_marginTop="20dp">
 
         <TextView
-            android:text="Opis Eventu"
+            android:text="Add description"
             android:textSize="20dp"
             android:layout_gravity="center"
             android:textColor="#FFFFFF"
@@ -119,7 +119,7 @@
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="Create" />
 
     </LinearLayout>
 

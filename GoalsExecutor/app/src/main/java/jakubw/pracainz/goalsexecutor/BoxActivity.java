@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,9 +36,10 @@ import java.util.Random;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
+import static android.app.Activity.RESULT_OK;
 import static androidx.recyclerview.widget.ItemTouchHelper.LEFT;
 
-public class BoxActivity extends AppCompatActivity implements BoxTaskAdapter.OnItemListener {
+public class BoxActivity extends Fragment implements BoxTaskAdapter.OnItemListener {
 
     FloatingActionButton addNewBoxTaskBtn;
     RecyclerView recyclerBoxTask;
@@ -49,18 +53,23 @@ public class BoxActivity extends AppCompatActivity implements BoxTaskAdapter.OnI
     public static final int NEXT_ACTION_REQUEST = 11; //kody do otrzymania danych o dodaniu taskbox w jakies miejsce np do nextaction albo do calendar (o dostaniu sie do odpowiedniego activity)
     public static final int CALENDAR_REQUEST = 12; //
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_box);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        return inflater.inflate(R.layout.activity_box, container,false);
+    }
 
-        addNewBoxTaskBtn = findViewById(R.id.addNewBoxTaskFloatingBtn);
-        recyclerBoxTask = findViewById(R.id.myBoxTasks);
+    @Override
+    public void onStart() {
+        super.onStart();
+        addNewBoxTaskBtn = getView().findViewById(R.id.addNewBoxTaskFloatingBtn);
+        recyclerBoxTask = getView().findViewById(R.id.myBoxTasks);
         boxTaskList = new ArrayList<>();
         idNumber = new Random().nextInt();
-        recyclerBoxTask.setLayoutManager(new LinearLayoutManager(this));
+        recyclerBoxTask.setLayoutManager(new LinearLayoutManager(getActivity()));
         //google signin
-        signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity());
 
         reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Box").child(signInAccount.getId().toString());
         reference.addValueEventListener(new ValueEventListener() {
@@ -77,7 +86,7 @@ public class BoxActivity extends AppCompatActivity implements BoxTaskAdapter.OnI
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -85,41 +94,86 @@ public class BoxActivity extends AppCompatActivity implements BoxTaskAdapter.OnI
             @Override
             public void onClick(View v) {
                 openDialogToAddNewBoxTask();
-                Toast.makeText(BoxActivity.this, "New box task", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "New box task", Toast.LENGTH_SHORT).show();
             }
         });
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(recyclerBoxTask);
+
     }
 
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_box);
+//
+//        addNewBoxTaskBtn = findViewById(R.id.addNewBoxTaskFloatingBtn);
+//        recyclerBoxTask = findViewById(R.id.myBoxTasks);
+//        boxTaskList = new ArrayList<>();
+//        idNumber = new Random().nextInt();
+//        recyclerBoxTask.setLayoutManager(new LinearLayoutManager(this));
+//        //google signin
+//        signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+//
+//        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Box").child(signInAccount.getId().toString());
+//        reference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                boxTaskList.clear();
+//                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+//                    BoxTask p = dataSnapshot1.getValue(BoxTask.class);
+//                    boxTaskList.add(p);
+//                    Log.e("box", p.getTitle());
+//                }
+//                setAdapter(boxTaskList);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        addNewBoxTaskBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                openDialogToAddNewBoxTask();
+//                Toast.makeText(BoxActivity.this, "New box task", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+//        itemTouchHelper.attachToRecyclerView(recyclerBoxTask);
+//    }
+
     public void setAdapter(ArrayList<BoxTask> boxTasksList) {
-        boxTaskAdapter = new BoxTaskAdapter(BoxActivity.this, boxTasksList, this);
+        boxTaskAdapter = new BoxTaskAdapter(getActivity(), boxTasksList, this);
         recyclerBoxTask.setAdapter(boxTaskAdapter); // wypelni wszystkie pola ViewHolderami
         boxTaskAdapter.notifyDataSetChanged();
     }
 
     private void openDialogToAddNewBoxTask() {
         NewBoxTaskDialog newBoxTaskDialog = new NewBoxTaskDialog();
-        newBoxTaskDialog.show(getSupportFragmentManager(), "Example");
+        newBoxTaskDialog.show(getFragmentManager(), "Example");
     }
 
     @Override
     public void onItemClick(final int position) {
         boxTask = boxTaskList.get(position);
         // otworz okienko aby wybrać do jakiej aktywności przekierować
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final CharSequence[] activityList = {"NextAction", "Calendar", "Someday"};
         builder.setTitle("Co to za zadanie?").setItems(activityList, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (activityList[which].toString().equals("NextAction")) {
-                    Intent intent = new Intent(BoxActivity.this, NewNextActionActivity.class);
+                    Intent intent = new Intent(getActivity(), NewNextActionActivity.class);
                     intent.putExtra("title", boxTask.getTitle());
                     startActivityForResult(intent, BoxActivity.NEXT_ACTION_REQUEST);
                 }
                 if (activityList[which].toString().equals("Calendar")) {
-                    Intent intent = new Intent(BoxActivity.this, NewCalendarEventActivity.class);
+                    Intent intent = new Intent(getActivity(), NewCalendarEventActivity.class);
                     intent.putExtra("title", boxTask.getTitle());
                     startActivityForResult(intent, BoxActivity.CALENDAR_REQUEST);
                 }
@@ -128,7 +182,7 @@ public class BoxActivity extends AppCompatActivity implements BoxTaskAdapter.OnI
 //                    intent.putExtra("title", boxTask.getTitle());
 //                    startActivity(intent);
 //                    reference.child("Box" + boxTask.getId()).removeValue(); // czy na pewno tak robic
-                    Toast.makeText(BoxActivity.this, "Someday", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Someday", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -173,7 +227,7 @@ public class BoxActivity extends AppCompatActivity implements BoxTaskAdapter.OnI
         @Override
         public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
             new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(BoxActivity.this, R.color.colorDeleteTask))
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorDeleteTask))
                     .addSwipeLeftActionIcon(R.drawable.ic_delete_black_)
                     .create()
                     .decorate();
@@ -184,7 +238,7 @@ public class BoxActivity extends AppCompatActivity implements BoxTaskAdapter.OnI
 
     // zeby usuwac BoxTask z listy dopiero jesli dane zadanie zostanie utworzone jako np NextAct/Calendar
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == NEXT_ACTION_REQUEST && resultCode == RESULT_OK) {
             if (data.getExtras().containsKey("taskAdded")) {
