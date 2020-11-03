@@ -136,6 +136,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent4 = new Intent(MainActivity.this, ProjectsActivity.class);
                 startActivity(intent4);
                 break;
+            case R.id.nav_groups:
+                Intent intent5 = new Intent(MainActivity.this, GroupsActivity.class);
+                startActivity(intent5);
+                break;
+
+
         }
         return true;
     }
