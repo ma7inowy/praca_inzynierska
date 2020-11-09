@@ -31,6 +31,7 @@ public class NewGroupTaskActivity extends AppCompatActivity {
     EditText addDescription;
     Button addGroupTaskBtn, addPriorityBtn, addEstimationTimeBtn;
     DatabaseReference reference;
+    DatabaseReference reference2;
     Integer idNumber;
     String priority = "3";
     int estimatedTime = 0;
@@ -66,6 +67,12 @@ public class NewGroupTaskActivity extends AppCompatActivity {
                 map.put("estimatedTime", estimatedTime);
                 map.put("priority", priority);
                 reference.updateChildren(map);
+
+                reference2 = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users").child(signInAccount.getId().toString()).child("GroupTasksId");
+//                HashMap map2 = new HashMap();
+//                map2.put("id", idNumber.toString());
+                reference2.push().setValue(idNumber.toString());
+
                 sendResultToBoxActivity();
                 Toast.makeText(NewGroupTaskActivity.this, addTitle.getText().toString() + " " + addDescription.getText().toString(), Toast.LENGTH_SHORT).show();
                 finish();

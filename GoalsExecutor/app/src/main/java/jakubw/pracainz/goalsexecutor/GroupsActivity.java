@@ -52,7 +52,7 @@ public class GroupsActivity extends AppCompatActivity implements GroupTasksAdapt
 
         // jesli zawiera id uzytkownika to wczytaj
         reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("GroupTasks");
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 groupTaskList.clear();
@@ -64,7 +64,7 @@ public class GroupsActivity extends AppCompatActivity implements GroupTasksAdapt
 //                    Log.e("groupTask", p.getTitle());
                 }
                 reference2 = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users").child(signInAccount.getId().toString()).child("GroupTasksId");
-                reference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                reference2.addValueEventListener(new ValueEventListener() {
                     ArrayList<GroupTask> userGroupTaskList = new ArrayList<>(); //zadania grupowe konkretnego uzytkownika
 
                     @Override
