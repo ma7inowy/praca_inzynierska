@@ -8,11 +8,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +19,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -29,7 +26,7 @@ public class NewGroupTaskActivity extends AppCompatActivity {
 
     EditText addTitle;
     EditText addDescription;
-    Button addGroupTaskBtn, addPriorityBtn, addEstimationTimeBtn;
+    Button addGroupTaskBtn, addPriorityBtn, addEstimationTimeBtn, addGroupTaskColaborants;
     DatabaseReference reference;
     DatabaseReference reference2;
     Integer idNumber;
@@ -46,6 +43,7 @@ public class NewGroupTaskActivity extends AppCompatActivity {
         addGroupTaskBtn = findViewById(R.id.addGroupTaskBtn);
         addPriorityBtn = findViewById(R.id.addGroupTaskPriorityBtn);
         addEstimationTimeBtn = findViewById(R.id.addGroupTaskEstimationTimeBtn);
+        addGroupTaskColaborants = findViewById(R.id.addGroupTaskColaborants);
         idNumber = new Random().nextInt();
 
         // do tworzenia zadania z BoxActivity
@@ -92,6 +90,18 @@ public class NewGroupTaskActivity extends AppCompatActivity {
             }
         });
 
+        addGroupTaskColaborants.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFindColaborantsDialog();
+            }
+        });
+
+    }
+
+    private void openFindColaborantsDialog() {
+        FindColaborantsDialog findColaborantsDialog = new FindColaborantsDialog();
+        findColaborantsDialog.show(getSupportFragmentManager(), "Find Colaborants");
     }
 
     private void showEstimationTimeDialog() {
