@@ -14,16 +14,21 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -31,6 +36,7 @@ public class SignInActivity extends AppCompatActivity {
     private final static int RC_SIGN_IN = 123;
     private Button signInBtn;
     private FirebaseAuth mAuth;
+    boolean duplicate = false; //sprawdza czy juz dane konto istnieje
 
     @Override
     protected void onStart() {
@@ -85,15 +91,54 @@ public class SignInActivity extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 Log.d("GoogleSignIn", "firebaseAuthWithGoogle:" + account.getId());
                 firebaseAuthWithGoogle(account.getIdToken());
+                if (!checkIfUserExistsInFirebaseDatabase(account))
+                    addUserToFirebaseDatabase(account);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w("GoogleSignIn", "Google sign in failed", e);
                 // ...
             }
         }
+        Log.i("signingin", "onActivityResult");
     }
 
-    private void firebaseAuthWithGoogle(String idToken) {
+    private void addUserToFirebaseDatabase(GoogleSignInAccount account) {
+        //wyslij dane do bazy
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users1").child(account.getId());
+        HashMap map = new HashMap();
+        map.put("name", account.getEmail());
+//                map.put("color", labelColor);
+//                map.put("id", idNumber.toString());
+        reference.updateChildren(map);
+    }
+
+    private boolean checkIfUserExistsInFirebaseDatabase(final GoogleSignInAccount account) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users1");
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    User p = dataSnapshot1.getValue(User.class);
+                    Log.i("checkIfInFirebase", p.getName());
+                    if (p.getName().equals(account.getEmail())) {
+                        duplicate = true;
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        return duplicate;
+
+    }
+
+    private void firebaseAuthWithGoogle(final String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
