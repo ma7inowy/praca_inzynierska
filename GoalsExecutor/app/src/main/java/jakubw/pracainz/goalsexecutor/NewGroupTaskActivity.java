@@ -33,6 +33,7 @@ public class NewGroupTaskActivity extends AppCompatActivity implements FindColab
     Integer idNumber;
     String priority = "3";
     int estimatedTime = 0;
+    ArrayList<String> colaborantList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +103,11 @@ public class NewGroupTaskActivity extends AppCompatActivity implements FindColab
 
     private void openFindColaborantsDialog() {
         FindColaborantsDialog findColaborantsDialog = new FindColaborantsDialog();
+        if(!colaborantList.isEmpty()){
+            Bundle bundle = new Bundle();
+            bundle.putStringArrayList("collaborants",colaborantList);
+            findColaborantsDialog.setArguments(bundle);
+        }
         findColaborantsDialog.show(getSupportFragmentManager(), "Find Colaborants");
     }
 
@@ -191,7 +197,14 @@ public class NewGroupTaskActivity extends AppCompatActivity implements FindColab
 
     @Override
     public void applyData(ArrayList<User> collaborants) {
+        colaborantList.clear();
         String textt = "Colaborants ("+ collaborants.size() + ")";
         addGroupTaskColaborants.setText(textt);
+
+        for(User user : collaborants){
+            colaborantList.add(user.getName());
+        }
+        //przepisuje obiekty z Array<User> do Array<String>, zeby mozna bylo
+        //pozniej z activity przekazac do dialogu (bo nie powinno sie wlasnych obiektow tym przekazywac)
     }
 }

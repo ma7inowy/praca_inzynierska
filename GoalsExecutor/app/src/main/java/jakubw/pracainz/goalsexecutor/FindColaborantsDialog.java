@@ -72,13 +72,13 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
 
             }
         });
-
         addColaborantText = view.findViewById(R.id.addColaborantText);
         addColaborantBtn = view.findViewById(R.id.addColaborantBtn);
         recyclerAllUsers = view.findViewById(R.id.recyclerAllUsers);
         recyclerAddedUsers = view.findViewById(R.id.recyclerAddedUsers);
         recyclerAllUsers.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerAddedUsers.setLayoutManager(new LinearLayoutManager(getActivity()));
+        readDataFromNewGroupTaskActivity(); // to moze kiedys wywalic nullpointer bo korzysta z recycler ktory jest wyzej i cos sie moze stac pierwsze
         addColaborantBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,6 +88,24 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
         });
 
         return builder.create();
+    }
+
+    private void readDataFromNewGroupTaskActivity() {
+        ArrayList<String> userArrayList1 = new ArrayList<>();
+        Bundle bundle = getArguments();
+        if (bundle != null && bundle.containsKey("collaborants")) {
+            userArrayList1 = bundle.getStringArrayList("collaborants");
+
+            for (String string : userArrayList1) {
+                User user = new User();
+                user.setName(string);
+                addedUserList.add(user);
+            }
+
+            setAddedUserAdapter(addedUserList);
+        }
+
+
     }
 
     private void firebaseUserSearch(String name) {
@@ -128,13 +146,26 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
 
     @Override
     public void onItemClick(int position, boolean allUsers) {
+        boolean theSame = false;
 
         if (allUsers) {
             Toast.makeText(getActivity(), "siemaALL", Toast.LENGTH_SHORT).show();
-            if (!addedUserList.contains(userList.get(position))) {
+            for (User user : addedUserList) {
+                if (user.getName().equals(userList.get(position).getName())) {
+                    theSame = true;
+                    break;
+                }
+            }
+            if(!theSame) {
                 addedUserList.add(userList.get(position));
                 setAddedUserAdapter(addedUserList);
             }
+
+
+//            if (!addedUserList.contains(userList.get(position))) {
+//                addedUserList.add(userList.get(position));
+//                setAddedUserAdapter(addedUserList);
+//            }
 
         } else {
             Toast.makeText(getActivity(), "siemaKoledzy", Toast.LENGTH_SHORT).show();
@@ -156,7 +187,7 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
     }
 
     //https://www.youtube.com/watch?v=ARezg1D9Zd0&ab_channel=CodinginFlow
-    public interface FindColaborantsDialogListener{
+    public interface FindColaborantsDialogListener {
         void applyData(ArrayList<User> collaborants);
     }
 }

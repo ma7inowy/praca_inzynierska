@@ -6,12 +6,12 @@ public class GroupTask {
     String title, description, id;
     String priority;
     int estimatedTime;
-    ArrayList<User> collaborants;
+    ArrayList<String> collaborants;
 
     public GroupTask() {
     }
 
-    public GroupTask(String title, String description, String id, String priority, int estimatedTime, ArrayList<User> collaborants) {
+    public GroupTask(String title, String description, String id, String priority, int estimatedTime, ArrayList<String> collaborants) {
         this.title = title;
         this.description = description;
         this.id = id;
@@ -60,11 +60,11 @@ public class GroupTask {
         this.estimatedTime = estimatedTime;
     }
 
-    public ArrayList<User> getCollaborants() {
+    public ArrayList<String> getCollaborants() {
         return collaborants;
     }
 
-    public void setCollaborants(ArrayList<User> collaborants) {
+    public void setCollaborants(ArrayList<String> collaborants) {
         this.collaborants = collaborants;
     }
 }
