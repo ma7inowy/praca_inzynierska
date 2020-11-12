@@ -3,7 +3,6 @@ package jakubw.pracainz.goalsexecutor;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -27,7 +26,6 @@ import com.google.firebase.database.ValueEventListener;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 
@@ -37,9 +35,12 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
     private Button addColaborantBtn;
     DatabaseReference reference;
     Integer idNumber;
-    RecyclerView recyclerAddColaborants;
+    RecyclerView recyclerAllUsers;
+    RecyclerView recyclerAddedUsers;
     ArrayList<User> userList = new ArrayList<>();
-    UserAdapter userAdapter;
+    ArrayList<User> addedUserList = new ArrayList<>();
+    UserAdapter allUserAdapter;
+    UserAdapter addedUserAdapter;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -70,8 +71,10 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
 
         addColaborantText = view.findViewById(R.id.addColaborantText);
         addColaborantBtn = view.findViewById(R.id.addColaborantBtn);
-        recyclerAddColaborants = view.findViewById(R.id.recyclerAddColaborants);
-        recyclerAddColaborants.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerAllUsers = view.findViewById(R.id.recyclerAllUsers);
+        recyclerAddedUsers = view.findViewById(R.id.recyclerAddedUsers);
+        recyclerAllUsers.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerAddedUsers.setLayoutManager(new LinearLayoutManager(getActivity()));
         addColaborantBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,8 +100,7 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
                     User p = dataSnapshot1.getValue(User.class);
                     userList.add(p);
                 }
-                setAdapter(userList);
-
+                setAllUserAdapter(userList);
             }
 
             @Override
@@ -108,16 +110,34 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
         });
     }
 
-    private void setAdapter(ArrayList<User> userList) {
-        userAdapter = new UserAdapter(getActivity(), userList,this);
-        recyclerAddColaborants.setAdapter(userAdapter);
-        userAdapter.notifyDataSetChanged();
+    private void setAddedUserAdapter(ArrayList<User> userList) {
+        addedUserAdapter = new UserAdapter(getActivity(), userList, this, false);
+        recyclerAddedUsers.setAdapter(addedUserAdapter);
+        addedUserAdapter.notifyDataSetChanged();
+    }
+
+    private void setAllUserAdapter(ArrayList<User> userList) {
+        allUserAdapter = new UserAdapter(getActivity(), userList, this, true);
+        recyclerAllUsers.setAdapter(allUserAdapter);
+        allUserAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void onItemClick(int position) {
-        Toast.makeText(getActivity(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+    public void onItemClick(int position, boolean allUsers) {
+
+        if (allUsers) {
+            Toast.makeText(getActivity(), "siemaALL", Toast.LENGTH_SHORT).show();
+            if (!addedUserList.contains(userList.get(position))) {
+                addedUserList.add(userList.get(position));
+                setAddedUserAdapter(addedUserList);
+            }
+
+        } else {
+            Toast.makeText(getActivity(), "siemaKoledzy", Toast.LENGTH_SHORT).show();
+            addedUserList.remove(position);
+            setAddedUserAdapter(addedUserList);
+        }
+
+
     }
-
-
 }

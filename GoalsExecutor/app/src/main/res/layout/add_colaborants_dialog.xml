@@ -27,13 +27,32 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerAddColaborants"
+        android:id="@+id/recyclerAllUsers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="16dp">
 
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/added_colaborants_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Current colaborants"
+        android:textAlignment="center"
+        android:textColor="#9A9A9A"
+        android:textSize="22sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerAddedUsers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="16dp">
     </androidx.recyclerview.widget.RecyclerView>
 
 

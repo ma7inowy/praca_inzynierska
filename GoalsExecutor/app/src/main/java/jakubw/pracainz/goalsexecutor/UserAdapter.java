@@ -15,11 +15,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
     private Context context;
     private ArrayList<User> userList;
     private OnItemListener onItemListener;
+    boolean allUsers;
 
-    public UserAdapter(Context context, ArrayList<User> userList, OnItemListener onItemListener) {
+    public UserAdapter(Context context, ArrayList<User> userList, OnItemListener onItemListener, boolean allUsers) {
         this.context = context;
         this.userList = userList;
         this.onItemListener = onItemListener;
+        this.allUsers = allUsers;
     }
 
     @NonNull
@@ -52,11 +54,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
 
         @Override
         public void onClick(View v) {
-            onItemListener.onItemClick(getAdapterPosition());
+            onItemListener.onItemClick(getAdapterPosition(), allUsers);
         }
     }
 
     public interface OnItemListener {
-        void onItemClick(int position);
+        void onItemClick(int position, boolean allUsers);
     }
 }
