@@ -1,6 +1,7 @@
 package jakubw.pracainz.goalsexecutor;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -41,6 +42,7 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
     ArrayList<User> addedUserList = new ArrayList<>();
     UserAdapter allUserAdapter;
     UserAdapter addedUserAdapter;
+    private FindColaborantsDialogListener findColaborantsListener;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -57,6 +59,8 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
         }).setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
+                findColaborantsListener.applyData(addedUserList);
 
                 //wyslij dane do bazy
 //                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users");
@@ -139,5 +143,20 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
         }
 
 
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            findColaborantsListener = (FindColaborantsDialogListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + "must implement FindColaborantsDialogListener");
+        }
+    }
+
+    //https://www.youtube.com/watch?v=ARezg1D9Zd0&ab_channel=CodinginFlow
+    public interface FindColaborantsDialogListener{
+        void applyData(ArrayList<User> collaborants);
     }
 }

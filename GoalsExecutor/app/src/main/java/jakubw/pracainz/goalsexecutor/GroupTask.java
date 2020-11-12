@@ -1,19 +1,23 @@
 package jakubw.pracainz.goalsexecutor;
 
+import java.util.ArrayList;
+
 public class GroupTask {
     String title, description, id;
     String priority;
     int estimatedTime;
+    ArrayList<User> collaborants;
 
     public GroupTask() {
     }
 
-    public GroupTask(String title, String description, String id, String priority, int estimatedTime) {
+    public GroupTask(String title, String description, String id, String priority, int estimatedTime, ArrayList<User> collaborants) {
         this.title = title;
         this.description = description;
         this.id = id;
         this.priority = priority;
         this.estimatedTime = estimatedTime;
+        this.collaborants = collaborants;
     }
 
     public String getTitle() {
@@ -54,5 +58,13 @@ public class GroupTask {
 
     public void setEstimatedTime(int estimatedTime) {
         this.estimatedTime = estimatedTime;
+    }
+
+    public ArrayList<User> getCollaborants() {
+        return collaborants;
+    }
+
+    public void setCollaborants(ArrayList<User> collaborants) {
+        this.collaborants = collaborants;
     }
 }

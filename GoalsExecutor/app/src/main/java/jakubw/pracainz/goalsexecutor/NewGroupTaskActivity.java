@@ -19,10 +19,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class NewGroupTaskActivity extends AppCompatActivity {
+public class NewGroupTaskActivity extends AppCompatActivity implements FindColaborantsDialog.FindColaborantsDialogListener {
 
     EditText addTitle;
     EditText addDescription;
@@ -186,5 +187,11 @@ public class NewGroupTaskActivity extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    @Override
+    public void applyData(ArrayList<User> collaborants) {
+        String textt = "Colaborants ("+ collaborants.size() + ")";
+        addGroupTaskColaborants.setText(textt);
     }
 }
