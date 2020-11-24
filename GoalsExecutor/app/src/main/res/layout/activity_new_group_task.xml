@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/new_task_background"
     android:orientation="vertical"
+
     tools:context=".NewGroupTaskActivity">
 
     <LinearLayout
@@ -42,8 +44,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="#808090"
+            android:background="@color/new_task_background"
             android:orientation="vertical"
             android:paddingLeft="11dp"
             android:paddingTop="11dp"
@@ -55,8 +56,8 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:text="Add title"
-                android:textColor="#FFFFFF"
+                android:text="Title"
+                android:textColor="#000000"
                 android:textSize="20dp">
 
             </TextView>
@@ -65,16 +66,24 @@
                 android:id="@+id/addGroupTaskTitle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#FFFFFF"
-                android:hint="Podaj zadanie" />
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:width="310sp"
+                android:height="50sp"
+                android:background="@drawable/edit_text_background_shape"
+                android:ems="10"
+                android:hint="Type group task name..."
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+
+                android:textColorHint="@color/new_task_text" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_marginTop="20dp"
-            android:background="#808090"
+
+            android:background="@color/new_task_background"
             android:orientation="vertical"
             android:paddingLeft="11dp"
             android:paddingTop="11dp"
@@ -86,8 +95,8 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:text="Add description"
-                android:textColor="#FFFFFF"
+                android:text="Description"
+                android:textColor="#000000"
                 android:textSize="20dp">
 
             </TextView>
@@ -95,42 +104,59 @@
             <EditText
                 android:id="@+id/addGroupTaskDescription"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="#FFFFFF"
-                android:hint="Opis"
-                android:maxLength="200" />
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:width="310sp"
+                android:height="50sp"
+                android:background="@drawable/edit_text_background_shape"
+                android:ems="10"
+                android:hint="Type group task description..."
+                android:maxLength="200"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+
+                android:textColorHint="@color/new_task_text" />
         </LinearLayout>
 
         <Button
             android:id="@+id/addGroupTaskPriorityBtn"
-            android:layout_width="match_parent"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:background="#00FF00"
+            android:background="@drawable/priority_button_shape"
             android:text="Priority: LOW" />
 
         <Button
             android:id="@+id/addGroupTaskEstimationTimeBtn"
-            android:layout_width="match_parent"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:background="#FFC800"
+            android:background="@drawable/estimated_time_button_shape"
+
             android:text="Estimated time: 0min" />
 
         <Button
             android:id="@+id/addGroupTaskColaborants"
-            android:layout_width="match_parent"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
             android:layout_marginTop="10dp"
-            android:background="#72746F"
-            android:text="Colaborants (5)" />
+            android:background="@drawable/set_data_time_button_shape"
+            android:text="Collaborants (0)" />
 
         <Button
             android:id="@+id/addGroupTaskBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="30dp"
             android:layout_marginTop="10dp"
-            android:text="Confirm" />
+            android:background="@drawable/confirm_button_shape"
+
+            android:text="Create" />
     </LinearLayout>
 
 

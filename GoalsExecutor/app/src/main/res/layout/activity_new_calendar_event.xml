@@ -4,122 +4,148 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewCalendarEventActivity"
-    android:orientation="vertical">
+    android:background="@color/new_task_background"
+    android:orientation="vertical"
+
+    tools:context=".NewCalendarEventActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark">
-
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/calendartitlepage"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Add new event"
-                android:textAlignment="center"
-                android:textColor="#FFF"
-                android:textSize="32sp"
-                android:layout_margin="10dp"/>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/calendartitlepage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_marginTop="20dp"
+                    android:text="New event"
+                    android:textAlignment="center"
+                    android:textColor="#FFF"
+                    android:textSize="32sp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#808090"
-        android:layout_margin="10dp"
-        android:paddingLeft="11dp"
-        android:paddingRight="11dp"
-        android:paddingBottom="11dp"
-        android:paddingTop="11dp">
-
-        <TextView
-            android:text="Add title"
-            android:textColor="#FFFFFF"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:textSize="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-        </TextView>
-
-        <EditText
-            android:id="@+id/addEventTitle"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#FFFFFF"
-            android:hint="Tytul eventu"
-            android:maxLength="20" />
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:background="@color/new_task_background"
+            android:orientation="vertical"
+            android:paddingLeft="11dp"
+            android:paddingTop="11dp"
+            android:paddingRight="11dp"
+            android:paddingBottom="11dp">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:background="#808090"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:paddingLeft="11dp"
-        android:paddingRight="11dp"
-        android:paddingBottom="11dp"
-        android:paddingTop="11dp"
-        android:layout_marginTop="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:text="Event title"
+                android:textColor="#000000"
+                android:textSize="20dp">
 
-        <TextView
-            android:text="Add description"
-            android:textSize="20dp"
-            android:layout_gravity="center"
-            android:textColor="#FFFFFF"
-            android:layout_margin="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            </TextView>
 
-        </TextView>
+            <EditText
+                android:id="@+id/addEventTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:width="310sp"
+                android:height="50sp"
+                android:background="@drawable/edit_text_background_shape"
+                android:ems="10"
+                android:hint="Type event name..."
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
 
-        <EditText
-            android:id="@+id/addEventDescription"
+                android:textColorHint="@color/new_task_text" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#FFFFFF"
-            android:hint="Opis"
-            android:maxLength="200" />
-    </LinearLayout>
+            android:layout_height="wrap_content"
 
-    <Button
-        android:id="@+id/setDateBtn"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Set date" />
-    <Button
-        android:id="@+id/setTimeBtn"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Set time" />
+            android:background="@color/new_task_background"
+            android:orientation="vertical"
+            android:paddingLeft="11dp"
+            android:paddingTop="11dp"
+            android:paddingRight="11dp"
+            android:paddingBottom="11dp">
 
-    <Button
-        android:id="@+id/addNewEventBtn"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Create" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:text="Event description"
+                android:textColor="#000000"
+                android:textSize="20dp">
+
+            </TextView>
+
+            <EditText
+                android:id="@+id/addEventDescription"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:width="310sp"
+                android:height="50sp"
+                android:background="@drawable/edit_text_background_shape"
+                android:ems="10"
+                android:hint="Type event description..."
+                android:maxLength="200"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+
+                android:textColorHint="@color/new_task_text" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/setDateBtn"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/set_data_time_button_shape"
+            android:text="Set date" />
+
+        <Button
+            android:id="@+id/setTimeBtn"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/set_data_time_button_shape"
+            android:text="Set time" />
+
+        <Button
+            android:id="@+id/addNewEventBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/confirm_button_shape"
+
+            android:text="Create" />
 
     </LinearLayout>
 

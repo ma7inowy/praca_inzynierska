@@ -3,14 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:layout_marginBottom="20dp"
-    android:background="@drawable/next_action_item_shape"
+    android:background="@drawable/group_task_item_shape"
     android:orientation="horizontal">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_toLeftOf="@+id/groupTaskItemPriorityBackground">
 
         <TextView
             android:id="@+id/groupTaskItemTitle"
@@ -19,6 +20,7 @@
             android:layout_marginTop="19dp"
             android:text="Buy whiskas"
             android:textColor="#000C5D"
+            android:singleLine="true"
             android:textSize="22sp" />
 
         <LinearLayout

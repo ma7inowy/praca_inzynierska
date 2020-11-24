@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/new_task_background"
     android:orientation="vertical"
     tools:context=".NewNextActionActivity">
 
@@ -42,47 +43,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="#FFFFFF"
-            android:orientation="vertical"
-            android:paddingLeft="11dp"
-            android:paddingTop="11dp"
-            android:paddingRight="11dp"
-            android:paddingBottom="11dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="left"
-                android:layout_margin="10dp"
-                android:text="Add title"
-                android:textColor="#000000"
-                android:textSize="20dp">
-
-            </TextView>
-
-            <EditText
-                android:id="@+id/addTitle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:height="50sp"
-                android:width="310sp"
-                android:ems="10"
-                android:background="@drawable/next_action_item_shape"
-                android:hint="Podaj zadanie"
-                android:padding="15dp"
-                android:textColorHint="#584D4D"
-                app:layout_constraintStart_toStartOf="parent"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_marginTop="20dp"
-            android:background="#808090"
+            android:background="@color/new_task_background"
             android:orientation="vertical"
             android:paddingLeft="11dp"
             android:paddingTop="11dp"
@@ -94,8 +55,47 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:text="Add description"
-                android:textColor="#FFFFFF"
+                android:text="Title"
+                android:textColor="#000000"
+                android:textSize="20dp">
+
+            </TextView>
+
+            <EditText
+                android:id="@+id/addTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:width="310sp"
+                android:height="50sp"
+                android:background="@drawable/edit_text_background_shape"
+                android:ems="10"
+                android:hint="Type task name..."
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+
+                android:textColorHint="@color/new_task_text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:background="@color/new_task_background"
+            android:orientation="vertical"
+            android:paddingLeft="11dp"
+            android:paddingTop="11dp"
+            android:paddingRight="11dp"
+            android:paddingBottom="11dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:text="Description"
+                android:textColor="#000000"
                 android:textSize="20dp">
 
             </TextView>
@@ -103,18 +103,25 @@
             <EditText
                 android:id="@+id/addDescription"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="#FFFFFF"
-                android:hint="Opis"
-                android:maxLength="200" />
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:width="310sp"
+                android:height="50sp"
+                android:background="@drawable/edit_text_background_shape"
+                android:ems="10"
+                android:hint="Type task description..."
+                android:maxLength="200"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+
+                android:textColorHint="@color/new_task_text" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_marginTop="20dp"
-            android:background="#808090"
+            android:background="@color/new_task_background"
             android:orientation="vertical"
             android:paddingLeft="11dp"
             android:paddingTop="11dp"
@@ -127,10 +134,8 @@
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:text="Label"
-                android:textColor="#FFFFFF"
-                android:textSize="20dp">
-
-            </TextView>
+                android:textColor="#000000"
+                android:textSize="20dp"></TextView>
 
             <Spinner
                 android:id="@+id/labelSpinner"
@@ -141,26 +146,34 @@
 
         <Button
             android:id="@+id/addPriorityBtn"
-            android:layout_width="match_parent"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:background="#00FF00"
+            android:background="@drawable/priority_button_shape"
             android:text="Priority: LOW" />
 
         <Button
             android:id="@+id/addEstimationTimeBtn"
-            android:layout_width="match_parent"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:background="#FFC800"
+            android:background="@drawable/estimated_time_button_shape"
+
             android:text="Estimated time: 0min" />
 
         <Button
+
             android:id="@+id/addNextActionBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="30dp"
+
             android:layout_marginTop="10dp"
-            android:text="Confirm" />
+            android:background="@drawable/confirm_button_shape"
+            android:text="Create" />
     </LinearLayout>
 
 
