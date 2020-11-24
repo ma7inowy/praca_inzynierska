@@ -43,10 +43,11 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
     UserAdapter allUserAdapter;
     UserAdapter addedUserAdapter;
     private FindColaborantsDialogListener findColaborantsListener;
+    GoogleSignInAccount signInAccount;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getContext());
+        signInAccount = GoogleSignIn.getLastSignedInAccount(getContext());
         idNumber = new Random().nextInt();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -98,7 +99,7 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
 
             for (String string : userArrayList1) {
                 User user = new User();
-                user.setName(string);
+                user.setEmail(string);
                 addedUserList.add(user);
             }
 
@@ -110,17 +111,18 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
 
     private void firebaseUserSearch(String name) {
 //        https://www.youtube.com/watch?v=b_tz8kbFUsU&list=LL&index=2&ab_channel=TVACStudio
-        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users1");
+        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users");
 
 //        Query ref = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users1").orderByChild("name").startAt(name).endAt(name + "\uf8ff");
-        Query query = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users1").orderByChild("name").startAt(name).endAt(name + "\uf8ff");
+        Query query = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users").orderByChild("email").startAt(name).endAt(name + "\uf8ff");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 userList.clear();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     User p = dataSnapshot1.getValue(User.class);
-                    userList.add(p);
+                    if (!p.getEmail().equals(signInAccount.getEmail()))
+                        userList.add(p);
                 }
                 setAllUserAdapter(userList);
             }
@@ -151,12 +153,12 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
         if (allUsers) {
             Toast.makeText(getActivity(), "siemaALL", Toast.LENGTH_SHORT).show();
             for (User user : addedUserList) {
-                if (user.getName().equals(userList.get(position).getName())) {
+                if (user.getEmail().equals(userList.get(position).getEmail())) {
                     theSame = true;
                     break;
                 }
             }
-            if(!theSame) {
+            if (!theSame) {
                 addedUserList.add(userList.get(position));
                 setAddedUserAdapter(addedUserList);
             }

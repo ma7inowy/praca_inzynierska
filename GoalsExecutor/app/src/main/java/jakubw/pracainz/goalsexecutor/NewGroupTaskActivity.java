@@ -1,11 +1,13 @@
 package jakubw.pracainz.goalsexecutor;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -16,8 +18,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,7 +38,9 @@ public class NewGroupTaskActivity extends AppCompatActivity implements FindColab
     Integer idNumber;
     String priority = "3";
     int estimatedTime = 0;
-    ArrayList<String> colaborantList = new ArrayList<>();
+    ArrayList<String> colaborantEmailList = new ArrayList<>();
+    ArrayList<User> colaborantList = new ArrayList<>();
+    GoogleSignInAccount signInAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +54,7 @@ public class NewGroupTaskActivity extends AppCompatActivity implements FindColab
         addEstimationTimeBtn = findViewById(R.id.addGroupTaskEstimationTimeBtn);
         addGroupTaskColaborants = findViewById(R.id.addGroupTaskColaborants);
         idNumber = new Random().nextInt();
+        signInAccount = GoogleSignIn.getLastSignedInAccount(this);
 
         // do tworzenia zadania z BoxActivity
         Intent intent = getIntent();
@@ -54,11 +62,11 @@ public class NewGroupTaskActivity extends AppCompatActivity implements FindColab
             addTitle.setText(intent.getStringExtra("title"));
         }
 
-        final GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
 
         addGroupTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                colaborantEmailList.add(signInAccount.getEmail()); // nwm czy tu czy gdzies indziej lepiej
                 reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("GroupTasks").child("Does" + idNumber);
                 HashMap map = new HashMap();
                 map.put("title", addTitle.getText().toString());
@@ -66,15 +74,13 @@ public class NewGroupTaskActivity extends AppCompatActivity implements FindColab
                 map.put("id", idNumber.toString());
                 map.put("estimatedTime", estimatedTime);
                 map.put("priority", priority);
+                map.put("collaborants", colaborantEmailList);
                 reference.updateChildren(map);
 
-                reference2 = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users").child(signInAccount.getId().toString()).child("GroupTasksId");
-//                HashMap map2 = new HashMap();
-//                map2.put("id", idNumber.toString());
-                reference2.push().setValue(idNumber.toString());
+                sendGroupTaskIdsToCollaborants();
+
 
                 sendResultToBoxActivity();
-                Toast.makeText(NewGroupTaskActivity.this, addTitle.getText().toString() + " " + addDescription.getText().toString(), Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -101,11 +107,53 @@ public class NewGroupTaskActivity extends AppCompatActivity implements FindColab
 
     }
 
+    private void sendGroupTaskIdsToCollaborants() {
+//        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("UsersAdditionalInfo").child(signInAccount.getId()).child("GroupTasksId");
+//        //MUSIALEM GETEMAIL BO NIE MOGE TEGO ID WZIAC BO NIE WIEM JAKIE ID MAJA UZYTKOWNICY Z LISTY (a MAM TYLKO EMAILE)
+//
+//        reference.push().setValue(idNumber.toString());
+
+
+
+
+        // pobieranie odpowiednich uzytkownikow ktorych dodano w findcolaborants
+        reference2 = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users");
+        reference2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                colaborantList.clear();
+                for (String userEmail : colaborantEmailList) {
+                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                        User p = dataSnapshot1.getValue(User.class);
+                        if (p.getEmail().equals(userEmail))
+                            colaborantList.add(p);
+                    }
+                }
+
+                if(!colaborantList.isEmpty()){
+                    //to wrzuc do additionalifno
+                    for(User user: colaborantList) {
+                        reference2 = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("UsersAdditionalInfo").child(user.getId()).child("GroupTasksId");
+                        reference2.push().setValue(idNumber.toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
     private void openFindColaborantsDialog() {
         FindColaborantsDialog findColaborantsDialog = new FindColaborantsDialog();
-        if(!colaborantList.isEmpty()){
+        if (!colaborantEmailList.isEmpty()) {
             Bundle bundle = new Bundle();
-            bundle.putStringArrayList("collaborants",colaborantList);
+            bundle.putStringArrayList("collaborants", colaborantEmailList);
             findColaborantsDialog.setArguments(bundle);
         }
         findColaborantsDialog.show(getSupportFragmentManager(), "Find Colaborants");
@@ -197,12 +245,13 @@ public class NewGroupTaskActivity extends AppCompatActivity implements FindColab
 
     @Override
     public void applyData(ArrayList<User> collaborants) {
-        colaborantList.clear();
-        String textt = "Colaborants ("+ collaborants.size() + ")";
+        colaborantEmailList.clear();
+//        colaborantList.add(signInAccount.getEmail()); TO DODAJ JUZ W MOMENCIE DODAWANIA ZADANIA
+        String textt = "Colaborants (" + collaborants.size() + ")";
         addGroupTaskColaborants.setText(textt);
 
-        for(User user : collaborants){
-            colaborantList.add(user.getName());
+        for (User user : collaborants) {
+            colaborantEmailList.add(user.getEmail());
         }
         //przepisuje obiekty z Array<User> do Array<String>, zeby mozna bylo
         //pozniej z activity przekazac do dialogu (bo nie powinno sie wlasnych obiektow tym przekazywac)

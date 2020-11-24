@@ -104,24 +104,25 @@ public class SignInActivity extends AppCompatActivity {
 
     private void addUserToFirebaseDatabase(GoogleSignInAccount account) {
         //wyslij dane do bazy
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users1").child(account.getId());
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users").child(account.getId());
         HashMap map = new HashMap();
-        map.put("name", account.getEmail());
+        map.put("email", account.getEmail());
+        map.put("id", account.getId());
 //                map.put("color", labelColor);
 //                map.put("id", idNumber.toString());
         reference.updateChildren(map);
     }
 
     private boolean checkIfUserExistsInFirebaseDatabase(final GoogleSignInAccount account) {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users1");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     User p = dataSnapshot1.getValue(User.class);
-                    Log.i("checkIfInFirebase", p.getName());
-                    if (p.getName().equals(account.getEmail())) {
+                    Log.i("checkIfInFirebase", p.getEmail());
+                    if (p.getEmail().equals(account.getEmail())) {
                         duplicate = true;
                         break;
                     }

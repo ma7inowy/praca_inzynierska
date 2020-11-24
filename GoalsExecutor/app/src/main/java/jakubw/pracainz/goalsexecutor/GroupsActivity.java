@@ -63,7 +63,8 @@ public class GroupsActivity extends AppCompatActivity implements GroupTasksAdapt
                     groupTaskList.add(p);
 //                    Log.e("groupTask", p.getTitle());
                 }
-                reference2 = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users").child(signInAccount.getId().toString()).child("GroupTasksId");
+//                reference2 = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("UsersAdditionalInfo").child(signInAccount.getId().toString()).child("GroupTasksId");
+                reference2 = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("UsersAdditionalInfo").child(signInAccount.getId().toString()).child("GroupTasksId");
                 reference2.addValueEventListener(new ValueEventListener() {
                     ArrayList<GroupTask> userGroupTaskList = new ArrayList<>(); //zadania grupowe konkretnego uzytkownika
 

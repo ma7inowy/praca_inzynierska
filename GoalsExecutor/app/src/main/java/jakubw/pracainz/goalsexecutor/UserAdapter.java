@@ -33,7 +33,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.userName.setText(userList.get(position).getName());
+        holder.userEmail.setText(userList.get(position).getEmail());
     }
 
     @Override
@@ -42,12 +42,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView userName;
+        TextView userEmail;
         OnItemListener onItemListener;
 
         public MyViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
             super(itemView);
-            this.userName = itemView.findViewById(R.id.boxTaskTitle);
+            this.userEmail = itemView.findViewById(R.id.boxTaskTitle);
             this.onItemListener = onItemListener;
             itemView.setOnClickListener(this);
         }

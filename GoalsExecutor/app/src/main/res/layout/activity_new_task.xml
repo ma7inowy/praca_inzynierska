@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="#808090"
+            android:background="#FFFFFF"
             android:orientation="vertical"
             android:paddingLeft="11dp"
             android:paddingTop="11dp"
@@ -53,10 +53,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
+                android:layout_gravity="left"
                 android:layout_margin="10dp"
                 android:text="Add title"
-                android:textColor="#FFFFFF"
+                android:textColor="#000000"
                 android:textSize="20dp">
 
             </TextView>
@@ -65,8 +65,16 @@
                 android:id="@+id/addTitle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#FFFFFF"
-                android:hint="Podaj zadanie" />
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:height="50sp"
+                android:width="310sp"
+                android:ems="10"
+                android:background="@drawable/next_action_item_shape"
+                android:hint="Podaj zadanie"
+                android:padding="15dp"
+                android:textColorHint="#584D4D"
+                app:layout_constraintStart_toStartOf="parent"/>
         </LinearLayout>
 
         <LinearLayout

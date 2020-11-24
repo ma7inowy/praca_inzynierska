@@ -19,7 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp">
 
             <RadioButton
                 android:id="@+id/radioLowPrioBtn"
@@ -46,7 +47,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginBottom="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -55,9 +57,11 @@
 
         <Spinner
             android:id="@+id/filterLabelSpinner"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-             />
+            android:textAlignment="center"
+
+            />
 
     </LinearLayout>
 
@@ -74,8 +78,9 @@
 
         <Spinner
             android:id="@+id/filterEstimatedTimeSpinner"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
             />
 
     </LinearLayout>
