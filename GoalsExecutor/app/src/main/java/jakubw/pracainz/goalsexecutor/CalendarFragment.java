@@ -47,7 +47,7 @@ import static androidx.recyclerview.widget.ItemTouchHelper.LEFT;
 
 public class CalendarFragment extends Fragment implements CalendarAdapter.OnItemListener {
 
-    Button sortEventsBtn;
+//    Button sortEventsBtn;
     DatabaseReference reference;
     RecyclerView recyclerCalendarEvent;
     ArrayList<CalendarEvent> calendarEventList;
@@ -66,7 +66,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
     @Override
     public void onStart() {
         super.onStart();
-        sortEventsBtn = getView().findViewById(R.id.btnsortEvents);
+//        sortEventsBtn = getView().findViewById(R.id.btnsortEvents);
         recyclerCalendarEvent = getView().findViewById(R.id.recyclerCalendarEvent);
         recyclerCalendarEvent.setLayoutManager(new LinearLayoutManager(getActivity()));
         calendarEventList = new ArrayList<>();
@@ -102,12 +102,12 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
             }
         });
 
-        sortEventsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleEventsFromPhoneCalendars();
-            }
-        });
+//        sortEventsBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                handleEventsFromPhoneCalendars();
+//            }
+//        });
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(recyclerCalendarEvent);

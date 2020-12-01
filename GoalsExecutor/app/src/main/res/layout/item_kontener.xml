@@ -33,7 +33,7 @@
             android:layout_marginTop="8dp"
             android:fontFamily="serif-monospace"
             android:text="label"
-            android:textColor="#FFFFFF"
+            android:textColor="#050404"
             android:textSize="18sp" />
 
         <TextView

@@ -163,8 +163,8 @@ public class BoxActivity extends Fragment implements BoxTaskAdapter.OnItemListen
         boxTask = boxTaskList.get(position);
         // otworz okienko aby wybrać do jakiej aktywności przekierować
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        final CharSequence[] activityList = {"NextAction", "Calendar", "Someday"};
-        builder.setTitle("Co to za zadanie?").setItems(activityList, new DialogInterface.OnClickListener() {
+        final CharSequence[] activityList = {"NextAction", "Calendar", "Someday", "Group"};
+        builder.setTitle("What's the type of task?").setItems(activityList, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (activityList[which].toString().equals("NextAction")) {
@@ -183,6 +183,13 @@ public class BoxActivity extends Fragment implements BoxTaskAdapter.OnItemListen
 //                    startActivity(intent);
 //                    reference.child("Box" + boxTask.getId()).removeValue(); // czy na pewno tak robic
                     Toast.makeText(getActivity(), "Someday", Toast.LENGTH_SHORT).show();
+                }
+                if (activityList[which].toString().equals("Group")) {
+//                    Intent intent = new Intent(BoxActivity.this, NewCalendarEventActivity.class);
+//                    intent.putExtra("title", boxTask.getTitle());
+//                    startActivity(intent);
+//                    reference.child("Box" + boxTask.getId()).removeValue(); // czy na pewno tak robic
+                    Toast.makeText(getActivity(), "Group", Toast.LENGTH_SHORT).show();
                 }
             }
         });
