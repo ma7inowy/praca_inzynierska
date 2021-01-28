@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import jakubw.pracainz.goalsexecutor.Model.BoxTask;
+
 class BoxTaskAdapter extends RecyclerView.Adapter<BoxTaskAdapter.MyViewHolder> {
     private Context context;
     private ArrayList<BoxTask> boxTaskList;

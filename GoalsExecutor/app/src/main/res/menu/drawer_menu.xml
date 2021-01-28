@@ -4,11 +4,11 @@
     <group android:checkableBehavior="single">
         <item android:id="@+id/nav_kontener"
             android:icon="@drawable/ic_kontener"
-            android:title="Kontener/BOX"/>
+            android:title="BOX"/>
 
         <item android:id="@+id/nav_next_action"
             android:icon="@drawable/ic_next_action"
-            android:title="Next action"/>
+            android:title="Next Action"/>
 
         <item android:id="@+id/nav_calendar"
             android:icon="@drawable/ic_calendar"
@@ -19,13 +19,16 @@
         <item android:id="@+id/nav_groups"
             android:icon="@drawable/ic_groups"
             android:title="Groups"/>
+        <item android:id="@+id/nav_someday"
+            android:icon="@drawable/ic_someday"
+            android:title="Someday"/>
     </group>
 
     <item android:title="Communicate">
         <menu>
             <item android:id="@+id/nav_settings"
-                android:icon="@drawable/ic_settings"
-                android:title="Settings"/>
+                android:icon="@drawable/ic_help"
+                android:title="Help"/>
             <item android:id="@+id/nav_profile"
                 android:icon="@drawable/ic_profile"
                 android:title="Labels"/>

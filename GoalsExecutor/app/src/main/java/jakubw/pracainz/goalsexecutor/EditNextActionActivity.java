@@ -30,6 +30,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import jakubw.pracainz.goalsexecutor.Model.Label;
+
 public class EditNextActionActivity extends AppCompatActivity {
 
     EditText editTitle;
@@ -92,7 +94,7 @@ public class EditNextActionActivity extends AppCompatActivity {
             }
         });
 
-        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("NextAction").child(signInAccount.getId().toString()).child("Does" + id);
+        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("NextAction").child(signInAccount.getId().toString()).child("Na" + id);
         editNextActionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

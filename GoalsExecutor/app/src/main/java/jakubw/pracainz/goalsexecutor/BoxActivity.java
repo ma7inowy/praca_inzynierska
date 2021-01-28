@@ -13,7 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -35,6 +34,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
+import jakubw.pracainz.goalsexecutor.Model.BoxTask;
 
 import static android.app.Activity.RESULT_OK;
 import static androidx.recyclerview.widget.ItemTouchHelper.LEFT;
@@ -52,12 +52,13 @@ public class BoxActivity extends Fragment implements BoxTaskAdapter.OnItemListen
     BoxTask boxTask; // tylko zeby miec globalnie id konkretnego wcisnietego zadania zeby mozna bylo zrobic onActivityResult
     public static final int NEXT_ACTION_REQUEST = 11; //kody do otrzymania danych o dodaniu taskbox w jakies miejsce np do nextaction albo do calendar (o dostaniu sie do odpowiedniego activity)
     public static final int CALENDAR_REQUEST = 12; //
+    public static final int GROUP_REQUEST = 13; //
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.activity_box, container,false);
+        return inflater.inflate(R.layout.activity_box, container, false);
     }
 
     @Override
@@ -79,14 +80,14 @@ public class BoxActivity extends Fragment implements BoxTaskAdapter.OnItemListen
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     BoxTask p = dataSnapshot1.getValue(BoxTask.class);
                     boxTaskList.add(p);
-                    Log.e("box", p.getTitle());
+                    Log.e("Box", p.getTitle());
                 }
                 setAdapter(boxTaskList);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-//                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
+//               Toast.makeText(getContext(), "No Data", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -161,9 +162,9 @@ public class BoxActivity extends Fragment implements BoxTaskAdapter.OnItemListen
     @Override
     public void onItemClick(final int position) {
         boxTask = boxTaskList.get(position);
-        // otworz okienko aby wybrać do jakiej aktywności przekierować
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        final CharSequence[] activityList = {"NextAction", "Calendar", "Someday", "Group"};
+        final CharSequence[] activityList = {"NextAction", "Calendar", "Someday", "Group", "Project"};
         builder.setTitle("What's the type of task?").setItems(activityList, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -185,11 +186,16 @@ public class BoxActivity extends Fragment implements BoxTaskAdapter.OnItemListen
                     Toast.makeText(getActivity(), "Someday", Toast.LENGTH_SHORT).show();
                 }
                 if (activityList[which].toString().equals("Group")) {
-//                    Intent intent = new Intent(BoxActivity.this, NewCalendarEventActivity.class);
+//                    Intent intent = new Intent(getActivity(), NewGroupTaskActivity.class);
 //                    intent.putExtra("title", boxTask.getTitle());
-//                    startActivity(intent);
-//                    reference.child("Box" + boxTask.getId()).removeValue(); // czy na pewno tak robic
+//                    startActivityForResult(intent, BoxActivity.GROUP_REQUEST);
                     Toast.makeText(getActivity(), "Group", Toast.LENGTH_SHORT).show();
+                }
+                if (activityList[which].toString().equals("Project")) {
+//                    Intent intent = new Intent(getActivity(), NewGroupTaskActivity.class);
+//                    intent.putExtra("title", boxTask.getTitle());
+//                    startActivityForResult(intent, BoxActivity.GROUP_REQUEST);
+                    Toast.makeText(getActivity(), "Project", Toast.LENGTH_SHORT).show();
                 }
             }
         });

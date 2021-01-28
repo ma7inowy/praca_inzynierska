@@ -14,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,6 +41,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
+import jakubw.pracainz.goalsexecutor.Model.CalendarEvent;
 
 import static androidx.recyclerview.widget.ItemTouchHelper.LEFT;
 
@@ -114,10 +114,10 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
     }
 
     private void handleEventsFromPhoneCalendars() {
-        ArrayList<CalendarEvent> events = ReadCalendar.readCalendar(getActivity(), signInAccount.getEmail());
+        ArrayList<CalendarEvent> events = GoogleCalendarReader.readCalendar(getActivity(), signInAccount.getEmail());
         if (!events.isEmpty()) {
             for (CalendarEvent event : events) {
-                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId()).child("Does" + event.getId());
+                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId()).child("Ca" + event.getId());
                 HashMap map = new HashMap();
                 map.put("title", event.getTitle());
                 map.put("year", event.getYear());
@@ -183,7 +183,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
                     final CalendarEvent deletedTask = calendarEventList.get(postion);
 
                     String id = deletedTask.getId();
-                    reference.child("Does" + id).removeValue();
+                    reference.child("Ca" + id).removeValue();
                     calendarEventList.remove(postion);
                     setAdapter(calendarEventList);
                     deleteAlarm(id);
@@ -224,7 +224,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
 
     //moze tez dodawac nowy
     private void undoDeletingAlarm(CalendarEvent calendarEvent) {
-        Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
+        Intent intent = new Intent(getActivity(), EventReminderBroadcast.class);
         intent.putExtra("desc", calendarEvent.getTitle());
         int requestcode = Integer.valueOf(calendarEvent.getId());
         //https://stackoverflow.com/questions/18649728/android-cannot-pass-intent-extras-though-alarmmanager/28203623 flaga do update
@@ -236,7 +236,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
     }
 
     private void deleteAlarm(String id) {
-        Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
+        Intent intent = new Intent(getActivity(), EventReminderBroadcast.class);
         int requestcode = Integer.valueOf(id);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), requestcode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
@@ -262,7 +262,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
     }
 
     private void syncAndRefreshDataFromGoogleCalendar() {
-        ArrayList<CalendarEvent> events = ReadCalendar.readCalendar(getActivity(), signInAccount.getEmail());
+        ArrayList<CalendarEvent> events = GoogleCalendarReader.readCalendar(getActivity(), signInAccount.getEmail());
         Toast.makeText(getActivity(), String.valueOf(calendarEventList.size()), Toast.LENGTH_SHORT).show();
         if (events.isEmpty()) return;
         for (CalendarEvent event : events) { //ewenty z kalendarza
@@ -291,7 +291,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
         map.put("minute", event.getMinute());
         map.put("description", event.getDescription());
         map.put("id", event.getId());
-        reference.child("Does" + event.getId()).updateChildren(map);
+        reference.child("Ca" + event.getId()).updateChildren(map);
     }
 
 //    public static ArrayList<CalendarEvent> getAllEventsToSetAlarmsAfterREBOOT(){

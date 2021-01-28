@@ -1,151 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/new_task_background"
     android:orientation="vertical"
     tools:context=".EditNextActionActivity">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark">
+        android:orientation="vertical">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/titlepageedit"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Task info"
-                android:textAlignment="center"
-                android:textColor="#FFF"
-                android:textSize="32sp"
-                android:layout_margin="10dp"/>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/titlepage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_marginTop="20dp"
+                    android:text="Task info"
+                    android:textAlignment="center"
+                    android:textColor="#FFF"
+                    android:textSize="32sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/new_task_background"
+            android:orientation="vertical"
+            android:paddingLeft="11dp"
+            android:paddingTop="11dp"
+            android:paddingRight="11dp"
+            android:paddingBottom="11dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:text="Title"
+                android:textColor="#000000"
+                android:textSize="20dp"></TextView>
+
+            <EditText
+                android:id="@+id/editTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:width="310sp"
+                android:height="50sp"
+                android:background="@drawable/edit_text_background_shape"
+                android:ems="10"
+                android:hint="Type task name..."
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:textColorHint="@color/new_task_text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:background="@color/new_task_background"
+            android:orientation="vertical"
+            android:paddingLeft="11dp"
+            android:paddingTop="11dp"
+            android:paddingRight="11dp"
+            android:paddingBottom="11dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:text="Description"
+                android:textColor="#000000"
+                android:textSize="20dp">
+
+            </TextView>
+
+            <EditText
+                android:id="@+id/editDescription"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:width="310sp"
+                android:height="50sp"
+                android:background="@drawable/edit_text_background_shape"
+                android:ems="10"
+                android:hint="Type task description..."
+                android:maxLength="200"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+
+                android:textColorHint="@color/new_task_text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/new_task_background"
+            android:orientation="vertical"
+            android:paddingLeft="11dp"
+            android:paddingTop="11dp"
+            android:paddingRight="11dp"
+            android:paddingBottom="11dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:text="Label"
+                android:textColor="#000000"
+                android:textSize="20dp"></TextView>
+
+            <Spinner
+                android:id="@+id/labelsSpinnerEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#808090"
-        android:layout_margin="10dp"
-        android:paddingLeft="11dp"
-        android:paddingRight="11dp"
-        android:paddingBottom="11dp"
-        android:paddingTop="11dp">
-
-        <TextView
-            android:text="Title"
-            android:textColor="#FFFFFF"
+        <Button
+            android:id="@+id/editPriorityBtn"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:textSize="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_marginTop="10dp"
+            android:background="@drawable/priority_button_shape"
+            android:text="Priority: LOW" />
 
-        </TextView>
-
-        <EditText
-            android:id="@+id/editTitle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#FFFFFF"
-            android:hint="Podaj zadanie" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:background="#808090"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:paddingLeft="11dp"
-        android:paddingRight="11dp"
-        android:paddingBottom="11dp"
-        android:paddingTop="11dp"
-        android:layout_marginTop="20dp">
-
-        <TextView
-            android:text="Description"
-            android:textSize="20dp"
+        <Button
+            android:id="@+id/editEstimationTimeBtn"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="#FFFFFF"
-            android:layout_margin="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_marginTop="10dp"
+            android:background="@drawable/estimated_time_button_shape"
+            android:text="Estimated time: 0min" />
 
-        </TextView>
-
-        <EditText
-            android:id="@+id/editDescription"
+        <Button
+            android:id="@+id/editTaskBtn"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#FFFFFF"
-            android:hint="Opis"
-            android:maxLength="200" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:background="#808090"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:paddingLeft="11dp"
-        android:paddingRight="11dp"
-        android:paddingBottom="11dp"
-        android:paddingTop="11dp"
-        android:layout_marginTop="20dp">
-
-        <TextView
-            android:text="Label"
-            android:textSize="20dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="#FFFFFF"
-            android:layout_margin="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-        </TextView>
-        <Spinner
-            android:id="@+id/labelsSpinnerEdit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
+            android:layout_margin="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/confirm_button_shape"
+            android:text="Save" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/editPriorityBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="#00FF00"
-        android:text="Priority: Low" />
 
-    <Button
-        android:id="@+id/editEstimationTimeBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="#FFC800"
-        android:text="Estimated time: 0min" />
-
-
-    <Button
-        android:id="@+id/editTaskBtn"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Confirm changes" />
-
-</LinearLayout>
+</ScrollView>

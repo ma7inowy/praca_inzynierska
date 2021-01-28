@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import jakubw.pracainz.goalsexecutor.Model.Label;
+
 public class NewNextActionActivity extends AppCompatActivity {
 
     EditText addTitle;
@@ -94,7 +96,7 @@ public class NewNextActionActivity extends AppCompatActivity {
         addNextActionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("NextAction").child(signInAccount.getId()).child("Does" + idNumber);
+                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("NextAction").child(signInAccount.getId()).child("Na" + idNumber);
                 HashMap map = new HashMap();
                 map.put("title", addTitle.getText().toString());
                 map.put("description", addDescription.getText().toString());

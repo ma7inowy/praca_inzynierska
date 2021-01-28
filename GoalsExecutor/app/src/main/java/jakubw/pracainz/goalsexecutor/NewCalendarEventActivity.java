@@ -70,7 +70,7 @@ public class NewCalendarEventActivity extends AppCompatActivity {
         addNewEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId()).child("Does" + idNumber);
+                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId()).child("Ca" + idNumber);
                 HashMap map = new HashMap();
 
                 map.put("title", addEventTitle.getText().toString());
@@ -84,7 +84,7 @@ public class NewCalendarEventActivity extends AppCompatActivity {
                 reference.updateChildren(map);
                 makeNotification();
                 sendResultToBoxActivity();
-                Toast.makeText(NewCalendarEventActivity.this, "done!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(NewCalendarEventActivity.this, "Done!", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -182,20 +182,14 @@ public class NewCalendarEventActivity extends AppCompatActivity {
     }
 
     private void makeNotification() {
-        Intent intent = new Intent(NewCalendarEventActivity.this, ReminderBroadcast.class);
+        Intent intent = new Intent(NewCalendarEventActivity.this, EventReminderBroadcast.class);
         intent.putExtra("desc", addEventTitle.getText().toString());
         int requestcode = idNumber;
-
-        //z ta falg update po to zeby updatowac dane z powiadomieniu jak np zmienie tytul zadania
         PendingIntent pendingIntent = PendingIntent.getBroadcast(NewCalendarEventActivity.this, requestcode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         long currentTime = System.currentTimeMillis();
         Calendar calendar = new GregorianCalendar(yearEvent, monthEvent, dayEvent, hourEvent, minuteEvent);
         long alarmTime = calendar.getTimeInMillis();
-        long tenSec = 1000 * 10;
-        Log.e("timealarm", "Alarm " + alarmTime);
-        Log.e("timealarm", "current " + currentTime);
         long diff = alarmTime - currentTime;
         Log.e("timealarm", "difference " + diff);
         if (diff > 0)

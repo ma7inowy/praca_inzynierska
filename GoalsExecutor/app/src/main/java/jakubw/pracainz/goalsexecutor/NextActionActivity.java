@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,6 +35,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
+import jakubw.pracainz.goalsexecutor.Model.Label;
+import jakubw.pracainz.goalsexecutor.Model.NextAction;
 
 import static androidx.recyclerview.widget.ItemTouchHelper.*;
 
@@ -163,7 +166,7 @@ public class NextActionActivity extends Fragment implements NextActionAdapter.On
                     }
 
                     String id = listForDelete.get(position).getId();
-                    reference.child("Does" + id).removeValue();
+                    reference.child("Na" + id).removeValue();
                     listForDelete.remove(position);
                     setAdapter(listForDelete);
                     Snackbar.make(recyclerNextAction, "Task " + deletedTask.getTitle() + " deleted!", Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
@@ -173,7 +176,6 @@ public class NextActionActivity extends Fragment implements NextActionAdapter.On
                             if (isFiltered) {
                                 filteredNextActionList.add(position, deletedTask);
                                 setAdapter(filteredNextActionList); // moze lepiej nasluchiwac na jedna pozycje?
-
                             } else {
                                 nextActionList.add(position, deletedTask);
                                 setAdapter(nextActionList);
@@ -185,7 +187,7 @@ public class NextActionActivity extends Fragment implements NextActionAdapter.On
                             map.put("id", deletedTask.getId());
                             map.put("labelName", deletedTask.getLabelName());
                             map.put("priority", deletedTask.getPriority());
-                            reference.child("Does" + deletedTask.getId()).updateChildren(map);
+                            reference.child("Na" + deletedTask.getId()).updateChildren(map);
                         }
                     }).show();
                     break;
@@ -280,7 +282,7 @@ public class NextActionActivity extends Fragment implements NextActionAdapter.On
     @Override
     public void applyFilterData(boolean priorityLow, boolean priorityMedium, boolean priorityHigh, String label, String estimatedTime) {
         ArrayList<NextAction> fList = new ArrayList<>();
-        ArrayList<NextAction> fList2 = new ArrayList<>();
+//        ArrayList<NextAction> fList2 = new ArrayList<>();
         int estimatedTimeInt = Integer.valueOf(estimatedTime);
         for (NextAction task : nextActionList) {
             if (task.getPriority().equals("1") && priorityHigh && task.getLabelName().equals(label) && (task.getEstimatedTime() <= estimatedTimeInt)) {
@@ -293,15 +295,19 @@ public class NextActionActivity extends Fragment implements NextActionAdapter.On
         }
         if (!priorityHigh && !priorityLow && !priorityMedium) {
             for (NextAction task2 : nextActionList) {
-                if (task2.getLabelName().equals(label) && (task2.getEstimatedTime() <= estimatedTimeInt)) fList2.add(task2);
+                if (task2.getLabelName().equals(label) && (task2.getEstimatedTime() <= estimatedTimeInt))
+                    fList.add(task2);
             }
-            setAdapter(fList2);
-            filteredNextActionList = fList2;
+        }
+
+        if(!fList.isEmpty()){
+            setAdapter(fList);
+            filteredNextActionList = fList;
         } else {
             setAdapter(fList);
             filteredNextActionList = fList;
+            Toast.makeText(getContext(), "No tasks match your search!", Toast.LENGTH_SHORT).show();
         }
-
         isFiltered = true;
     }
 }

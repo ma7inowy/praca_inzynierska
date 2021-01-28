@@ -13,6 +13,8 @@ import java.util.Calendar;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import jakubw.pracainz.goalsexecutor.Model.CalendarEvent;
+
 class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.MyViewHolder> {
     private Context context;
     private ArrayList<CalendarEvent> calendarEventList;

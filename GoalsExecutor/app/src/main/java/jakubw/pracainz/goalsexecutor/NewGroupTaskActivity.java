@@ -7,7 +7,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+
+import jakubw.pracainz.goalsexecutor.Model.User;
 
 public class NewGroupTaskActivity extends AppCompatActivity implements FindColaborantsDialog.FindColaborantsDialogListener {
 
@@ -67,7 +68,7 @@ public class NewGroupTaskActivity extends AppCompatActivity implements FindColab
             @Override
             public void onClick(View view) {
                 colaborantEmailList.add(signInAccount.getEmail()); // nwm czy tu czy gdzies indziej lepiej
-                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("GroupTasks").child("Does" + idNumber);
+                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("GroupTasks").child("Group" + idNumber);
                 HashMap map = new HashMap();
                 map.put("title", addTitle.getText().toString());
                 map.put("description", addDescription.getText().toString());

@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import jakubw.pracainz.goalsexecutor.Model.Label;
+
 public class LabelAdapter extends RecyclerView.Adapter<LabelAdapter.MyViewHolder> {
     private Context context;
     private ArrayList<Label> labelList;

@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import jakubw.pracainz.goalsexecutor.Model.User;
+
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> {
     private Context context;
     private ArrayList<User> userList;

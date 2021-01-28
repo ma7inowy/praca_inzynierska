@@ -1,11 +1,11 @@
-package jakubw.pracainz.goalsexecutor;
+package jakubw.pracainz.goalsexecutor.Model;
 
 import androidx.annotation.NonNull;
 
 public class Label {
-    String name;
-    int color;
-    String id;
+    private String name;
+    private int color;
+    private String id;
 
     public Label(String name, int color, String id) {
         this.name = name;

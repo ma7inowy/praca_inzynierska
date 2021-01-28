@@ -29,6 +29,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Random;
 
+import jakubw.pracainz.goalsexecutor.Model.User;
+
 
 public class FindColaborantsDialog extends AppCompatDialogFragment implements UserAdapter.OnItemListener {
 

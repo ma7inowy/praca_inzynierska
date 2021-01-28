@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".ReminderBroadcast" />
+        <receiver android:name=".EventReminderBroadcast" />
         <receiver
             android:name=".BootReceiver"
             android:enabled="true"

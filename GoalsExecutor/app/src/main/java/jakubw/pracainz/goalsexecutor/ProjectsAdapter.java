@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import jakubw.pracainz.goalsexecutor.Model.Project;
+
 public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.MyViewHolder> {
     private Context context;
     private ArrayList<Project> projectList;

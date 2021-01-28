@@ -11,7 +11,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import java.util.Random;
 
-public class ReminderBroadcast extends BroadcastReceiver {
+public class EventReminderBroadcast extends BroadcastReceiver {
 
     String desc ="null";
     @Override
@@ -28,7 +28,7 @@ public class ReminderBroadcast extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "notifyGoalsExecutor")
                 .setSmallIcon(R.drawable.ic_app_name_transparent)
                 .setContentTitle("Daily Tasks! Do it!")
-                .setContentText("Masz zrobic zadanko: " + desc)
+                .setContentText("Task name: " + desc)
                 .setContentIntent(contentIntent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 

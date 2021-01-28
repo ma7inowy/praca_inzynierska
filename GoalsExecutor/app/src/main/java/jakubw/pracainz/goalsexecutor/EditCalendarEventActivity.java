@@ -80,7 +80,7 @@ public class EditCalendarEventActivity extends AppCompatActivity {
             }
         });
 
-        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId().toString()).child("Does" + id);
+        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId().toString()).child("Ca" + id);
         editEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -164,7 +164,7 @@ public class EditCalendarEventActivity extends AppCompatActivity {
     }
 
     private void editNotification() {
-        Intent intent = new Intent(EditCalendarEventActivity.this, ReminderBroadcast.class);
+        Intent intent = new Intent(EditCalendarEventActivity.this, EventReminderBroadcast.class);
         intent.putExtra("desc", editEventTitle.getText().toString());
         int requestcode = Integer.valueOf(id);
         //https://stackoverflow.com/questions/18649728/android-cannot-pass-intent-extras-though-alarmmanager/28203623 flaga do update

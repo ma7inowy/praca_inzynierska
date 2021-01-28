@@ -1,8 +1,8 @@
-package jakubw.pracainz.goalsexecutor;
+package jakubw.pracainz.goalsexecutor.Model;
 
 public class Project {
-    String title;
-    String id;
+    private String title;
+    private String id;
 
     public Project() {
     }

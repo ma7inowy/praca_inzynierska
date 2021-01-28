@@ -1,34 +1,35 @@
-package jakubw.pracainz.goalsexecutor;
+package jakubw.pracainz.goalsexecutor.Model;
 
-public class NextAction {
+import java.util.ArrayList;
 
-    String title, description, id;
-//    Label label;
-    String labelName, priority;
-    int estimatedTime;
+public class GroupTask {
+    private String title, description, id;
+    private String priority;
+    private int estimatedTime;
+    private ArrayList<String> collaborants;
 
-    public NextAction() {
+    public GroupTask() {
     }
 
-    public NextAction(String title, String description, String id, String labelName, String priority, int estimatedTime) {
+    public GroupTask(String title, String description, String id, String priority, int estimatedTime, ArrayList<String> collaborants) {
         this.title = title;
         this.description = description;
         this.id = id;
-        this.labelName = labelName;
         this.priority = priority;
         this.estimatedTime = estimatedTime;
+        this.collaborants = collaborants;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
@@ -41,14 +42,6 @@ public class NextAction {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getLabelName() {
-        return labelName;
-    }
-
-    public void setLabelName(String labelName) {
-        this.labelName = labelName;
     }
 
     public String getPriority() {
@@ -65,5 +58,13 @@ public class NextAction {
 
     public void setEstimatedTime(int estimatedTime) {
         this.estimatedTime = estimatedTime;
+    }
+
+    public ArrayList<String> getCollaborants() {
+        return collaborants;
+    }
+
+    public void setCollaborants(ArrayList<String> collaborants) {
+        this.collaborants = collaborants;
     }
 }

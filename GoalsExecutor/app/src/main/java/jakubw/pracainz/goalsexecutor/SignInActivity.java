@@ -30,6 +30,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
+import jakubw.pracainz.goalsexecutor.Model.User;
+
 public class SignInActivity extends AppCompatActivity {
 
     private GoogleSignInClient mGoogleSignInClient;

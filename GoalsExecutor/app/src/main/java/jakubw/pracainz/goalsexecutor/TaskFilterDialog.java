@@ -27,6 +27,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import jakubw.pracainz.goalsexecutor.Model.Label;
+
 public class TaskFilterDialog extends AppCompatDialogFragment {
     RadioButton radioLowPrioBtn;
     RadioButton radioHighPrioBtn;
@@ -57,6 +59,7 @@ public class TaskFilterDialog extends AppCompatDialogFragment {
                 boolean priorityLow = radioLowPrioBtn.isChecked();
                 boolean priorityMedium = radioMediumPrioBtn.isChecked();
                 boolean priorityHigh = radioHighPrioBtn.isChecked();
+
                 filterDialogListener.applyFilterData(priorityLow, priorityMedium, priorityHigh, labelName, estimatedTime);
             }
         });
@@ -125,7 +128,7 @@ public class TaskFilterDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
-    //dla dialogfragmentu
+//    zapewnia nas ze targetFragment implementuje TaskFilterDialogListener
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

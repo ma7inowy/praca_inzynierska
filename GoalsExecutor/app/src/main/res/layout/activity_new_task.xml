@@ -34,11 +34,8 @@
                     android:textAlignment="center"
                     android:textColor="#FFF"
                     android:textSize="32sp" />
-
             </LinearLayout>
-
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -57,9 +54,7 @@
                 android:layout_margin="10dp"
                 android:text="Title"
                 android:textColor="#000000"
-                android:textSize="20dp">
-
-            </TextView>
+                android:textSize="20dp"></TextView>
 
             <EditText
                 android:id="@+id/addTitle"
@@ -74,7 +69,6 @@
                 android:hint="Type task name..."
                 android:paddingLeft="30dp"
                 android:paddingRight="30dp"
-
                 android:textColorHint="@color/new_task_text" />
         </LinearLayout>
 
@@ -160,17 +154,14 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:background="@drawable/estimated_time_button_shape"
-
             android:text="Estimated time: 0min" />
 
         <Button
-
             android:id="@+id/addNextActionBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="30dp"
-
             android:layout_marginTop="10dp"
             android:background="@drawable/confirm_button_shape"
             android:text="Create" />

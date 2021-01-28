@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import jakubw.pracainz.goalsexecutor.Model.GroupTask;
+
 public class GroupTasksAdapter extends RecyclerView.Adapter<GroupTasksAdapter.MyViewHolder> {
     private Context context;
     private ArrayList<GroupTask> groupTaskList;

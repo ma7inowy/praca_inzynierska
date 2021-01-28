@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -23,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+
+import jakubw.pracainz.goalsexecutor.Model.CalendarEvent;
 
 import static android.content.Context.ALARM_SERVICE;
 
@@ -77,7 +77,7 @@ public class BootReceiver extends BroadcastReceiver {
         for (CalendarEvent event : calendarEventList) {
             Log.i("BootReceiverxd", event.getTitle());
 
-            Intent intent = new Intent(context, ReminderBroadcast.class);
+            Intent intent = new Intent(context, EventReminderBroadcast.class);
 //            intent.setAction("android.intent.action.BOOT_COMPLETED");
 //            intent.setAction("android.intent.action.QUICKBOOT_POWERON");
             intent.putExtra("desc", event.getTitle());

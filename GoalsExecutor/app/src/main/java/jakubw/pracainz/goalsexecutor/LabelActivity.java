@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
+import jakubw.pracainz.goalsexecutor.Model.Label;
 
 import static androidx.recyclerview.widget.ItemTouchHelper.LEFT;
 

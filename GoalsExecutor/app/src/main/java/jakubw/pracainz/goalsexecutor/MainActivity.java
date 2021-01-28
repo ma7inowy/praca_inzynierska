@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import jakubw.pracainz.goalsexecutor.Model.CalendarEvent;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -157,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void showCalendarsData() {
-        ReadCalendar.readCalendar(this, signInAccount.getEmail());
+        GoogleCalendarReader.readCalendar(this, signInAccount.getEmail());
     }
 
     private void signOut() {
@@ -197,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void handleEventsFromPhoneCalendars() {
         DatabaseReference reference;
-        ArrayList<CalendarEvent> events = ReadCalendar.readCalendar(MainActivity.this, signInAccount.getEmail());
+        ArrayList<CalendarEvent> events = GoogleCalendarReader.readCalendar(MainActivity.this, signInAccount.getEmail());
         if (!events.isEmpty()) {
             for (CalendarEvent event : events) {
                 reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId()).child("Does" + event.getId());

@@ -2,7 +2,6 @@ package jakubw.pracainz.goalsexecutor;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +14,9 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+
+import jakubw.pracainz.goalsexecutor.Model.Label;
+import jakubw.pracainz.goalsexecutor.Model.NextAction;
 
 public class NextActionAdapter extends RecyclerView.Adapter<NextActionAdapter.MyViewHolder> {
 

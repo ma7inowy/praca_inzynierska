@@ -1,4 +1,4 @@
-package jakubw.pracainz.goalsexecutor;
+package jakubw.pracainz.goalsexecutor.Model;
 
 public class User {
 
