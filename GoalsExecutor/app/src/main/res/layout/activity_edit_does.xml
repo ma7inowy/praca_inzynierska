@@ -30,7 +30,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_marginTop="20dp"
-                    android:text="Task info"
+                    android:text="Edit Task"
                     android:textAlignment="center"
                     android:textColor="#FFF"
                     android:textSize="32sp" />
