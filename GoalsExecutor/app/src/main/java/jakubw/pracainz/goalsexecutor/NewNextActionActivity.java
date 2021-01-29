@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.PaintDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -142,16 +144,16 @@ public class NewNextActionActivity extends AppCompatActivity {
 
     private void showEstimationTimeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(NewNextActionActivity.this);
-        builder.setTitle("Choose estimated time");
+        builder.setTitle("Choose estimated time:");
 
-        View view  = LayoutInflater.from(NewNextActionActivity.this).inflate(R.layout.estimated_time_dialog, null);
+        View view = LayoutInflater.from(NewNextActionActivity.this).inflate(R.layout.estimated_time_dialog, null);
         final TextView estimatedTimeProgress = view.findViewById(R.id.estimatedTimeProgress);
         final SeekBar estimatedTimeSeekBar = view.findViewById(R.id.estimatedTimeSeekBar);
         estimatedTimeSeekBar.setMax(240);
         estimatedTimeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                estimatedTimeProgress.setText(""+ progress  + " min");
+                estimatedTimeProgress.setText("" + progress + " MIN");
                 estimatedTime = progress;
             }
 
@@ -171,7 +173,7 @@ public class NewNextActionActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(NewNextActionActivity.this, String.valueOf(estimatedTime), Toast.LENGTH_SHORT).show();
-                addEstimationTimeBtn.setText("Potrzebny czas: " + estimatedTime + "minut");
+                addEstimationTimeBtn.setText("ESTIMATED TIME: " + estimatedTime + " MIN");
                 dialog.dismiss();
             }
         });
@@ -197,8 +199,8 @@ public class NewNextActionActivity extends AppCompatActivity {
     private void showPrioritiesDialog() {
         final String[] priorities = {"High", "Medium", "Low"};
         AlertDialog.Builder builder = new AlertDialog.Builder(NewNextActionActivity.this);
-        builder.setTitle("Choose priority");
-        builder.setSingleChoiceItems(priorities, Integer.valueOf(priority)-1, new DialogInterface.OnClickListener() {
+        builder.setTitle("Choose priority:");
+        builder.setSingleChoiceItems(priorities, Integer.valueOf(priority) - 1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 priority = String.valueOf(which + 1);
@@ -208,7 +210,8 @@ public class NewNextActionActivity extends AppCompatActivity {
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                addPriorityBtn.setText("PRIORYTET: " + priorities[Integer.valueOf(priority) - 1]);
+                addPriorityBtn.setText("PRIORITY: " + priorities[Integer.valueOf(priority) - 1]);
+                setPriorityButtonBackground();
 
                 Toast.makeText(NewNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
@@ -222,6 +225,26 @@ public class NewNextActionActivity extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    private void setPriorityButtonBackground() {
+        int color = setColorForPriorityButton(priority);
+        PaintDrawable pd = new PaintDrawable(color);
+        pd.setCornerRadius(70);
+        addPriorityBtn.setBackground(pd);
+    }
+
+    private int setColorForPriorityButton(String priority) {
+        if (priority.equals(String.valueOf(1)))
+            return Color.RED;
+        else if (priority.equals(String.valueOf(2)))
+            return Color.YELLOW;
+        else if (priority.equals(String.valueOf(3)))
+            return Color.GREEN;
+        else {
+            Toast.makeText(this, "error!", Toast.LENGTH_SHORT).show();
+            return 0;
+        }
     }
 
     private void setLabelAdapter(ArrayList<Label> list) {

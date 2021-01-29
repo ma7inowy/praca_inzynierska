@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.PaintDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,7 +38,7 @@ public class EditNextActionActivity extends AppCompatActivity {
 
     EditText editTitle;
     EditText editDescription;
-    Button editNextActionBtn,editEstimationTimeBtn,editPriorityBtn;
+    Button editNextActionBtn, editEstimationTimeBtn, editPriorityBtn;
     String id;
     DatabaseReference reference;
     DatabaseReference referenceLabel;
@@ -70,11 +72,12 @@ public class EditNextActionActivity extends AppCompatActivity {
         editDescription.setText(intent.getStringExtra("description"));
         id = intent.getStringExtra("id");
         labelId = intent.getStringExtra("labelName");
-        estimatedTime = intent.getIntExtra("estimatedTime",0);
-        editEstimationTimeBtn.setText("Potrzebny czas: " + estimatedTime + "minut");
+        estimatedTime = intent.getIntExtra("estimatedTime", 0);
+        editEstimationTimeBtn.setText("ESTIMATED TIME: " + estimatedTime + " MIN");
         priority = intent.getStringExtra("priority");
-        editPriorityBtn.setText("PRIORYTET: " + priorities[Integer.valueOf(priority) - 1]);
-
+        editPriorityBtn.setText("PRIORITY: " + priorities[Integer.valueOf(priority) - 1]);
+        if (priority != null)
+            setPriorityButtonBackground();
         //pobranie labelow z bazy MOZE ZNALEZC JAKIS LEPSZY SPOSOB? raz pobrac najlepiej i tyle
         referenceLabel = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Labels").child(signInAccount.getId().toString());
         referenceLabel.addValueEventListener(new ValueEventListener() {
@@ -102,7 +105,7 @@ public class EditNextActionActivity extends AppCompatActivity {
                 map.put("title", editTitle.getText().toString());
                 map.put("description", editDescription.getText().toString());
                 map.put("estimatedTime", estimatedTime);
-                map.put("priority",priority);
+                map.put("priority", priority);
                 map.put("labelName", labelId);
                 reference.updateChildren(map);
                 Toast.makeText(EditNextActionActivity.this, editTitle.getText().toString() + " " + editDescription.getText().toString(), Toast.LENGTH_SHORT).show();
@@ -159,18 +162,18 @@ public class EditNextActionActivity extends AppCompatActivity {
 
     private void showEstimationTimeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(EditNextActionActivity.this);
-        builder.setTitle("Choose estimated time");
+        builder.setTitle("Choose estimated time:");
 
-        View view  = LayoutInflater.from(EditNextActionActivity.this).inflate(R.layout.estimated_time_dialog, null);
+        View view = LayoutInflater.from(EditNextActionActivity.this).inflate(R.layout.estimated_time_dialog, null);
         final TextView estimatedTimeProgress = view.findViewById(R.id.estimatedTimeProgress);
         final SeekBar estimatedTimeSeekBar = view.findViewById(R.id.estimatedTimeSeekBar);
         estimatedTimeSeekBar.setMax(240);
         estimatedTimeSeekBar.setProgress(estimatedTime);
-        estimatedTimeProgress.setText(estimatedTime + " min");
+        estimatedTimeProgress.setText(estimatedTime + " MIN");
         estimatedTimeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                estimatedTimeProgress.setText(progress  + " min");
+                estimatedTimeProgress.setText(progress + " MIN");
                 estimatedTime = progress;
             }
 
@@ -190,7 +193,7 @@ public class EditNextActionActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(EditNextActionActivity.this, String.valueOf(estimatedTime), Toast.LENGTH_SHORT).show();
-                editEstimationTimeBtn.setText("Potrzebny czas: " + estimatedTime + "minut");
+                editEstimationTimeBtn.setText("ESTIMATED TIME: " + estimatedTime + " MIN");
                 dialog.dismiss();
             }
         });
@@ -207,8 +210,8 @@ public class EditNextActionActivity extends AppCompatActivity {
 
     private void showPrioritiesDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(EditNextActionActivity.this);
-        builder.setTitle("Choose priority");
-        builder.setSingleChoiceItems(priorities, Integer.valueOf(priority)-1, new DialogInterface.OnClickListener() {
+        builder.setTitle("Choose priority:");
+        builder.setSingleChoiceItems(priorities, Integer.valueOf(priority) - 1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 priority = String.valueOf(which + 1);
@@ -218,7 +221,8 @@ public class EditNextActionActivity extends AppCompatActivity {
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                editPriorityBtn.setText("PRIORYTET: " + priorities[Integer.valueOf(priority) - 1]);
+                editPriorityBtn.setText("PRIORITY: " + priorities[Integer.valueOf(priority) - 1]);
+                setPriorityButtonBackground();
 
                 Toast.makeText(EditNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
@@ -232,6 +236,26 @@ public class EditNextActionActivity extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    private void setPriorityButtonBackground() {
+        int color = setColorForPriorityButton(priority);
+        PaintDrawable pd = new PaintDrawable(color);
+        pd.setCornerRadius(70);
+        editPriorityBtn.setBackground(pd);
+    }
+
+    private int setColorForPriorityButton(String priority) {
+        if (priority.equals(String.valueOf(1)))
+            return Color.RED;
+        else if (priority.equals(String.valueOf(2)))
+            return Color.YELLOW;
+        else if (priority.equals(String.valueOf(3)))
+            return Color.GREEN;
+        else {
+            Toast.makeText(this, "error!", Toast.LENGTH_SHORT).show();
+            return 0;
+        }
     }
 
 }

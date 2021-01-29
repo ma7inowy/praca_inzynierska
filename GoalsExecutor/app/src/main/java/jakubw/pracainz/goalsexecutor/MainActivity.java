@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ArrayList<CalendarEvent> events = GoogleCalendarReader.readCalendar(MainActivity.this, signInAccount.getEmail());
         if (!events.isEmpty()) {
             for (CalendarEvent event : events) {
-                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId()).child("Does" + event.getId());
+                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId()).child("Ca" + event.getId());
                 HashMap map = new HashMap();
                 map.put("title", event.getTitle());
                 map.put("year", event.getYear());
