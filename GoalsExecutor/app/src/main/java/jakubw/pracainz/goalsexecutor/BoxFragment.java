@@ -39,7 +39,7 @@ import jakubw.pracainz.goalsexecutor.Model.BoxTask;
 import static android.app.Activity.RESULT_OK;
 import static androidx.recyclerview.widget.ItemTouchHelper.LEFT;
 
-public class BoxActivity extends Fragment implements BoxTaskAdapter.OnItemListener {
+public class BoxFragment extends Fragment implements BoxTaskAdapter.OnItemListener {
 
     FloatingActionButton addNewBoxTaskBtn;
     RecyclerView recyclerBoxTask;
@@ -140,7 +140,7 @@ public class BoxActivity extends Fragment implements BoxTaskAdapter.OnItemListen
 //            @Override
 //            public void onClick(View v) {
 //                openDialogToAddNewBoxTask();
-//                Toast.makeText(BoxActivity.this, "New box task", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(BoxFragment.this, "New box task", Toast.LENGTH_SHORT).show();
 //            }
 //        });
 //
@@ -171,15 +171,15 @@ public class BoxActivity extends Fragment implements BoxTaskAdapter.OnItemListen
                 if (activityList[which].toString().equals("NextAction")) {
                     Intent intent = new Intent(getActivity(), NewNextActionActivity.class);
                     intent.putExtra("title", boxTask.getTitle());
-                    startActivityForResult(intent, BoxActivity.NEXT_ACTION_REQUEST);
+                    startActivityForResult(intent, BoxFragment.NEXT_ACTION_REQUEST);
                 }
                 if (activityList[which].toString().equals("Calendar")) {
                     Intent intent = new Intent(getActivity(), NewCalendarEventActivity.class);
                     intent.putExtra("title", boxTask.getTitle());
-                    startActivityForResult(intent, BoxActivity.CALENDAR_REQUEST);
+                    startActivityForResult(intent, BoxFragment.CALENDAR_REQUEST);
                 }
                 if (activityList[which].toString().equals("Someday")) {
-//                    Intent intent = new Intent(BoxActivity.this, NewCalendarEventActivity.class);
+//                    Intent intent = new Intent(BoxFragment.this, NewCalendarEventActivity.class);
 //                    intent.putExtra("title", boxTask.getTitle());
 //                    startActivity(intent);
 //                    reference.child("Box" + boxTask.getId()).removeValue(); // czy na pewno tak robic
@@ -188,13 +188,13 @@ public class BoxActivity extends Fragment implements BoxTaskAdapter.OnItemListen
                 if (activityList[which].toString().equals("Group")) {
 //                    Intent intent = new Intent(getActivity(), NewGroupTaskActivity.class);
 //                    intent.putExtra("title", boxTask.getTitle());
-//                    startActivityForResult(intent, BoxActivity.GROUP_REQUEST);
+//                    startActivityForResult(intent, BoxFragment.GROUP_REQUEST);
                     Toast.makeText(getActivity(), "Group", Toast.LENGTH_SHORT).show();
                 }
                 if (activityList[which].toString().equals("Project")) {
 //                    Intent intent = new Intent(getActivity(), NewGroupTaskActivity.class);
 //                    intent.putExtra("title", boxTask.getTitle());
-//                    startActivityForResult(intent, BoxActivity.GROUP_REQUEST);
+//                    startActivityForResult(intent, BoxFragment.GROUP_REQUEST);
                     Toast.makeText(getActivity(), "Project", Toast.LENGTH_SHORT).show();
                 }
             }

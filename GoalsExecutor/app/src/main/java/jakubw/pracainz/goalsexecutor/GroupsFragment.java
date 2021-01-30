@@ -1,13 +1,17 @@
 package jakubw.pracainz.goalsexecutor;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -24,7 +28,7 @@ import java.util.Random;
 
 import jakubw.pracainz.goalsexecutor.Model.GroupTask;
 
-public class GroupsActivity extends AppCompatActivity implements GroupTasksAdapter.OnItemListener {
+public class GroupsFragment extends Fragment implements GroupTasksAdapter.OnItemListener {
 
     RecyclerView recyclerGroups;
     FloatingActionButton addGroupTaskBtn;
@@ -35,21 +39,27 @@ public class GroupsActivity extends AppCompatActivity implements GroupTasksAdapt
     ArrayList<String> userGroupTaskIdList;
     GoogleSignInAccount signInAccount;
     GroupTasksAdapter groupTasksAdapter;
+    ArrayList<GroupTask> userGroupTaskList; //zadania grupowe konkretnego uzytkownika
     Integer idNumber;
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        return inflater.inflate(R.layout.activity_groups, container, false);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_groups);
-
-        recyclerGroups = findViewById(R.id.recyclerGroups);
-        addGroupTaskBtn = findViewById(R.id.addGroupTaskBtn);
+    public void onStart() {
+        super.onStart();
+        userGroupTaskList = new ArrayList<>();
+        recyclerGroups = getView().findViewById(R.id.recyclerGroups);
+        addGroupTaskBtn = getView().findViewById(R.id.addGroupTaskBtn);
         groupTaskList = new ArrayList<>();
         userGroupTaskIdList = new ArrayList<>();
-        signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity());
         idNumber = new Random().nextInt();
-        recyclerGroups.setLayoutManager(new LinearLayoutManager(this));
+        recyclerGroups.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // jesli zawiera id uzytkownika to wczytaj
         reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("GroupTasks");
@@ -59,16 +69,11 @@ public class GroupsActivity extends AppCompatActivity implements GroupTasksAdapt
                 groupTaskList.clear();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     GroupTask p = dataSnapshot1.getValue(GroupTask.class);
-//                    if(p!=null)
-//                    if(p.getId().equals(user.getGroupId))
                     groupTaskList.add(p);
-//                    Log.e("groupTask", p.getTitle());
                 }
 //                reference2 = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("UsersAdditionalInfo").child(signInAccount.getId().toString()).child("GroupTasksId");
                 reference2 = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("UsersAdditionalInfo").child(signInAccount.getId().toString()).child("GroupTasksId");
                 reference2.addValueEventListener(new ValueEventListener() {
-                    ArrayList<GroupTask> userGroupTaskList = new ArrayList<>(); //zadania grupowe konkretnego uzytkownika
-
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         userGroupTaskIdList.clear();
@@ -92,7 +97,7 @@ public class GroupsActivity extends AppCompatActivity implements GroupTasksAdapt
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -100,14 +105,14 @@ public class GroupsActivity extends AppCompatActivity implements GroupTasksAdapt
         addGroupTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GroupsActivity.this, NewGroupTaskActivity.class);
+                Intent intent = new Intent(getContext(), NewGroupTaskActivity.class);
                 startActivity(intent);
             }
         });
     }
 
     private void setAdapter(ArrayList<GroupTask> userGroupTaskList) {
-        groupTasksAdapter = new GroupTasksAdapter(GroupsActivity.this, userGroupTaskList, this);
+        groupTasksAdapter = new GroupTasksAdapter(getContext(), userGroupTaskList, this);
         recyclerGroups.setAdapter(groupTasksAdapter);
         groupTasksAdapter.notifyDataSetChanged();
     }
@@ -127,15 +132,14 @@ public class GroupsActivity extends AppCompatActivity implements GroupTasksAdapt
     @Override
     public void onItemClick(int position) {
         final GroupTask groupTask;
-        groupTask = groupTaskList.get(position);
-
-        Intent intent = new Intent(GroupsActivity.this, EditNextActionActivity.class);
+        groupTask = userGroupTaskList.get(position);
+        Intent intent = new Intent(getContext(), EditNextActionActivity.class);
         intent.putExtra("title", groupTask.getTitle());
         intent.putExtra("description", groupTask.getDescription());
         intent.putExtra("estimatedTime", groupTask.getEstimatedTime());
         intent.putExtra("id", groupTask.getId());
         intent.putExtra("priority", groupTask.getPriority());
         startActivity(intent);
-        Toast.makeText(GroupsActivity.this, "id" + groupTask.getId(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), position, Toast.LENGTH_SHORT).show();
     }
 }

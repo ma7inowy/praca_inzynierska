@@ -15,9 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".NewGroupTaskActivity"></activity>
-        <activity android:name=".GroupsActivity" />
-        <activity android:name=".BoxActivity" />
-        <activity android:name=".ProjectsActivity" />
+        <activity android:name=".GroupsFragment" />
+        <activity android:name=".BoxFragment" />
+        <activity android:name=".ProjectsFragment" />
         <activity android:name=".LabelActivity" />
         <activity android:name=".EditCalendarEventActivity" />
         <activity android:name=".NewCalendarEventActivity" />
@@ -27,7 +27,7 @@
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".NewNextActionActivity" />
-        <activity android:name=".NextActionActivity" />
+        <activity android:name=".NextActionFragment" />
         <activity
             android:name=".SignInActivity"
             android:theme="@style/AppTheme.NoActionBar">

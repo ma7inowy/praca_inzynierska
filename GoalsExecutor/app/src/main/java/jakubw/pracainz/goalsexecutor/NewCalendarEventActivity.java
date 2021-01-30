@@ -61,7 +61,7 @@ public class NewCalendarEventActivity extends AppCompatActivity {
         final GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         createNotificationChanel();
 
-        // do tworzenia zadania z BoxActivity
+        // do tworzenia zadania z BoxFragment
         Intent intent = getIntent();
         if (intent.hasExtra("title")) {
             addEventTitle.setText(intent.getStringExtra("title"));

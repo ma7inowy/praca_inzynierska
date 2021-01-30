@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,7 +39,7 @@ import jakubw.pracainz.goalsexecutor.Model.NextAction;
 
 import static androidx.recyclerview.widget.ItemTouchHelper.*;
 
-public class NextActionActivity extends Fragment implements NextActionAdapter.OnItemListener, TaskFilterDialog.TaskFilterDialogListener {
+public class NextActionFragment extends Fragment implements NextActionAdapter.OnItemListener, TaskFilterDialog.TaskFilterDialogListener {
 
     TextView titlePage, endPage;
     DatabaseReference reference;
@@ -138,7 +137,7 @@ public class NextActionActivity extends Fragment implements NextActionAdapter.On
 
     private void openFilterDialog() {
         TaskFilterDialog taskFilterDialog = new TaskFilterDialog();
-        taskFilterDialog.setTargetFragment(NextActionActivity.this, 1);
+        taskFilterDialog.setTargetFragment(NextActionFragment.this, 1);
         taskFilterDialog.show(getFragmentManager(), "Filter dialog");
     }
 

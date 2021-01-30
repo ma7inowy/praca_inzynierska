@@ -104,12 +104,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_next_action:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NextActionActivity()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NextActionFragment()).commit();
                 break;
             case R.id.nav_kontener:
-//                Intent intent5 = new Intent(MainActivity.this, BoxActivity.class);
+//                Intent intent5 = new Intent(MainActivity.this, BoxFragment.class);
 //                startActivity(intent5);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new BoxActivity()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new BoxFragment()).commit();
                 break;
             case R.id.nav_logout:
                 signOut();
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 checkPermission(callbackId, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR);
                 break;
-            case R.id.nav_profile:
+            case R.id.nav_labels:
                 Intent intent3 = new Intent(MainActivity.this, LabelActivity.class);
                 startActivity(intent3);
                 break;
@@ -134,12 +134,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                checkPermission(callbackId, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR);
                 break;
             case R.id.nav_projects:
-                Intent intent4 = new Intent(MainActivity.this, ProjectsActivity.class);
-                startActivity(intent4);
+//                Intent intent4 = new Intent(MainActivity.this, ProjectsFragment.class);
+//                startActivity(intent4);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProjectsFragment()).commit();
                 break;
             case R.id.nav_groups:
-                Intent intent5 = new Intent(MainActivity.this, GroupsActivity.class);
-                startActivity(intent5);
+//                Intent intent5 = new Intent(MainActivity.this, GroupsFragment.class);
+//                startActivity(intent5);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GroupsFragment()).commit();
+
                 break;
 
 

@@ -57,7 +57,7 @@ public class NewGroupTaskActivity extends AppCompatActivity implements FindColab
         idNumber = new Random().nextInt();
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
 
-        // do tworzenia zadania z BoxActivity
+        // do tworzenia zadania z BoxFragment
         Intent intent = getIntent();
         if (intent.hasExtra("title")) {
             addTitle.setText(intent.getStringExtra("title"));

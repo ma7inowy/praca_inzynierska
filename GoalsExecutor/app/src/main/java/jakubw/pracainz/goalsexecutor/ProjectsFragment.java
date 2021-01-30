@@ -3,12 +3,16 @@ package jakubw.pracainz.goalsexecutor;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,7 +36,7 @@ import jakubw.pracainz.goalsexecutor.Model.Project;
 
 import static androidx.recyclerview.widget.ItemTouchHelper.LEFT;
 
-public class ProjectsActivity extends AppCompatActivity implements ProjectsAdapter.OnItemListener {
+public class ProjectsFragment extends Fragment implements ProjectsAdapter.OnItemListener {
 
     FloatingActionButton addNewProjectBtn;
     RecyclerView recyclerProject;
@@ -42,18 +46,23 @@ public class ProjectsActivity extends AppCompatActivity implements ProjectsAdapt
     ProjectsAdapter projectAdapter;
     Integer idNumber;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_projects);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        return inflater.inflate(R.layout.activity_projects, container, false);
+    }
 
-        addNewProjectBtn = findViewById(R.id.addNewProjectBtn);
-        recyclerProject = findViewById(R.id.recyclerProject);
+    @Override
+    public void onStart() {
+        super.onStart();
+        addNewProjectBtn = getView().findViewById(R.id.addNewProjectBtn);
+        recyclerProject = getView().findViewById(R.id.recyclerProject);
         projectList = new ArrayList<>();
         idNumber = new Random().nextInt();
-        recyclerProject.setLayoutManager(new LinearLayoutManager(this));
+        recyclerProject.setLayoutManager(new LinearLayoutManager(getActivity()));
         //google signin
-        signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity());
 
         reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Projects").child(signInAccount.getId().toString());
 
@@ -71,7 +80,7 @@ public class ProjectsActivity extends AppCompatActivity implements ProjectsAdapt
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -79,17 +88,16 @@ public class ProjectsActivity extends AppCompatActivity implements ProjectsAdapt
             @Override
             public void onClick(View v) {
                 openDialogToAddNewProject();
-                Toast.makeText(ProjectsActivity.this, "New Proj", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "New Proj", Toast.LENGTH_SHORT).show();
             }
         });
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(recyclerProject);
-
     }
 
     public void setAdapter(ArrayList<Project> projectList) {
-        projectAdapter = new ProjectsAdapter(ProjectsActivity.this, projectList, this);
+        projectAdapter = new ProjectsAdapter(getActivity(), projectList, this);
         recyclerProject.setAdapter(projectAdapter); // wypelni wszystkie pola ViewHolderami
         projectAdapter.notifyDataSetChanged();
     }
@@ -97,12 +105,12 @@ public class ProjectsActivity extends AppCompatActivity implements ProjectsAdapt
     @Override
     public void onItemClick(int position) {
         final Project project = projectList.get(position);
-        Toast.makeText(this, "id" + project.getId(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "id" + project.getId(), Toast.LENGTH_SHORT).show();
     }
 
     private void openDialogToAddNewProject() {
         NewProjectDialog newProjectDialog = new NewProjectDialog();
-        newProjectDialog.show(getSupportFragmentManager(), "Example");
+        newProjectDialog.show(getFragmentManager(), "Example");
     }
 
     // swipe left to delete task
@@ -142,7 +150,7 @@ public class ProjectsActivity extends AppCompatActivity implements ProjectsAdapt
         @Override
         public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
             new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(ProjectsActivity.this, R.color.colorDeleteTask))
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorDeleteTask))
                     .addSwipeLeftActionIcon(R.drawable.ic_delete_black_)
                     .create()
                     .decorate();
