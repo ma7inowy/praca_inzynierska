@@ -10,19 +10,19 @@
     <LinearLayout
         android:layout_marginLeft="16dp"
         android:orientation="vertical"
-        android:layout_width="220dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/eventTitle"
-            android:layout_marginTop="19dp"
-            android:layout_gravity="left"
-            android:textSize="22sp"
-            android:textColor="#000C5D"
-            android:text="New Event"
-            android:singleLine="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginTop="19dp"
+            android:singleLine="true"
+            android:text="New Event"
+            android:textColor="#000000"
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/eventDate"

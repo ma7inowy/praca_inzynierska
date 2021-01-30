@@ -65,16 +65,16 @@ public class EditNextActionActivity extends AppCompatActivity {
         //google signin
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         labelList = new ArrayList<>();
-
         editLabelSpinner = findViewById(R.id.labelsSpinnerEdit);
+
         Intent intent = getIntent();
+        priority = intent.getStringExtra("priority");
         editTitle.setText(intent.getStringExtra("title"));
         editDescription.setText(intent.getStringExtra("description"));
         id = intent.getStringExtra("id");
         labelId = intent.getStringExtra("labelName");
         estimatedTime = intent.getIntExtra("estimatedTime", 0);
         editEstimationTimeBtn.setText("ESTIMATED TIME: " + estimatedTime + " MIN");
-        priority = intent.getStringExtra("priority");
         editPriorityBtn.setText("PRIORITY: " + priorities[Integer.valueOf(priority) - 1]);
         if (priority != null)
             setPriorityButtonBackground();

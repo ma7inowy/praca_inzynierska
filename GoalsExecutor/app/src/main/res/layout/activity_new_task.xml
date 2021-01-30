@@ -119,8 +119,7 @@
             android:orientation="vertical"
             android:paddingLeft="11dp"
             android:paddingTop="11dp"
-            android:paddingRight="11dp"
-            android:paddingBottom="11dp">
+            android:paddingRight="11dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -133,8 +132,12 @@
 
             <Spinner
                 android:id="@+id/labelSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_width="230dp"
+                android:layout_height="47dp"
+                android:layout_gravity="center"
+                android:background="@drawable/spinner_style"
+                android:textAlignment="center" />
+
 
         </LinearLayout>
 

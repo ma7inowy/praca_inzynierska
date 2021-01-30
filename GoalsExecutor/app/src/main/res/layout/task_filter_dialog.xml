@@ -58,6 +58,7 @@
         <Spinner
             android:id="@+id/filterLabelSpinner"
             android:layout_width="250dp"
+            android:layout_marginLeft="23dp"
             android:layout_height="wrap_content"
             android:textAlignment="center"
 
@@ -80,6 +81,7 @@
             android:id="@+id/filterEstimatedTimeSpinner"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="23dp"
             android:textAlignment="center"
             />
 

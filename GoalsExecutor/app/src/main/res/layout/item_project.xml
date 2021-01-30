@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:layout_marginBottom="20dp"
-    android:background="#FF6F00"
+    android:background="@drawable/project_item_shape"
     android:orientation="horizontal"
     android:id="@+id/projectlayout">
 
@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="Project 1"
-        android:textColor="#000C5D"
+        android:textColor="#000000"
         android:textSize="30sp" />
 
 </LinearLayout>
