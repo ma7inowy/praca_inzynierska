@@ -72,7 +72,7 @@ public class GroupsFragment extends Fragment implements GroupTasksAdapter.OnItem
                     groupTaskList.add(p);
                 }
 //                reference2 = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("UsersAdditionalInfo").child(signInAccount.getId().toString()).child("GroupTasksId");
-                reference2 = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("UsersAdditionalInfo").child(signInAccount.getId().toString()).child("GroupTasksId");
+                reference2 = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("UsersGroups").child(signInAccount.getId().toString()).child("GroupTasksId");
                 reference2.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

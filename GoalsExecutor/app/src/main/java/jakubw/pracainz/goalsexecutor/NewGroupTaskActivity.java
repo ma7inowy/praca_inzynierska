@@ -135,7 +135,7 @@ public class NewGroupTaskActivity extends AppCompatActivity implements FindColab
                 if(!colaborantList.isEmpty()){
                     //to wrzuc do additionalifno
                     for(User user: colaborantList) {
-                        reference2 = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("UsersAdditionalInfo").child(user.getId()).child("GroupTasksId");
+                        reference2 = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("UsersGroups").child(user.getId()).child("GroupTasksId");
                         reference2.push().setValue(idNumber.toString());
                     }
                 }

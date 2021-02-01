@@ -144,10 +144,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                Intent intent5 = new Intent(MainActivity.this, GroupsFragment.class);
 //                startActivity(intent5);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GroupsFragment()).commit();
-
                 break;
-
-
+            case R.id.nav_someday:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SomedayFragment()).commit();
+                break;
         }
         return true;
     }
