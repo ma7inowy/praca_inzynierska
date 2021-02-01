@@ -85,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new BoxFragment()).commit();
+
 
 //        if(signInAccount!= null){
 //            userEmail.setText(signInAccount.getEmail());
@@ -161,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void showCalendarsData() {
-        GoogleCalendarReader.readCalendar(this, signInAccount.getEmail());
+        GoogleCalendarReader.getEventsFromGoogleCalendar(this, signInAccount.getEmail());
     }
 
     private void signOut() {
@@ -201,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void handleEventsFromPhoneCalendars() {
         DatabaseReference reference;
-        ArrayList<CalendarEvent> events = GoogleCalendarReader.readCalendar(MainActivity.this, signInAccount.getEmail());
+        ArrayList<CalendarEvent> events = GoogleCalendarReader.getEventsFromGoogleCalendar(MainActivity.this, signInAccount.getEmail());
         if (!events.isEmpty()) {
             for (CalendarEvent event : events) {
                 reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId()).child("Ca" + event.getId());

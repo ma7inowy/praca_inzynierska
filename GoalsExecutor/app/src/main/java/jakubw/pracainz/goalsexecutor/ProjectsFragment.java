@@ -1,5 +1,7 @@
 package jakubw.pracainz.goalsexecutor;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -106,6 +109,10 @@ public class ProjectsFragment extends Fragment implements ProjectsAdapter.OnItem
     public void onItemClick(int position) {
         final Project project = projectList.get(position);
         Toast.makeText(getContext(), "id" + project.getId(), Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(getActivity(), NewNextActionActivity.class);
+        intent.putExtra("title", project.getTitle() + ": ");
+        startActivity(intent);
     }
 
     private void openDialogToAddNewProject() {

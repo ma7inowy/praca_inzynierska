@@ -114,7 +114,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
     }
 
     private void handleEventsFromPhoneCalendars() {
-        ArrayList<CalendarEvent> events = GoogleCalendarReader.readCalendar(getActivity(), signInAccount.getEmail());
+        ArrayList<CalendarEvent> events = GoogleCalendarReader.getEventsFromGoogleCalendar(getActivity(), signInAccount.getEmail());
         if (!events.isEmpty()) {
             for (CalendarEvent event : events) {
                 reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId()).child("Ca" + event.getId());
@@ -262,7 +262,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
     }
 
     private void syncAndRefreshDataFromGoogleCalendar() {
-        ArrayList<CalendarEvent> events = GoogleCalendarReader.readCalendar(getActivity(), signInAccount.getEmail());
+        ArrayList<CalendarEvent> events = GoogleCalendarReader.getEventsFromGoogleCalendar(getActivity(), signInAccount.getEmail());
         Toast.makeText(getActivity(), String.valueOf(calendarEventList.size()), Toast.LENGTH_SHORT).show();
         if (events.isEmpty()) return;
         for (CalendarEvent event : events) { //ewenty z kalendarza

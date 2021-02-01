@@ -44,6 +44,7 @@ public class BoxFragment extends Fragment implements BoxTaskAdapter.OnItemListen
     FloatingActionButton addNewBoxTaskBtn;
     RecyclerView recyclerBoxTask;
     DatabaseReference reference;
+    DatabaseReference referenceTasks; // polaczneie z wezlami bazy aby dodac np projekt, group, someday (zeby nie mieszac z reference)
     ArrayList<BoxTask> boxTaskList;
     GoogleSignInAccount signInAccount;
     BoxTaskAdapter boxTaskAdapter;
@@ -104,50 +105,6 @@ public class BoxFragment extends Fragment implements BoxTaskAdapter.OnItemListen
 
     }
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_box);
-//
-//        addNewBoxTaskBtn = findViewById(R.id.addNewBoxTaskFloatingBtn);
-//        recyclerBoxTask = findViewById(R.id.myBoxTasks);
-//        boxTaskList = new ArrayList<>();
-//        idNumber = new Random().nextInt();
-//        recyclerBoxTask.setLayoutManager(new LinearLayoutManager(this));
-//        //google signin
-//        signInAccount = GoogleSignIn.getLastSignedInAccount(this);
-//
-//        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Box").child(signInAccount.getId().toString());
-//        reference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                boxTaskList.clear();
-//                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-//                    BoxTask p = dataSnapshot1.getValue(BoxTask.class);
-//                    boxTaskList.add(p);
-//                    Log.e("box", p.getTitle());
-//                }
-//                setAdapter(boxTaskList);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                Toast.makeText(getApplicationContext(), "No Data", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        addNewBoxTaskBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                openDialogToAddNewBoxTask();
-//                Toast.makeText(BoxFragment.this, "New box task", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-//        itemTouchHelper.attachToRecyclerView(recyclerBoxTask);
-//    }
-
     public void setAdapter(ArrayList<BoxTask> boxTasksList) {
         boxTaskAdapter = new BoxTaskAdapter(getActivity(), boxTasksList, this);
         recyclerBoxTask.setAdapter(boxTaskAdapter); // wypelni wszystkie pola ViewHolderami
@@ -179,23 +136,22 @@ public class BoxFragment extends Fragment implements BoxTaskAdapter.OnItemListen
                     startActivityForResult(intent, BoxFragment.CALENDAR_REQUEST);
                 }
                 if (activityList[which].toString().equals("Someday")) {
-//                    Intent intent = new Intent(BoxFragment.this, NewCalendarEventActivity.class);
-//                    intent.putExtra("title", boxTask.getTitle());
-//                    startActivity(intent);
-//                    reference.child("Box" + boxTask.getId()).removeValue(); // czy na pewno tak robic
                     Toast.makeText(getActivity(), "Someday", Toast.LENGTH_SHORT).show();
                 }
                 if (activityList[which].toString().equals("Group")) {
-//                    Intent intent = new Intent(getActivity(), NewGroupTaskActivity.class);
-//                    intent.putExtra("title", boxTask.getTitle());
-//                    startActivityForResult(intent, BoxFragment.GROUP_REQUEST);
+                    Intent intent = new Intent(getActivity(), NewGroupTaskActivity.class);
+                    intent.putExtra("title", boxTask.getTitle());
+                    startActivityForResult(intent, BoxFragment.GROUP_REQUEST);
                     Toast.makeText(getActivity(), "Group", Toast.LENGTH_SHORT).show();
                 }
                 if (activityList[which].toString().equals("Project")) {
-//                    Intent intent = new Intent(getActivity(), NewGroupTaskActivity.class);
-//                    intent.putExtra("title", boxTask.getTitle());
-//                    startActivityForResult(intent, BoxFragment.GROUP_REQUEST);
-                    Toast.makeText(getActivity(), "Project", Toast.LENGTH_SHORT).show();
+                    referenceTasks = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Projects").child(signInAccount.getId().toString()).child("Project" + idNumber);
+                    HashMap map = new HashMap();
+                    map.put("title", boxTask.getTitle());
+                    map.put("id", idNumber.toString());
+                    referenceTasks.updateChildren(map);
+                    reference.child("Box" + boxTask.getId()).removeValue();
+                    Toast.makeText(getActivity(), "Added " + boxTask.getTitle() + " to Projects!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -260,6 +216,13 @@ public class BoxFragment extends Fragment implements BoxTaskAdapter.OnItemListen
             }
         }
         if (requestCode == CALENDAR_REQUEST && resultCode == RESULT_OK) {
+            if (data.getExtras().containsKey("taskAdded")) {
+                if (data.getBooleanExtra("taskAdded", false))
+                    reference.child("Box" + boxTask.getId()).removeValue();
+            }
+        }
+
+        if (requestCode == GROUP_REQUEST && resultCode == RESULT_OK) {
             if (data.getExtras().containsKey("taskAdded")) {
                 if (data.getBooleanExtra("taskAdded", false))
                     reference.child("Box" + boxTask.getId()).removeValue();
