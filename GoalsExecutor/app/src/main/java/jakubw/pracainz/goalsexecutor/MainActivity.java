@@ -132,8 +132,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent3 = new Intent(MainActivity.this, LabelActivity.class);
                 startActivity(intent3);
                 break;
-            case R.id.nav_settings:
-//                checkPermission(callbackId, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR);
+            case R.id.nav_help:
+                Intent intent4 = new Intent(MainActivity.this, HelpActivity.class);
+                startActivity(intent4);
                 break;
             case R.id.nav_projects:
 //                Intent intent4 = new Intent(MainActivity.this, ProjectsFragment.class);
@@ -148,6 +149,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_someday:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SomedayFragment()).commit();
                 break;
+
+
         }
         return true;
     }

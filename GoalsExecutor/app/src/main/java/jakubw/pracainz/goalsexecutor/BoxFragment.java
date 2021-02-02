@@ -136,6 +136,12 @@ public class BoxFragment extends Fragment implements BoxTaskAdapter.OnItemListen
                     startActivityForResult(intent, BoxFragment.CALENDAR_REQUEST);
                 }
                 if (activityList[which].toString().equals("Someday")) {
+                    referenceTasks = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Someday").child(signInAccount.getId().toString()).child("Someday" + idNumber);
+                    HashMap map = new HashMap();
+                    map.put("title", boxTask.getTitle());
+                    map.put("id", idNumber.toString());
+                    referenceTasks.updateChildren(map);
+                    reference.child("Box" + boxTask.getId()).removeValue();
                     Toast.makeText(getActivity(), "Someday", Toast.LENGTH_SHORT).show();
                 }
                 if (activityList[which].toString().equals("Group")) {

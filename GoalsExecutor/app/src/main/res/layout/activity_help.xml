@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".HelpActivity">
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/helpText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="ddd"
+                android:layout_margin="20dp"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/helpText2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="text" />
+
+            <TextView
+                android:id="@+id/gromadzenie"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:text="1. Gromadzenie"
+                android:textStyle="bold|italic" />
+
+            <TextView
+                android:id="@+id/gromadzenieHelp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Info o gromadzeniu" />
+
+            <TextView
+                android:id="@+id/analiza"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:text="2. Analiza"
+                android:textStyle="bold|italic" />
+
+            <TextView
+                android:id="@+id/analizaHelp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Info o analizie" />
+
+            <TextView
+                android:id="@+id/porzadkowanie"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:text="3. Porzadkowanie"
+                android:textStyle="bold|italic" />
+
+            <TextView
+                android:id="@+id/porzadkowanieHelp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Info Porzadkowanie" />
+
+            <TextView
+                android:id="@+id/porzadkowanieZakladkiHelp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Info porzadkowanieZakladkiHelp" />
+
+            <TextView
+                android:id="@+id/przeglad"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:text="4. Przeglad"
+                android:textStyle="bold|italic" />
+
+            <TextView
+                android:id="@+id/przegladHelp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="info przeglad" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

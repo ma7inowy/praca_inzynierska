@@ -26,7 +26,7 @@
 
     <item android:title="Communicate">
         <menu>
-            <item android:id="@+id/nav_settings"
+            <item android:id="@+id/nav_help"
                 android:icon="@drawable/ic_help"
                 android:title="Help"/>
             <item android:id="@+id/nav_labels"
