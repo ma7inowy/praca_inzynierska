@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".HelpActivity"></activity>
         <activity android:name=".SomedayFragment" />
-        <activity android:name=".NewGroupTaskActivity" />
+        <activity android:name=".NewAndEditGroupTaskActivity" />
         <activity android:name=".GroupsFragment" />
         <activity android:name=".BoxFragment" />
         <activity android:name=".ProjectsFragment" />

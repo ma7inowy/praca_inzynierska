@@ -190,7 +190,7 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
         }
     }
 
-    //https://www.youtube.com/watch?v=ARezg1D9Zd0&ab_channel=CodinginFlow
+    //yt
     public interface FindColaborantsDialogListener {
         void applyData(ArrayList<User> collaborants);
     }

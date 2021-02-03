@@ -7,7 +7,7 @@
     android:background="@color/new_task_background"
     android:orientation="vertical"
 
-    tools:context=".NewGroupTaskActivity">
+    tools:context=".NewAndEditGroupTaskActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -2,7 +2,6 @@ package jakubw.pracainz.goalsexecutor;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,7 +11,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -105,7 +103,7 @@ public class GroupsFragment extends Fragment implements GroupTasksAdapter.OnItem
         addGroupTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), NewGroupTaskActivity.class);
+                Intent intent = new Intent(getContext(), NewAndEditGroupTaskActivity.class);
                 startActivity(intent);
             }
         });
@@ -133,13 +131,16 @@ public class GroupsFragment extends Fragment implements GroupTasksAdapter.OnItem
     public void onItemClick(int position) {
         final GroupTask groupTask;
         groupTask = userGroupTaskList.get(position);
-        Intent intent = new Intent(getContext(), EditNextActionActivity.class);
+        Intent intent = new Intent(getContext(), NewAndEditGroupTaskActivity.class);
         intent.putExtra("title", groupTask.getTitle());
         intent.putExtra("description", groupTask.getDescription());
         intent.putExtra("estimatedTime", groupTask.getEstimatedTime());
         intent.putExtra("id", groupTask.getId());
         intent.putExtra("priority", groupTask.getPriority());
+        intent.putExtra("collaborants", groupTask.getCollaborants());
+        intent.putExtra("edit", true);
         startActivity(intent);
+//        Toast.makeText(getContext(), groupTask.getId(), Toast.LENGTH_SHORT).show();
 //        Toast.makeText(getContext(), position, Toast.LENGTH_SHORT).show();
     }
 }

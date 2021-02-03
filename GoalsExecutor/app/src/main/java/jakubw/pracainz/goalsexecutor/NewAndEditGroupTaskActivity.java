@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.PaintDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,19 +31,23 @@ import java.util.Random;
 
 import jakubw.pracainz.goalsexecutor.Model.User;
 
-public class NewGroupTaskActivity extends AppCompatActivity implements FindColaborantsDialog.FindColaborantsDialogListener {
+public class NewAndEditGroupTaskActivity extends AppCompatActivity implements FindColaborantsDialog.FindColaborantsDialogListener {
 
     EditText addTitle;
     EditText addDescription;
     Button addGroupTaskBtn, addPriorityBtn, addEstimationTimeBtn, addGroupTaskColaborants;
     DatabaseReference reference;
     DatabaseReference reference2;
+    DatabaseReference reference3;
     Integer idNumber;
     String priority = "3";
     int estimatedTime = 0;
     ArrayList<String> colaborantEmailList = new ArrayList<>();
     ArrayList<User> colaborantList = new ArrayList<>();
     GoogleSignInAccount signInAccount;
+    final String[] priorities = {"High", "Medium", "Low"};
+    boolean editing = false;
+    TextView titlepageGroup1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +60,7 @@ public class NewGroupTaskActivity extends AppCompatActivity implements FindColab
         addPriorityBtn = findViewById(R.id.addGroupTaskPriorityBtn);
         addEstimationTimeBtn = findViewById(R.id.addGroupTaskEstimationTimeBtn);
         addGroupTaskColaborants = findViewById(R.id.addGroupTaskColaborants);
-        idNumber = new Random().nextInt();
+        titlepageGroup1 = findViewById(R.id.titlepageGroup1);
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
 
         // do tworzenia zadania z BoxFragment
@@ -63,11 +69,43 @@ public class NewGroupTaskActivity extends AppCompatActivity implements FindColab
             addTitle.setText(intent.getStringExtra("title"));
         }
 
+        if (intent.hasExtra("description")) {
+            addDescription.setText(intent.getStringExtra("description"));
+        }
+
+        if (intent.hasExtra("estimatedTime")) {
+            estimatedTime = intent.getIntExtra("estimatedTime", 0);
+            addEstimationTimeBtn.setText("ESTIMATED TIME: " + estimatedTime + " MIN");
+        }
+
+        if (intent.hasExtra("id")) {
+            idNumber = Integer.valueOf(intent.getStringExtra("id"));
+            Toast.makeText(this, idNumber.toString(), Toast.LENGTH_SHORT).show();
+        } else idNumber = new Random().nextInt();
+
+        if (intent.hasExtra("priority")) {
+            priority = intent.getStringExtra("priority");
+            setPriorityButtonBackground();
+            addPriorityBtn.setText("PRIORITY: " + priorities[Integer.valueOf(priority) - 1]);
+        }
+
+        if (intent.hasExtra("collaborants")) {
+            colaborantEmailList = intent.getStringArrayListExtra("collaborants");
+            String textt = "Colaborants (" + colaborantEmailList.size() + ")";
+            addGroupTaskColaborants.setText(textt);
+        }
+
+        if (intent.hasExtra("edit")) {
+            editing = true;
+            setWidgetsForEditing();
+        }
 
         addGroupTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                colaborantEmailList.add(signInAccount.getEmail()); // nwm czy tu czy gdzies indziej lepiej
+                if (!colaborantEmailList.contains(signInAccount.getEmail()))
+                    colaborantEmailList.add(signInAccount.getEmail());
+
                 reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("GroupTasks").child("Group" + idNumber);
                 HashMap map = new HashMap();
                 map.put("title", addTitle.getText().toString());
@@ -77,9 +115,8 @@ public class NewGroupTaskActivity extends AppCompatActivity implements FindColab
                 map.put("priority", priority);
                 map.put("collaborants", colaborantEmailList);
                 reference.updateChildren(map);
-
-                sendGroupTaskIdsToCollaborants();
-
+                if (!editing)
+                    getCollaborantsProfiles();
 
                 sendResultToBoxActivity();
                 finish();
@@ -102,52 +139,53 @@ public class NewGroupTaskActivity extends AppCompatActivity implements FindColab
         addGroupTaskColaborants.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFindColaborantsDialog();
+                if (!editing)
+                    openFindColaborantsDialog();
+                else
+                    Toast.makeText(NewAndEditGroupTaskActivity.this, colaborantEmailList.toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
     }
 
-    private void sendGroupTaskIdsToCollaborants() {
+    private void setWidgetsForEditing() {
+        titlepageGroup1.setText("Edit Group Task");
+        addGroupTaskBtn.setText("Save");
+    }
+
+    private void getCollaborantsProfiles() {
 //        reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("UsersAdditionalInfo").child(signInAccount.getId()).child("GroupTasksId");
 //        //MUSIALEM GETEMAIL BO NIE MOGE TEGO ID WZIAC BO NIE WIEM JAKIE ID MAJA UZYTKOWNICY Z LISTY (a MAM TYLKO EMAILE)
-//
-//        reference.push().setValue(idNumber.toString());
-
-
-
 
         // pobieranie odpowiednich uzytkownikow ktorych dodano w findcolaborants
         reference2 = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users");
         reference2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 colaborantList.clear();
-                for (String userEmail : colaborantEmailList) {
-                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                        User p = dataSnapshot1.getValue(User.class);
-                        if (p.getEmail().equals(userEmail))
-                            colaborantList.add(p);
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    User p = dataSnapshot1.getValue(User.class);
+                    assert p != null;
+                    // jesli ko
+                    if (colaborantEmailList.contains(p.getEmail())) {
+                        sendGroupTaskIdsToCollaborants(p);
                     }
-                }
 
-                if(!colaborantList.isEmpty()){
-                    //to wrzuc do additionalifno
-                    for(User user: colaborantList) {
-                        reference2 = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("UsersGroups").child(user.getId()).child("GroupTasksId");
-                        reference2.push().setValue(idNumber.toString());
-                    }
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
+    }
 
+    public void sendGroupTaskIdsToCollaborants(User p) {
 
+        //to wrzuc do additionalifno id zadania kazdemu uzytkownikowi ktory jest do niego przypisany
+        // sprawdzenie czy uzytkownik juz ma przypisane to zadanie zeby nie robic tego 2  razy
+        reference3 = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("UsersGroups").child(p.getId()).child("GroupTasksId");
+        reference3.push().setValue(idNumber.toString());
     }
 
     private void openFindColaborantsDialog() {
@@ -161,13 +199,15 @@ public class NewGroupTaskActivity extends AppCompatActivity implements FindColab
     }
 
     private void showEstimationTimeDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(NewGroupTaskActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(NewAndEditGroupTaskActivity.this);
         builder.setTitle("Choose estimated time");
 
-        View view = LayoutInflater.from(NewGroupTaskActivity.this).inflate(R.layout.estimated_time_dialog, null);
+        View view = LayoutInflater.from(NewAndEditGroupTaskActivity.this).inflate(R.layout.estimated_time_dialog, null);
         final TextView estimatedTimeProgress = view.findViewById(R.id.estimatedTimeProgress);
         final SeekBar estimatedTimeSeekBar = view.findViewById(R.id.estimatedTimeSeekBar);
         estimatedTimeSeekBar.setMax(240);
+        estimatedTimeSeekBar.setProgress(estimatedTime);
+        estimatedTimeProgress.setText(estimatedTime + " MIN");
         estimatedTimeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -190,15 +230,15 @@ public class NewGroupTaskActivity extends AppCompatActivity implements FindColab
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(NewGroupTaskActivity.this, String.valueOf(estimatedTime), Toast.LENGTH_SHORT).show();
-                addEstimationTimeBtn.setText("Potrzebny czas: " + estimatedTime + "minut");
+                Toast.makeText(NewAndEditGroupTaskActivity.this, String.valueOf(estimatedTime), Toast.LENGTH_SHORT).show();
+                addEstimationTimeBtn.setText("ESTIMATED TIME: " + estimatedTime + " MIN");
                 dialog.dismiss();
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(NewGroupTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
+                Toast.makeText(NewAndEditGroupTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -215,33 +255,53 @@ public class NewGroupTaskActivity extends AppCompatActivity implements FindColab
     }
 
     private void showPrioritiesDialog() {
-        final String[] priorities = {"High", "Medium", "Low"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(NewGroupTaskActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(NewAndEditGroupTaskActivity.this);
         builder.setTitle("Choose priority");
         builder.setSingleChoiceItems(priorities, Integer.valueOf(priority) - 1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 priority = String.valueOf(which + 1);
-                Toast.makeText(NewGroupTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
+                Toast.makeText(NewAndEditGroupTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
             }
         });
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                addPriorityBtn.setText("PRIORYTET: " + priorities[Integer.valueOf(priority) - 1]);
+                addPriorityBtn.setText("PRIORITY: " + priorities[Integer.valueOf(priority) - 1]);
+                setPriorityButtonBackground();
 
-                Toast.makeText(NewGroupTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
+                Toast.makeText(NewAndEditGroupTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(NewGroupTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
+                Toast.makeText(NewAndEditGroupTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
         builder.show();
+    }
+
+    private void setPriorityButtonBackground() {
+        int color = setColorForPriorityButton(priority);
+        PaintDrawable pd = new PaintDrawable(color);
+        pd.setCornerRadius(70);
+        addPriorityBtn.setBackground(pd);
+    }
+
+    private int setColorForPriorityButton(String priority) {
+        if (priority.equals(String.valueOf(1)))
+            return Color.RED;
+        else if (priority.equals(String.valueOf(2)))
+            return Color.YELLOW;
+        else if (priority.equals(String.valueOf(3)))
+            return Color.GREEN;
+        else {
+            Toast.makeText(this, "error!", Toast.LENGTH_SHORT).show();
+            return 0;
+        }
     }
 
     @Override

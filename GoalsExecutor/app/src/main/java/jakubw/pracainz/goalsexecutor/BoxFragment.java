@@ -145,7 +145,7 @@ public class BoxFragment extends Fragment implements BoxTaskAdapter.OnItemListen
                     Toast.makeText(getActivity(), "Someday", Toast.LENGTH_SHORT).show();
                 }
                 if (activityList[which].toString().equals("Group")) {
-                    Intent intent = new Intent(getActivity(), NewGroupTaskActivity.class);
+                    Intent intent = new Intent(getActivity(), NewAndEditGroupTaskActivity.class);
                     intent.putExtra("title", boxTask.getTitle());
                     startActivityForResult(intent, BoxFragment.GROUP_REQUEST);
                     Toast.makeText(getActivity(), "Group", Toast.LENGTH_SHORT).show();
