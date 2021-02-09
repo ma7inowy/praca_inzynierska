@@ -276,8 +276,6 @@ public class NextActionFragment extends Fragment implements NextActionAdapter.On
 
     }
 
-    //trzeba zmienic tez on click zeby bralo te liste przefiltrowana jak sie kliknie
-    // jak zatwierdze filtry to to sie wywola
     @Override
     public void applyFilterData(boolean priorityLow, boolean priorityMedium, boolean priorityHigh, String label, String estimatedTime) {
         ArrayList<NextAction> fList = new ArrayList<>();

@@ -65,13 +65,6 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
 
                 findColaborantsListener.applyData(addedUserList);
 
-                //wyslij dane do bazy
-//                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users");
-//                HashMap map = new HashMap();
-//                map.put("name", addLabelName.getText().toString());
-//                map.put("color", labelColor);
-//                map.put("id", idNumber.toString());
-//                reference.updateChildren(map);
 
             }
         });
@@ -81,7 +74,7 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
         recyclerAddedUsers = view.findViewById(R.id.recyclerAddedUsers);
         recyclerAllUsers.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerAddedUsers.setLayoutManager(new LinearLayoutManager(getActivity()));
-        readDataFromNewGroupTaskActivity(); // to moze kiedys wywalic nullpointer bo korzysta z recycler ktory jest wyzej i cos sie moze stac pierwsze
+        readDataFromNewGroupTaskActivity();
         addColaborantBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,7 +105,6 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
     }
 
     private void firebaseUserSearch(String name) {
-//        https://www.youtube.com/watch?v=b_tz8kbFUsU&list=LL&index=2&ab_channel=TVACStudio
         reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users");
 
 //        Query ref = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Users1").orderByChild("name").startAt(name).endAt(name + "\uf8ff");
@@ -153,7 +145,7 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
         boolean theSame = false;
 
         if (allUsers) {
-            Toast.makeText(getActivity(), "siemaALL", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "siemaALL", Toast.LENGTH_SHORT).show();
             for (User user : addedUserList) {
                 if (user.getEmail().equals(userList.get(position).getEmail())) {
                     theSame = true;
@@ -172,7 +164,7 @@ public class FindColaborantsDialog extends AppCompatDialogFragment implements Us
 //            }
 
         } else {
-            Toast.makeText(getActivity(), "siemaKoledzy", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "siemaKoledzy", Toast.LENGTH_SHORT).show();
             addedUserList.remove(position);
             setAddedUserAdapter(addedUserList);
         }

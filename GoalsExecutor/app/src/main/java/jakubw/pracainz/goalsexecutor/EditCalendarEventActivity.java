@@ -172,7 +172,7 @@ public class EditCalendarEventActivity extends AppCompatActivity {
         Intent intent = new Intent(EditCalendarEventActivity.this, EventReminderBroadcast.class);
         intent.putExtra("desc", editEventTitle.getText().toString());
         int requestcode = Integer.valueOf(id);
-        //https://stackoverflow.com/questions/18649728/android-cannot-pass-intent-extras-though-alarmmanager/28203623 flaga do update
+        // flaga do update
         PendingIntent pendingIntent = PendingIntent.getBroadcast(EditCalendarEventActivity.this, requestcode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);

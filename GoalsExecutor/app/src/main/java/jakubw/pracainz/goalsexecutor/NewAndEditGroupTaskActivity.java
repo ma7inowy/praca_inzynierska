@@ -80,7 +80,7 @@ public class NewAndEditGroupTaskActivity extends AppCompatActivity implements Fi
 
         if (intent.hasExtra("id")) {
             idNumber = Integer.valueOf(intent.getStringExtra("id"));
-            Toast.makeText(this, idNumber.toString(), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, idNumber.toString(), Toast.LENGTH_SHORT).show();
         } else idNumber = new Random().nextInt();
 
         if (intent.hasExtra("priority")) {
@@ -235,7 +235,7 @@ public class NewAndEditGroupTaskActivity extends AppCompatActivity implements Fi
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(NewAndEditGroupTaskActivity.this, String.valueOf(estimatedTime), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(NewAndEditGroupTaskActivity.this, String.valueOf(estimatedTime), Toast.LENGTH_SHORT).show();
                 addEstimationTimeBtn.setText("ESTIMATED TIME: " + estimatedTime + " MIN");
                 dialog.dismiss();
             }
@@ -243,7 +243,7 @@ public class NewAndEditGroupTaskActivity extends AppCompatActivity implements Fi
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(NewAndEditGroupTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(NewAndEditGroupTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -266,7 +266,7 @@ public class NewAndEditGroupTaskActivity extends AppCompatActivity implements Fi
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 priority = String.valueOf(which + 1);
-                Toast.makeText(NewAndEditGroupTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(NewAndEditGroupTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
             }
         });
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -275,14 +275,14 @@ public class NewAndEditGroupTaskActivity extends AppCompatActivity implements Fi
                 addPriorityBtn.setText("PRIORITY: " + priorities[Integer.valueOf(priority) - 1]);
                 setPriorityButtonBackground();
 
-                Toast.makeText(NewAndEditGroupTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(NewAndEditGroupTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(NewAndEditGroupTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(NewAndEditGroupTaskActivity.this, priority, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });

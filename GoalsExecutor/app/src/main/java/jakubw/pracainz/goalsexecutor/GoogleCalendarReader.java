@@ -85,7 +85,6 @@ public class GoogleCalendarReader {
                         final Date begin = new Date(eventCursor.getLong(1));
 //                        final Date end = new Date(eventCursor.getLong(2));
 //                        final Boolean allDay = !eventCursor.getString(3).equals("0");
-                        //TESTOWANKO DANE DO Date
                         SimpleDateFormat postFormater = new SimpleDateFormat("h,dd,MM,yyyy");
                         String beginNew = postFormater.format(begin);
                         String[] table = beginNew.split(",");

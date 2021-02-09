@@ -121,7 +121,7 @@ public class EditNextActionActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Label label = (Label) parent.getSelectedItem();
                 labelId = label.getName();
-                Toast.makeText(parent.getContext(), labelId, Toast.LENGTH_LONG).show();
+//                Toast.makeText(parent.getContext(), labelId, Toast.LENGTH_LONG).show();
                 Log.e("labelName", "wcisniete");
             }
 
@@ -195,7 +195,7 @@ public class EditNextActionActivity extends AppCompatActivity {
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(EditNextActionActivity.this, String.valueOf(estimatedTime), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(EditNextActionActivity.this, String.valueOf(estimatedTime), Toast.LENGTH_SHORT).show();
                 editEstimationTimeBtn.setText("ESTIMATED TIME: " + estimatedTime + " MIN");
                 dialog.dismiss();
             }
@@ -203,7 +203,7 @@ public class EditNextActionActivity extends AppCompatActivity {
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(EditNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(EditNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -218,7 +218,7 @@ public class EditNextActionActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 priority = String.valueOf(which + 1);
-                Toast.makeText(EditNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(EditNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
             }
         });
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -227,14 +227,14 @@ public class EditNextActionActivity extends AppCompatActivity {
                 editPriorityBtn.setText("PRIORITY: " + priorities[Integer.valueOf(priority) - 1]);
                 setPriorityButtonBackground();
 
-                Toast.makeText(EditNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(EditNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(EditNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(EditNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });

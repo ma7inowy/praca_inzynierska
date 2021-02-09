@@ -102,12 +102,6 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
             }
         });
 
-//        sortEventsBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                handleEventsFromPhoneCalendars();
-//            }
-//        });
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(recyclerCalendarEvent);
@@ -227,7 +221,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
         Intent intent = new Intent(getActivity(), EventReminderBroadcast.class);
         intent.putExtra("desc", calendarEvent.getTitle());
         int requestcode = Integer.valueOf(calendarEvent.getId());
-        //https://stackoverflow.com/questions/18649728/android-cannot-pass-intent-extras-though-alarmmanager/28203623 flaga do update
+        // flaga do update
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), requestcode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = new GregorianCalendar(calendarEvent.getYear(), calendarEvent.getMonth(), calendarEvent.getDay(), calendarEvent.getHour(), calendarEvent.getMinute());

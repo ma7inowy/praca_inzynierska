@@ -75,7 +75,7 @@ public class NewNextActionActivity extends AppCompatActivity {
         //google signin
         final GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
 
-        //pobranie labelow z bazy MOZE ZNALEZC JAKIS LEPSZY SPOSOB?
+        //
         referenceLabel = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Labels").child(signInAccount.getId().toString());
         referenceLabel.addValueEventListener(new ValueEventListener() {
             @Override
@@ -135,7 +135,7 @@ public class NewNextActionActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Label label = (Label) parent.getSelectedItem();
                 labelName = label.getName();
-                Toast.makeText(parent.getContext(), labelName, Toast.LENGTH_LONG).show();
+//                Toast.makeText(parent.getContext(), labelName, Toast.LENGTH_LONG).show();
                 Log.e("labelName", "wcisniete");
             }
 
@@ -176,7 +176,7 @@ public class NewNextActionActivity extends AppCompatActivity {
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(NewNextActionActivity.this, String.valueOf(estimatedTime), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(NewNextActionActivity.this, String.valueOf(estimatedTime), Toast.LENGTH_SHORT).show();
                 addEstimationTimeBtn.setText("ESTIMATED TIME: " + estimatedTime + " MIN");
                 dialog.dismiss();
             }
@@ -184,7 +184,7 @@ public class NewNextActionActivity extends AppCompatActivity {
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(NewNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(NewNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -208,7 +208,7 @@ public class NewNextActionActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 priority = String.valueOf(which + 1);
-                Toast.makeText(NewNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(NewNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
             }
         });
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -217,7 +217,7 @@ public class NewNextActionActivity extends AppCompatActivity {
                 addPriorityBtn.setText("PRIORITY: " + priorities[Integer.valueOf(priority) - 1]);
                 setPriorityButtonBackground();
 
-                Toast.makeText(NewNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(NewNextActionActivity.this, priority, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });

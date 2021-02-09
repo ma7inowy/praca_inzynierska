@@ -91,7 +91,7 @@ public class ProjectsFragment extends Fragment implements ProjectsAdapter.OnItem
             @Override
             public void onClick(View v) {
                 openDialogToAddNewProject();
-                Toast.makeText(getContext(), "New Proj", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "New Proj", Toast.LENGTH_SHORT).show();
             }
         });
 
