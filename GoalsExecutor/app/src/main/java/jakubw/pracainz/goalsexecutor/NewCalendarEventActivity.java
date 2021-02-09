@@ -70,22 +70,26 @@ public class NewCalendarEventActivity extends AppCompatActivity {
         addNewEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId()).child("Ca" + idNumber);
-                HashMap map = new HashMap();
+                if(!addEventTitle.getText().toString().matches("")) {
+                    reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Calendar").child(signInAccount.getId()).child("Ca" + idNumber);
+                    HashMap map = new HashMap();
 
-                map.put("title", addEventTitle.getText().toString());
-                map.put("year", yearEvent);
-                map.put("month", monthEvent);
-                map.put("day", dayEvent);
-                map.put("hour", hourEvent);
-                map.put("minute", minuteEvent);
-                map.put("description", addEventDescription.getText().toString());
-                map.put("id", idNumber.toString());
-                reference.updateChildren(map);
-                makeNotification();
-                sendResultToBoxActivity();
-                Toast.makeText(NewCalendarEventActivity.this, "Done!", Toast.LENGTH_SHORT).show();
-                finish();
+                    map.put("title", addEventTitle.getText().toString());
+                    map.put("year", yearEvent);
+                    map.put("month", monthEvent);
+                    map.put("day", dayEvent);
+                    map.put("hour", hourEvent);
+                    map.put("minute", minuteEvent);
+                    map.put("description", addEventDescription.getText().toString());
+                    map.put("id", idNumber.toString());
+                    reference.updateChildren(map);
+                    makeNotification();
+                    sendResultToBoxActivity();
+                    Toast.makeText(NewCalendarEventActivity.this, "Done!", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else
+                    Toast.makeText(NewCalendarEventActivity.this, "Enter event name!", Toast.LENGTH_SHORT).show();
+
             }
         });
 

@@ -78,7 +78,7 @@ public class EditNextActionActivity extends AppCompatActivity {
         editPriorityBtn.setText("PRIORITY: " + priorities[Integer.valueOf(priority) - 1]);
         if (priority != null)
             setPriorityButtonBackground();
-        //pobranie labelow z bazy MOZE ZNALEZC JAKIS LEPSZY SPOSOB? raz pobrac najlepiej i tyle
+
         referenceLabel = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Labels").child(signInAccount.getId().toString());
         referenceLabel.addValueEventListener(new ValueEventListener() {
             @Override
@@ -101,15 +101,18 @@ public class EditNextActionActivity extends AppCompatActivity {
         editNextActionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HashMap map = new HashMap();
-                map.put("title", editTitle.getText().toString());
-                map.put("description", editDescription.getText().toString());
-                map.put("estimatedTime", estimatedTime);
-                map.put("priority", priority);
-                map.put("labelName", labelId);
-                reference.updateChildren(map);
-                Toast.makeText(EditNextActionActivity.this, editTitle.getText().toString() + " " + editDescription.getText().toString(), Toast.LENGTH_SHORT).show();
-                finish();
+                if (!editTitle.getText().toString().matches("")) {
+                    HashMap map = new HashMap();
+                    map.put("title", editTitle.getText().toString());
+                    map.put("description", editDescription.getText().toString());
+                    map.put("estimatedTime", estimatedTime);
+                    map.put("priority", priority);
+                    map.put("labelName", labelId);
+                    reference.updateChildren(map);
+                    Toast.makeText(EditNextActionActivity.this, "Done!", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else
+                    Toast.makeText(EditNextActionActivity.this, "Enter task name!", Toast.LENGTH_SHORT).show();
             }
         });
 

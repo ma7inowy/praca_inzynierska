@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
@@ -39,11 +40,15 @@ public class NewBoxTaskDialog extends AppCompatDialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //wyslij dane do bazy
-                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Box").child(signInAccount.getId().toString()).child("Box" + idNumber);
-                HashMap map = new HashMap();
-                map.put("title", addBoxTaskName.getText().toString());
-                map.put("id", idNumber.toString());
-                reference.updateChildren(map);
+                if (!addBoxTaskName.getText().toString().matches("")) {
+                    reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("Box").child(signInAccount.getId().toString()).child("Box" + idNumber);
+                    HashMap map = new HashMap();
+                    map.put("title", addBoxTaskName.getText().toString());
+                    map.put("id", idNumber.toString());
+                    reference.updateChildren(map);
+                    Toast.makeText(getContext(), "Done!", Toast.LENGTH_SHORT).show();
+                } else  Toast.makeText(getContext(), "Enter task name!", Toast.LENGTH_SHORT).show();
+
             }
         });
 

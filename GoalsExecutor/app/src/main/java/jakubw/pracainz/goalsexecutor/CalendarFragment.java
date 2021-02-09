@@ -255,7 +255,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
         int id = item.getItemId();
         if (id == R.id.calendar_item_sync) {
             syncAndRefreshDataFromGoogleCalendar();
-            Toast.makeText(getActivity(), "Sync", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Synchronized with Google Calendar!", Toast.LENGTH_SHORT).show();
         }
 
         return super.onOptionsItemSelected(item);
@@ -263,7 +263,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
 
     private void syncAndRefreshDataFromGoogleCalendar() {
         ArrayList<CalendarEvent> events = GoogleCalendarReader.getEventsFromGoogleCalendar(getActivity(), signInAccount.getEmail());
-        Toast.makeText(getActivity(), String.valueOf(calendarEventList.size()), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), String.valueOf(calendarEventList.size()), Toast.LENGTH_SHORT).show();
         if (events.isEmpty()) return;
         for (CalendarEvent event : events) { //ewenty z kalendarza
             int licznik = 0;

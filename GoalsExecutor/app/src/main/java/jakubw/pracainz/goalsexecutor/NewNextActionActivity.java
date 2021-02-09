@@ -98,18 +98,22 @@ public class NewNextActionActivity extends AppCompatActivity {
         addNextActionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("NextAction").child(signInAccount.getId()).child("Na" + idNumber);
-                HashMap map = new HashMap();
-                map.put("title", addTitle.getText().toString());
-                map.put("description", addDescription.getText().toString());
-                map.put("id", idNumber.toString());
-                map.put("labelName", labelName);
-                map.put("estimatedTime", estimatedTime);
-                map.put("priority", priority);
-                reference.updateChildren(map);
-                sendResultToBoxActivity();
-                Toast.makeText(NewNextActionActivity.this, addTitle.getText().toString() + " " + addDescription.getText().toString(), Toast.LENGTH_SHORT).show();
-                finish();
+                if (!addTitle.getText().toString().matches("")) {
+                    reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("NextAction").child(signInAccount.getId()).child("Na" + idNumber);
+                    HashMap map = new HashMap();
+                    map.put("title", addTitle.getText().toString());
+                    map.put("description", addDescription.getText().toString());
+                    map.put("id", idNumber.toString());
+                    map.put("labelName", labelName);
+                    map.put("estimatedTime", estimatedTime);
+                    map.put("priority", priority);
+                    reference.updateChildren(map);
+                    sendResultToBoxActivity();
+                    Toast.makeText(NewNextActionActivity.this, "Done!", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else
+                    Toast.makeText(NewNextActionActivity.this, "Enter task name!", Toast.LENGTH_SHORT).show();
+
             }
         });
 

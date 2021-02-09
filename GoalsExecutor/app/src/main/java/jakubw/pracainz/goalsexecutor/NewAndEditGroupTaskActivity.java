@@ -103,23 +103,27 @@ public class NewAndEditGroupTaskActivity extends AppCompatActivity implements Fi
         addGroupTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!colaborantEmailList.contains(signInAccount.getEmail()))
-                    colaborantEmailList.add(signInAccount.getEmail());
+                if (!addTitle.getText().toString().matches("")) {
+                    if (!colaborantEmailList.contains(signInAccount.getEmail()))
+                        colaborantEmailList.add(signInAccount.getEmail());
 
-                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("GroupTasks").child("Group" + idNumber);
-                HashMap map = new HashMap();
-                map.put("title", addTitle.getText().toString());
-                map.put("description", addDescription.getText().toString());
-                map.put("id", idNumber.toString());
-                map.put("estimatedTime", estimatedTime);
-                map.put("priority", priority);
-                map.put("collaborants", colaborantEmailList);
-                reference.updateChildren(map);
-                if (!editing)
-                    getCollaborantsProfiles();
+                    reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Tasks").child("GroupTasks").child("Group" + idNumber);
+                    HashMap map = new HashMap();
+                    map.put("title", addTitle.getText().toString());
+                    map.put("description", addDescription.getText().toString());
+                    map.put("id", idNumber.toString());
+                    map.put("estimatedTime", estimatedTime);
+                    map.put("priority", priority);
+                    map.put("collaborants", colaborantEmailList);
+                    reference.updateChildren(map);
+                    if (!editing)
+                        getCollaborantsProfiles();
 
-                sendResultToBoxActivity();
-                finish();
+                    sendResultToBoxActivity();
+                    Toast.makeText(NewAndEditGroupTaskActivity.this, "Done!", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else
+                    Toast.makeText(NewAndEditGroupTaskActivity.this, "Enter task name!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -173,6 +177,7 @@ public class NewAndEditGroupTaskActivity extends AppCompatActivity implements Fi
 
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 

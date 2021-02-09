@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
@@ -45,12 +46,17 @@ public class NewLabelDialog extends AppCompatDialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //wyslij dane do bazy
-                reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Labels").child(signInAccount.getId()).child("Label" + idNumber);
-                HashMap map = new HashMap();
-                map.put("name", addLabelName.getText().toString());
-                map.put("color", labelColor);
-                map.put("id", idNumber.toString());
-                reference.updateChildren(map);
+                if (!addLabelName.getText().toString().matches("")) {
+                    reference = FirebaseDatabase.getInstance().getReference().child("GoalsExecutor").child("Labels").child(signInAccount.getId()).child("Label" + idNumber);
+                    HashMap map = new HashMap();
+                    map.put("name", addLabelName.getText().toString());
+                    map.put("color", labelColor);
+                    map.put("id", idNumber.toString());
+                    reference.updateChildren(map);
+                    Toast.makeText(getContext(), "Done!", Toast.LENGTH_SHORT).show();
+                } else Toast.makeText(getContext(), "Enter label name!", Toast.LENGTH_SHORT).show();
+
+
             }
         });
 

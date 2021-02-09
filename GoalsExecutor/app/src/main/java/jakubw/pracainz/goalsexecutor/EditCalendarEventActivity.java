@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -84,17 +85,21 @@ public class EditCalendarEventActivity extends AppCompatActivity {
         editEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HashMap map = new HashMap();
-                map.put("title", editEventTitle.getText().toString());
-                map.put("year", yearEvent);
-                map.put("month", monthEvent);
-                map.put("day", dayEvent);
-                map.put("hour", hourEvent);
-                map.put("minute", minuteEvent);
-                map.put("description", editEventDescription.getText().toString());
-                reference.updateChildren(map);
-                editNotification();
-                finish();
+                if (!editEventTitle.getText().toString().matches("")) {
+                    HashMap map = new HashMap();
+                    map.put("title", editEventTitle.getText().toString());
+                    map.put("year", yearEvent);
+                    map.put("month", monthEvent);
+                    map.put("day", dayEvent);
+                    map.put("hour", hourEvent);
+                    map.put("minute", minuteEvent);
+                    map.put("description", editEventDescription.getText().toString());
+                    reference.updateChildren(map);
+                    editNotification();
+                    Toast.makeText(EditCalendarEventActivity.this, "Done!", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else Toast.makeText(EditCalendarEventActivity.this, "Enter event name!", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
