@@ -25,6 +25,7 @@
         android:layout_centerHorizontal="true"
         android:fontFamily="sans-serif-black"
         android:layout_marginTop="30dp"
+        android:textColor="@color/white"
         android:text="Welcome to Goals Executor!"
         android:textSize="20dp" />
 

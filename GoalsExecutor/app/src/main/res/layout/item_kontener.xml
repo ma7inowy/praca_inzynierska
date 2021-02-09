@@ -37,17 +37,17 @@
                 android:textColor="#050404"
                 android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/nextActionItemEstimatedTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="8dp"
-            android:fontFamily=""
-            android:text="estTime"
-            android:textColor="#FFFDFD"
-            android:background="@drawable/next_action_field_shape"
-            android:textSize="18sp" />
+            <TextView
+                android:id="@+id/nextActionItemEstimatedTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/next_action_field_shape"
+                android:fontFamily="@font/amaranth"
+                android:text="estTime"
+                android:textColor="#FFFDFD"
+                android:textSize="18sp" />
         </LinearLayout>
 
     </LinearLayout>
